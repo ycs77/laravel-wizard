@@ -1,0 +1,41 @@
+{
+    "name": "ycs77/laravel-wizard",
+    "description": "Wizard component for laravel 5.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lucas Yang",
+            "email": "yangchenshin77@gmail.com"
+        }
+    ],
+    "keywords": [
+        "laravel",
+        "wizard",
+        "step",
+        "steps",
+        "component",
+        "plugin"
+    ],
+    "homepage": "https://github.com/ycs77/laravel-wizard",
+    "require": {
+        "php": "^7.0",
+        "illuminate/http": "^5.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~6.0",
+        "orchestra/testbench": "~3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ycs77\\LaravelWizard\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ycs77\\LaravelWizard\\Test\\": "tests"
+        }
+    },
+    "extra": {},
+    "minimum-stability": "stable"
+}
