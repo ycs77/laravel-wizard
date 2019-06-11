@@ -1,4 +1,5 @@
 /vendor
+/.vscode
 composer.lock
 phpunit.xml
 *.cache

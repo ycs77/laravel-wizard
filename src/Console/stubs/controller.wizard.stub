@@ -1,0 +1,23 @@
+<?php
+
+namespace DummyNamespace;
+
+DummyFullStepsClasses
+use Ycs77\LaravelWizard\Http\Controllers\WizardController;
+
+class DummyClass extends WizardController
+{
+    /**
+     * The wizard name.
+     *
+     * @var string
+     */
+    protected $wizardName = 'DummyWizardName';
+
+    /**
+     * The wizard steps instance.
+     *
+     * @var array
+     */
+    protected $steps = [DummyStepsClasses];
+}

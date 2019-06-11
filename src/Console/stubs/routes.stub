@@ -1,0 +1,2 @@
+
+Wizard::routes('DummyUri', 'DummyController', 'DummyName');

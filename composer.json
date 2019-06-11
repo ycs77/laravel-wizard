@@ -1,6 +1,6 @@
 {
     "name": "ycs77/laravel-wizard",
-    "description": "Wizard component for laravel 5.",
+    "description": "A web setup wizard for your Laravel application.",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -20,11 +20,16 @@
     "homepage": "https://github.com/ycs77/laravel-wizard",
     "require": {
         "php": "^7.0",
-        "illuminate/http": "^5.5"
+        "illuminate/console": "^5.5",
+        "illuminate/http": "^5.5",
+        "illuminate/routing": "^5.5",
+        "illuminate/support": "^5.5",
+        "illuminate/view": "^5.5"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0",
-        "orchestra/testbench": "~3.5"
+        "orchestra/testbench": "~3.5",
+        "mockery/mockery": "^1.2"
     },
     "autoload": {
         "psr-4": {
@@ -36,6 +41,15 @@
             "Ycs77\\LaravelWizard\\Test\\": "tests"
         }
     },
-    "extra": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ycs77\\LaravelWizard\\WizardServiceProvider"
+            ],
+            "aliases": {
+                "Wizard": "Ycs77\\LaravelWizard\\Facades\\Wizard"
+            }
+        }
+    },
     "minimum-stability": "stable"
 }
