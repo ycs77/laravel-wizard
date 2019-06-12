@@ -90,10 +90,10 @@ class UsernameStep extends Step
     /**
      * Save this step form data.
      *
-     * @param  array  $data
+     * @param  array|null  $data
      * @return void
      */
-    public function saveData(array $data)
+    public function saveData($data = null)
     {
         $data = Arr::except($data, 'username');
         Auth::user()->update($data);

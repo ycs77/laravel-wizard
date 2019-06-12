@@ -125,10 +125,10 @@ abstract class Step
     /**
      * Save this step form data.
      *
-     * @param  array  $data
+     * @param  array|null  $data
      * @return void
      */
-    abstract public function saveData(array $data);
+    abstract public function saveData($data = null);
 
     /**
      * Validation rules.
@@ -156,7 +156,7 @@ abstract class Step
      * Get step cache data.
      *
      * @param  string  $key
-     * @return array
+     * @return array|string|null
      */
     public function data($key = '')
     {
