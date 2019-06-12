@@ -57,14 +57,36 @@ class WizardController extends Controller
     /**
      * Show the wizard form.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  string|null  $step
      * @return \Illuminate\Http\Response
      */
-    public function create($step = null)
+    public function create(Request $request, $step = null)
     {
+        $step = $this->getWizardStep($step);
+        $lastProcessedIndex = $this->wizard()->getLastProcessedStepIndex();
+
+        // Check this step is not last processed step.
+        if ($step->index() !== $lastProcessedIndex) {
+
+            // If trigger from 'back',
+            // Set this step index and redirect to this step.
+            if ($request->query('trigger') === 'back') {
+                $cacheData = $this->wizard()->cache()->get();
+                $this->wizard()->cacheStepData($cacheData, $step->index());
+                return redirect()->route($request->route()->getName(), [$step->slug()]);
+            }
+
+            // Redirect to last processed step.
+            $lastProcessedStep = $this->wizard()->stepRepo()->get($lastProcessedIndex);
+            return redirect()->route(
+                $request->route()->getName(),
+                [$lastProcessedStep->slug()]
+            );
+        }
+
         $wizard = $this->wizard();
         $stepRepo = $this->wizard()->stepRepo();
-        $step = $this->getWizardStep($step);
         $formAction = $this->getActionMethod('create');
         $postAction = $this->getActionMethod('store');
 

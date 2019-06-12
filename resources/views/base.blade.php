@@ -30,7 +30,7 @@
 
             <div class="d-flex justify-content-between align-items-center">
                 @if ($stepRepo->hasPrev())
-                    <a href="{{ action($formAction, ['step' => $stepRepo->prevSlug()]) }}" class="btn btn-primary">
+                    <a href="{{ action($formAction, ['step' => $stepRepo->prevSlug()]) }}?trigger=back" class="btn btn-primary">
                         @lang('wizard::generic.back')
                     </a>
                 @else
