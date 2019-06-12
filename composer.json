@@ -1,6 +1,6 @@
 {
     "name": "ycs77/laravel-wizard",
-    "description": "A web setup wizard for your Laravel application.",
+    "description": "A web setup wizard for Laravel application.",
     "type": "library",
     "license": "MIT",
     "authors": [

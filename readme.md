@@ -5,7 +5,7 @@
 [![Build Status][ico-circleci]][link-circleci]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-A web setup wizard for your Laravel application.
+A web setup wizard for Laravel application.
 
 > This package is adapted from [smajti1/laravel-wizard](https://github.com/smajti1/laravel-wizard).
 
