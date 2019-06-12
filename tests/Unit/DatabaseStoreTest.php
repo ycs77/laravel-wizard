@@ -157,6 +157,20 @@ class DatabaseStoreTest extends TestCase
         ]);
     }
 
+    public function testPutData()
+    {
+        $this->authenticate();
+
+        // act
+        $this->cache->put('step', ['field' => 'data']);
+
+        // assert
+        $this->assertDatabaseHas('wizard', [
+            'payload' => '{"step":{"field":"data"}}',
+            'user_id' => 1,
+        ]);
+    }
+
     public function testCheckHasData()
     {
         $this->authenticate();

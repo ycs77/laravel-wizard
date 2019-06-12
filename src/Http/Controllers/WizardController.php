@@ -165,22 +165,8 @@ class WizardController extends Controller
      */
     protected function getActionMethod(string $method)
     {
-        $className = $this->getControllerClass();
+        $className = static::class;
         return "$className@$method";
-    }
-
-    /**
-     * Get controller main class name.
-     *
-     * @return string
-     */
-    public function getControllerClass()
-    {
-        return Str::replaceFirst(
-            'App\\Http\\Controller\\',
-            '',
-            class_basename(static::class)
-        );
     }
 
     /**
@@ -205,10 +191,12 @@ class WizardController extends Controller
     protected function getWizardStep($slug)
     {
         try {
-            return $this->wizard()->getStep($slug);
+            $step = $this->wizard()->getStep($slug);
         } catch (StepNotFoundException $e) {
             abort(404);
         }
+
+        return $step;
     }
 
     /**

@@ -35,11 +35,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Ycs77\\LaravelWizard\\Test\\": "tests",
-            "Ycs77\\LaravelWizard\\Test\\App\\": "tests/app"
+            "Ycs77\\LaravelWizard\\Test\\": "tests"
         },
         "classmap": [
-            "tests/database/migrations"
+            "tests/Stubs/database/migrations"
         ]
     },
     "extra": {

@@ -17,6 +17,12 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
+            <exclude>
+                <file>./src/WizardServiceProvider.php</file>
+                <directory>./src/Console</directory>
+                <directory>./src/Contracts</directory>
+                <directory>./src/Exceptions</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>

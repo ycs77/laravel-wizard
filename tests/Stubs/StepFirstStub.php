@@ -36,7 +36,9 @@ class StepFirstStub extends Step
      */
     public function saveData($data = null)
     {
-        //
+        $queue = session('test-steps-queue', []);
+        $queue['first'] = true;
+        session()->put('test-steps-queue', $queue);
     }
 
     /**

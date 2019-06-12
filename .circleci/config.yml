@@ -16,7 +16,7 @@ setup: &setup
         paths:
           - ./vendor
     - run:
-        name: Test
+        name: Run Tests
         command: ./vendor/bin/phpunit
 
 jobs:

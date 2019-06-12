@@ -6,7 +6,7 @@ use Mockery;
 use Orchestra\Database\ConsoleServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 use Ycs77\LaravelWizard\Facades\Wizard as WizardFacade;
-use Ycs77\LaravelWizard\Test\App\User;
+use Ycs77\LaravelWizard\Test\Stubs\User;
 use Ycs77\LaravelWizard\WizardServiceProvider;
 
 class TestCase extends OrchestraTestCase
@@ -22,7 +22,7 @@ class TestCase extends OrchestraTestCase
 
         $this->app['view']->addLocation(__DIR__ . '/../resources/stub_views');
 
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/Stubs/database/migrations');
     }
 
     /**

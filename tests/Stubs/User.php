@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\LaravelWizard\Test\App;
+namespace Ycs77\LaravelWizard\Test\Stubs;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 

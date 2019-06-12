@@ -125,6 +125,18 @@ class SessionStoreTest extends TestCase
         $this->assertEquals($expected, $this->app['session']->get('laravel_wizard.test'));
     }
 
+    public function testPutData()
+    {
+        // arrange
+        $expected = ['step' => ['field' => 'data']];
+
+        // act
+        $this->cache->put('step', ['field' => 'data']);
+
+        // assert
+        $this->assertEquals($expected, $this->app['session']->get('laravel_wizard.test'));
+    }
+
     public function testCheckHasData()
     {
         // arrange

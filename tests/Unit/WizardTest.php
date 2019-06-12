@@ -49,6 +49,18 @@ class WizardTest extends TestCase
         $this->assertEquals(1, $actual);
     }
 
+    public function testGetLastProcessedStepIndexFromNoCache()
+    {
+        // arrange
+        $this->app['config']->set('wizard.cache', false);
+
+        // act
+        $actual = $this->wizard->getLastProcessedStepIndex();
+
+        // assert
+        $this->assertEquals(0, $actual);
+    }
+
     public function testGetStep()
     {
         // arrange
