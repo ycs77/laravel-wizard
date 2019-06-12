@@ -37,6 +37,13 @@ class WizardController extends Controller
     protected $steps = [];
 
     /**
+     * The wizard done show texts.
+     *
+     * @var string
+     */
+    protected $doneText;
+
+    /**
      * Create new wizard controller.
      *
      * @param  \Ycs77\LaravelWizard\Wizard  $wizard
@@ -104,7 +111,9 @@ class WizardController extends Controller
      */
     public function done()
     {
-        return view('wizard::done');
+        $doneText = $this->doneText;
+
+        return view('wizard::done', compact('doneText'));
     }
 
     /**

@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container my-3">
+    <div class="container my-5">
         <h1 class="text-center">
-            @lang('wizard::generic.done')
+            {{ __($doneText ?? 'wizard::generic.done') }}
         </h1>
     </div>
 @endsection
