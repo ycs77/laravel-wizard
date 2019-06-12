@@ -31,11 +31,10 @@ class StepFirstStub extends Step
     /**
      * Save this step form data.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  array  $data
      * @return void
      */
-    public function saveData(Request $request, $data = [])
+    public function saveData($data = [])
     {
         //
     }

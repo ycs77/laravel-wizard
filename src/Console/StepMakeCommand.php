@@ -37,7 +37,7 @@ class StepMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/wizard.step.stub';
+        return __DIR__ . '/stubs/step.stub';
     }
 
     /**

@@ -125,11 +125,10 @@ abstract class Step
     /**
      * Save this step form data.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  array  $data
      * @return void
      */
-    abstract public function saveData(Request $request, $data = []);
+    abstract public function saveData($data = []);
 
     /**
      * Validation rules.

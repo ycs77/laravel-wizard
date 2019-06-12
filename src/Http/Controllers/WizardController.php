@@ -80,7 +80,7 @@ class WizardController extends Controller
         if (config('wizard.cache')) {
             $step->cacheProgress($request);
         } else {
-            $step->saveData($request, $step->getRequestData($request));
+            $step->saveData($step->getRequestData($request));
         }
 
         if (!$this->getNextStepSlug()) {
@@ -194,14 +194,13 @@ class WizardController extends Controller
     /**
      * Save wizard data.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    protected function save(Request $request)
+    protected function save()
     {
         /** @var \Ycs77\LaravelWizard\Step $step */
         foreach ($this->wizard()->all() as $step) {
-            $step->saveData($request, $step->data());
+            $step->saveData($step->data());
         }
 
         $this->wizard()->cache()->clear();
