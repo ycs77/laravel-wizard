@@ -23,10 +23,11 @@ class SessionStore implements CacheStore
     protected $wizardKey = '';
 
     /**
-     * Create data store instance.
+     * Create a new wizard cache session store instance.
      *
      * @param \Illuminate\Contracts\Session\Session  $session
      * @param string  $key
+     * @return void
      */
     public function __construct(Session $session, string $wizardKey = '')
     {
@@ -65,8 +66,8 @@ class SessionStore implements CacheStore
      */
     public function set(array $data, $lastIndex = null)
     {
-        if (isset( $lastIndex)) {
-            $data['_last_index'] = $lastIndex;
+        if (isset( $lastIndex) && is_numeric($lastIndex)) {
+            $data['_last_index'] = (int)$lastIndex;
         }
 
         $this->session->put($this->wizardKey, $data);

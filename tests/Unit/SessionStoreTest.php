@@ -35,13 +35,13 @@ class SessionStoreTest extends TestCase
     {
         // arrange
         $expected = ['step' => ['field' => 'data']];
-
-        // act
         $this->session([
             'laravel_wizard.test' => [
                 'step' => ['field' => 'data'],
             ],
         ]);
+
+        // act
         $actual = $this->cache->get();
 
         // assert
@@ -52,13 +52,13 @@ class SessionStoreTest extends TestCase
     {
         // arrange
         $expected = ['field' => 'data'];
-
-        // act
         $this->session([
             'laravel_wizard.test' => [
                 'step' => ['field' => 'data'],
             ],
         ]);
+
+        // act
         $actual = $this->cache->get('step');
 
         // assert
@@ -69,13 +69,13 @@ class SessionStoreTest extends TestCase
     {
         // arrange
         $expected = 'data';
-
-        // act
         $this->session([
             'laravel_wizard.test' => [
                 'step' => ['field' => 'data'],
             ],
         ]);
+
+        // act
         $actual = $this->cache->get('step.field');
 
         // assert
@@ -84,12 +84,14 @@ class SessionStoreTest extends TestCase
 
     public function testGetLastProcessedIndexData()
     {
-        // act
+        // arrange
         $this->session([
             'laravel_wizard.test' => [
                 '_last_index' => 0,
             ],
         ]);
+
+        // act
         $actual = $this->cache->getLastProcessedIndex();
 
         // assert
@@ -125,12 +127,14 @@ class SessionStoreTest extends TestCase
 
     public function testCheckHasData()
     {
-        // act
+        // arrange
         $this->session([
             'laravel_wizard.test' => [
                 'step' => ['field' => 'data'],
             ],
         ]);
+
+        // act
         $actual = $this->cache->has('step');
 
         // assert
@@ -139,10 +143,12 @@ class SessionStoreTest extends TestCase
 
     public function testClearData()
     {
-        // act
+        // arrange
         $this->app['session']->put('laravel_wizard.test', [
             'step' => ['field' => 'data'],
         ]);
+
+        // act
         $this->cache->clear();
 
         // assert
