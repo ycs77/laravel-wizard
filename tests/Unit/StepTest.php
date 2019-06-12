@@ -29,7 +29,7 @@ class StepTest extends TestCase
     {
         parent::setUp();
 
-        $this->wizard = $this->mock(Wizard::class)->makePartial();
+        $this->wizard = $this->mock(Wizard::class, [$this->app])->makePartial();
         $this->step = $this->mock(StepFirstStub::class, [$this->wizard, 0])->makePartial();
     }
 

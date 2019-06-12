@@ -86,7 +86,11 @@ class Wizard
      */
     public function getLastProcessedStepIndex()
     {
-        return $this->cache->getLastProcessedIndex() ?? 0;
+        if ($this->app['config']['wizard.cache']) {
+            return $this->cache->getLastProcessedIndex() ?? 0;
+        }
+
+        return 0;
     }
 
     /**
