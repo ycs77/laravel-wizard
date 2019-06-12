@@ -60,10 +60,37 @@ return [
     |
     | This option controls the default wizard cache "driver".
     |
-    | Supported: "session"
+    | Supported: "session", "database"
     |
     */
 
     'driver' => 'session',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Wizard Cache Database Connection
+    |--------------------------------------------------------------------------
+    |
+    | When using the "database" or "redis" wizard cache drivers, you may
+    | specify a connection that should be used to manage these wizard caches.
+    | This should correspond to a connection in your database configuration
+    | options.
+    |
+    */
+
+    'connection' => env('WIZARD_CACHE_CONNECTION', null),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Wizard Cache Database Table
+    |--------------------------------------------------------------------------
+    |
+    | When using the "database" wizard cache driver, you may specify the table
+    | we should use to manage the wizard caches. Of course, a sensible default
+    | is provided for you; however, you are free to change this as needed.
+    |
+    */
+
+    'table' => 'wizard',
 
 ];

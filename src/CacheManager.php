@@ -48,6 +48,18 @@ class CacheManager extends Manager
     }
 
     /**
+     * Create an instance of the "database" wizard cache driver.
+     *
+     * @return \Ycs77\LaravelWizard\Contracts\CacheStore
+     */
+    protected function createDatabaseDriver()
+    {
+        $table = $this->app['config']['wizard.table'];
+
+        return new DatabaseStore($this->getDatabaseConnection(), $table, $this->app);
+    }
+
+    /**
      * Set the wizard key.
      *
      * @param  string  $wizardName
@@ -67,5 +79,17 @@ class CacheManager extends Manager
     protected function getSessionKey()
     {
         return 'laravel_wizard.' . $this->wizardName;
+    }
+
+    /**
+     * Get the database connection for the database driver.
+     *
+     * @return \Illuminate\Database\Connection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $this->app['db']->connection(
+            $this->app['config']['wizard.connection']
+        );
     }
 }

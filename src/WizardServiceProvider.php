@@ -4,6 +4,7 @@ namespace Ycs77\LaravelWizard;
 
 use Illuminate\Support\ServiceProvider;
 use Ycs77\LaravelWizard\Console\StepMakeCommand;
+use Ycs77\LaravelWizard\Console\TableCommand;
 use Ycs77\LaravelWizard\Console\WizardControllerMakeCommand;
 use Ycs77\LaravelWizard\Console\WizardMakeCommand;
 
@@ -41,6 +42,7 @@ class WizardServiceProvider extends ServiceProvider
         $this->commands(WizardMakeCommand::class);
         $this->commands(WizardControllerMakeCommand::class);
         $this->commands(StepMakeCommand::class);
+        $this->commands(TableCommand::class);
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'wizard');
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'wizard');
