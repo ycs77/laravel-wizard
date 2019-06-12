@@ -128,15 +128,15 @@ abstract class Step
      * @param  array  $data
      * @return void
      */
-    abstract public function saveData($data = []);
+    abstract public function saveData(array $data);
 
     /**
      * Validation rules.
      *
-     * @param  \Illuminate\Http\Request|null  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function rules(Request $request = null)
+    public function rules(Request $request)
     {
         return [];
     }

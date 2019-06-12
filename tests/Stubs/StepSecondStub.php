@@ -34,7 +34,7 @@ class StepSecondStub extends Step
      * @param  array  $data
      * @return void
      */
-    public function saveData($data = [])
+    public function saveData(array $data)
     {
         //
     }
@@ -42,10 +42,10 @@ class StepSecondStub extends Step
     /**
      * Validation rules.
      *
-     * @param  \Illuminate\Http\Request|null  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function rules(Request $request = null)
+    public function rules(Request $request)
     {
         return [];
     }
