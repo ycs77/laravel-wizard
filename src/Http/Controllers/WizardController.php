@@ -92,28 +92,26 @@ class WizardController extends Controller
 
         if (!$this->getNextStepSlug()) {
             // Wizard done...
-            if (config('wizard.cache')) {
-                $this->save($request);
-            }
+            $data = config('wizard.cache') ? $this->save($request) : null;
 
-            return $this->doneRedirectTo()
-                ?: redirect($this->getActionUrl('done'));
+            return $this->doneRedirectTo($data);
         }
 
-        return $this->redirectTo()
-            ?: redirect($this->getActionUrl('create', [$this->getNextStepSlug()]));
+        return $this->redirectTo();
     }
 
     /**
      * Show the done page.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function done()
+    public function done(Request $request)
     {
+        $wizardData = $request->session()->get('wizard_data');
         $doneText = $this->doneText;
 
-        return view('wizard::done', compact('doneText'));
+        return view('wizard::done', compact('wizardData', 'doneText'));
     }
 
     /**
@@ -123,17 +121,18 @@ class WizardController extends Controller
      */
     public function redirectTo()
     {
-        //
+        return redirect($this->getActionUrl('create', [$this->getNextStepSlug()]));
     }
 
     /**
      * Done redirect response.
      *
+     * @param  array|null  $withData
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function doneRedirectTo()
+    public function doneRedirectTo($withData = null)
     {
-        //
+        return redirect($this->getActionUrl('done'))->with('wizard_data', $withData);
     }
 
     /**
@@ -212,7 +211,9 @@ class WizardController extends Controller
             $step->saveData($step->data());
         }
 
+        $data = $this->wizard()->cache()->get();
         $this->wizard()->cache()->clear();
+        return $data;
     }
 
     /**
