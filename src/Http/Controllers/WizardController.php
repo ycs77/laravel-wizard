@@ -199,7 +199,7 @@ class WizardController extends Controller
     protected function save()
     {
         /** @var \Ycs77\LaravelWizard\Step $step */
-        foreach ($this->wizard()->all() as $step) {
+        foreach ($this->wizard()->stepRepo()->all() as $step) {
             $step->saveData($step->data());
         }
 
