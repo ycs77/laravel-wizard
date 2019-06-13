@@ -15,6 +15,13 @@ class DummyClass extends WizardController
     protected $wizardName = 'DummyWizardName';
 
     /**
+     * The wizard title.
+     *
+     * @var string
+     */
+    protected $wizardTitle = 'DummyWizardTitle';
+
+    /**
      * The wizard steps instance.
      *
      * @var array

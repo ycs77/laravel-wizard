@@ -87,6 +87,7 @@ class WizardControllerMakeCommand extends GeneratorCommand
     {
         return [
             'DummyWizardName' => $this->getWizardName(),
+            'DummyWizardTitle' => ucfirst(str_replace('_', ' ', $this->getWizardName())),
         ];
     }
 

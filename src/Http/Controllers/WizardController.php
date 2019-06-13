@@ -31,6 +31,13 @@ class WizardController extends Controller
     protected $wizardName = '';
 
     /**
+     * The wizard title.
+     *
+     * @var string
+     */
+    protected $wizardTitle = '';
+
+    /**
      * The wizard steps instance.
      *
      * @var array
@@ -84,11 +91,12 @@ class WizardController extends Controller
         }
 
         $wizard = $this->wizard();
+        $wizardTitle = $this->wizardTitle;
         $stepRepo = $this->wizard()->stepRepo();
         $formAction = $this->getActionMethod('create');
         $postAction = $this->getActionMethod('store');
 
-        return view('wizard::base', compact('wizard', 'stepRepo', 'step', 'formAction', 'postAction'));
+        return view('wizard::base', compact('wizard', 'wizardTitle', 'stepRepo', 'step', 'formAction', 'postAction'));
     }
 
     /**
@@ -129,9 +137,11 @@ class WizardController extends Controller
     public function done(Request $request)
     {
         $wizardData = $request->session()->get('wizard_data');
+        $wizardData = json_decode(base64_decode($wizardData), true);
+        $stepRepo = $this->wizard()->stepRepo();
         $doneText = $this->doneText;
 
-        return view('wizard::done', compact('wizardData', 'doneText'));
+        return view('wizard::done', compact('wizardData', 'stepRepo', 'doneText'));
     }
 
     /**
@@ -152,6 +162,7 @@ class WizardController extends Controller
      */
     protected function doneRedirectTo($withData = null)
     {
+        $withData = base64_encode(json_encode($withData ?? []));
         return redirect($this->getActionUrl('done'))->with('wizard_data', $withData);
     }
 

@@ -2,6 +2,8 @@
 
 @section('content')
     <div class="container my-3">
+        <h1 class="text-center">{{ $wizardTitle }}</h1>
+
         <div class="steps-scroll mb-3">
             <ul class="steps">
                 @foreach ($stepRepo->all() as $key => $_step)
@@ -34,9 +36,7 @@
                         @lang('wizard::generic.back')
                     </a>
                 @else
-                    <button class="btn btn-primary" disabled>
-                        @lang('wizard::generic.back')
-                    </button>
+                    <span></span>
                 @endif
 
                 @if ($stepRepo->hasNext())

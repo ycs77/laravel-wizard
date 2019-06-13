@@ -54,7 +54,9 @@ class HttpTest extends TestCase
         $response->assertStatus(200);
 
         // Post first step
-        $response = $this->post('/wizard/test/step-first-stub');
+        $response = $this->post('/wizard/test/step-first-stub', [
+            //
+        ]);
         $response->assertRedirect('/wizard/test/step-second-stub');
 
         // Get second step
