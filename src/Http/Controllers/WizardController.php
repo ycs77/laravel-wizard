@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 use Ycs77\LaravelWizard\Exceptions\StepNotFoundException;
 use Ycs77\LaravelWizard\Step;
 use Ycs77\LaravelWizard\Wizard;
@@ -200,6 +201,15 @@ class WizardController extends Controller
     protected function getActionMethod(string $method)
     {
         $className = static::class;
+        $stepNamespace = config('wizard.namespace.controllers');
+        $rootNamespace = trim(str_replace('/', '\\', $stepNamespace), '\\');
+
+        if (Str::startsWith($className, $rootNamespace)) {
+            $className = trim(str_replace($rootNamespace, '', $className), '\\');
+        } else {
+            $className = '\\' . trim($className, '\\');
+        }
+
         return "$className@$method";
     }
 
