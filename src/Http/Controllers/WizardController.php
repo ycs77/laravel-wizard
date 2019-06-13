@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Ycs77\LaravelWizard\Exceptions\StepNotFoundException;
+use Ycs77\LaravelWizard\Step;
 use Ycs77\LaravelWizard\Wizard;
 
 class WizardController extends Controller
@@ -58,7 +59,7 @@ class WizardController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  string|null  $step
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function create(Request $request, $step = null)
     {
@@ -71,16 +72,13 @@ class WizardController extends Controller
             // If trigger from 'back',
             // Set this step index and redirect to this step.
             if ($request->query('trigger') === 'back') {
-                $cacheData = $this->wizard()->cache()->get();
-                $this->wizard()->cacheStepData($cacheData, $step->index());
-                return redirect()->route($request->route()->getName(), [$step->slug()]);
+                return $this->setThisStepAndRedirectTo($request, $step);
             }
 
             // Redirect to last processed step.
-            $lastProcessedStep = $this->wizard()->stepRepo()->get($lastProcessedIndex);
-            return redirect()->route(
-                $request->route()->getName(),
-                [$lastProcessedStep->slug()]
+            return $this->redirectToLastProcessedStep(
+                $request,
+                $lastProcessedIndex
             );
         }
 
@@ -140,7 +138,7 @@ class WizardController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function redirectTo()
+    protected function redirectTo()
     {
         return redirect($this->getActionUrl('create', [$this->getNextStepSlug()]));
     }
@@ -151,9 +149,46 @@ class WizardController extends Controller
      * @param  array|null  $withData
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function doneRedirectTo($withData = null)
+    protected function doneRedirectTo($withData = null)
     {
         return redirect($this->getActionUrl('done'))->with('wizard_data', $withData);
+    }
+
+    /**
+     * Set this step and redirect to this step.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Ycs77\LaravelWizard\Step  $step
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function setThisStepAndRedirectTo(Request $request, Step $step)
+    {
+        $this->wizard()->cacheStepData(
+            $this->wizard()->cache()->get(),
+            $step->index()
+        );
+
+        return redirect()->route(
+            $request->route()->getName(),
+            [$step->slug()]
+        );
+    }
+
+    /**
+     * Redirect to last processed step.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $lastProcessedIndex
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function redirectToLastProcessedStep(Request $request, int $lastProcessedIndex)
+    {
+        $lastProcessedStep = $this->wizard()->stepRepo()->get($lastProcessedIndex);
+
+        return redirect()->route(
+            $request->route()->getName(),
+            [$lastProcessedStep->slug()]
+        );
     }
 
     /**
