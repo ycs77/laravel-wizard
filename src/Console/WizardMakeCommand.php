@@ -78,7 +78,7 @@ class WizardMakeCommand extends Command
      */
     protected function getNameInput()
     {
-        return trim($this->argument('name'));
+        return trim(str_replace('/', '\\', $this->argument('name')));
     }
 
     /**
