@@ -47,7 +47,7 @@ class WizardMakeCommand extends Command
      */
     public function appendRoute()
     {
-        $nameAry = ['wizard', Str::snake($this->getNameInput())];
+        $nameAry = ['wizard', Str::snake(class_basename($this->getNameInput()))];
 
         $routeText = file_get_contents(__DIR__ . '/stubs/routes.stub');
         $routeText = str_replace('DummyUri', implode('/', $nameAry), $routeText);

@@ -109,7 +109,7 @@ class WizardControllerMakeCommand extends GeneratorCommand
                 $wizardName = Str::replaceLast('Controller', '', $wizardName);
             }
 
-            $wizardName = Str::snake($wizardName);
+            $wizardName = Str::snake(class_basename($wizardName));
         }
 
         return $wizardName;
