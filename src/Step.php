@@ -51,8 +51,9 @@ abstract class Step
     /**
      * Create a new step instance.
      *
-     * @param \Ycs77\LaravelWizard\Wizard  $wizard
-     * @param int  $index
+     * @param  \Ycs77\LaravelWizard\Wizard  $wizard
+     * @param  int  $index
+     * @return void
      */
     public function __construct(Wizard $wizard, int $index)
     {
