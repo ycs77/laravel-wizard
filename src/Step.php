@@ -14,6 +14,20 @@ abstract class Step
     protected $wizard;
 
     /**
+     * The step model instance.
+     *
+     * @var \Illuminate\Database\Eloquent\Model
+     */
+    protected $model;
+
+    /**
+     * The step model class name.
+     *
+     * @var string
+     */
+    protected $modelClass;
+
+    /**
      * The step index.
      *
      * @var int
@@ -59,6 +73,10 @@ abstract class Step
     {
         $this->wizard = $wizard;
         $this->index = $index;
+
+        if ($this->modelClass) {
+            $this->model = $this->wizard->getApp()->make($this->modelClass);
+        }
     }
 
     /**
@@ -197,5 +215,15 @@ abstract class Step
         $this->wizard->cacheStepData($cacheData, $nextStepIndex);
 
         return $this->wizard->cache()->get();
+    }
+
+    /**
+     * Get the step model instance.
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel()
+    {
+        return $this->model;
     }
 }

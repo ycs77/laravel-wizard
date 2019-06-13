@@ -4,6 +4,7 @@ namespace Ycs77\LaravelWizard\Test\Stubs;
 
 use Illuminate\Http\Request;
 use Ycs77\LaravelWizard\Step;
+use Ycs77\LaravelWizard\Test\Stubs\User;
 
 class StepFirstStub extends Step
 {
@@ -27,6 +28,13 @@ class StepFirstStub extends Step
      * @var string
      */
     protected $view = 'steps.first';
+
+    /**
+     * The step model class name.
+     *
+     * @var string
+     */
+    protected $modelClass = User::class;
 
     /**
      * Save this step form data.

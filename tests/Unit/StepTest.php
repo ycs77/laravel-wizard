@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Ycs77\LaravelWizard\CacheManager;
 use Ycs77\LaravelWizard\Test\Stubs\StepFirstStub;
 use Ycs77\LaravelWizard\Test\Stubs\StepSecondStub;
+use Ycs77\LaravelWizard\Test\Stubs\User;
 use Ycs77\LaravelWizard\Test\TestCase;
 use Ycs77\LaravelWizard\Wizard;
 
@@ -48,6 +49,18 @@ class StepTest extends TestCase
         $this->assertEquals('step-first-stub', $this->step->slug());
         $this->assertEquals('Step first stub', $this->step->label());
         $this->assertEquals('steps.first', $this->step->view());
+    }
+
+    public function testGetStepModel()
+    {
+        // arrange
+        $expected = $this->app->make(User::class);
+
+        // act
+        $actual = $this->step->getModel();
+
+        // assert
+        $this->assertEquals($expected, $actual);
     }
 
     public function testMakeFromStatic()

@@ -29,6 +29,13 @@ class StepSecondStub extends Step
     protected $view = 'steps.second';
 
     /**
+     * The step model class name.
+     *
+     * @var string
+     */
+    protected $modelClass = User::class;
+
+    /**
      * Save this step form data.
      *
      * @param  array|null  $data

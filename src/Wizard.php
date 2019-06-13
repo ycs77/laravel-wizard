@@ -166,6 +166,16 @@ class Wizard
     }
 
     /**
+     * Get the application instance.
+     *
+     * @return  \Illuminate\Foundation\Application
+     */
+    public function getApp()
+    {
+        return $this->app;
+    }
+
+    /**
      * Handle dynamic method calls into the wizard.
      *
      * @param  string  $method
