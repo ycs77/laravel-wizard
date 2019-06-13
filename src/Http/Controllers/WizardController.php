@@ -7,7 +7,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Str;
 use Ycs77\LaravelWizard\Exceptions\StepNotFoundException;
 use Ycs77\LaravelWizard\Wizard;
 
