@@ -31,7 +31,7 @@ class Wizard
     /**
      * Create a new Wizard instance.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Foundation\Application  $app
      * @return void
      */
     public function __construct(Application $app)

@@ -30,19 +30,29 @@ class StepFirstStub extends Step
     protected $view = 'steps.first';
 
     /**
-     * The step model class name.
+     * Set the step model.
      *
-     * @var string
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
      */
-    protected $modelClass = User::class;
+    public function setModel(Request $request)
+    {
+        $this->model = User::firstOrCreate([
+            'name' => 'Lucas Yang',
+        ], [
+            'email' => 'yangchenshin77@gmail.com',
+            'password' => 'password',
+        ]);
+    }
 
     /**
      * Save this step form data.
      *
      * @param  array|null  $data
+     * @param  \Illuminate\Database\Eloquent\Model|null  $data
      * @return void
      */
-    public function saveData($data = null)
+    public function saveData($data = null, $model = null)
     {
         $queue = session('test-steps-queue', []);
         $queue['first'] = true;

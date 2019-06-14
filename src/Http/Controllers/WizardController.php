@@ -71,7 +71,7 @@ class WizardController extends Controller
      */
     public function create(Request $request, $step = null)
     {
-        $step = $this->getWizardStep($step);
+        $step = $this->getWizardStep($step, $request);
         $lastProcessedIndex = $this->wizard()->getLastProcessedStepIndex();
 
         // Check this step is not last processed step.
@@ -108,14 +108,14 @@ class WizardController extends Controller
      */
     public function store(Request $request, string $step)
     {
-        $step = $this->getWizardStep($step);
+        $step = $this->getWizardStep($step, $request);
 
         $this->validate($request, $step->rules($request));
 
         if (config('wizard.cache')) {
             $step->cacheProgress($request);
         } else {
-            $step->saveData($step->getRequestData($request));
+            $step->saveData($step->getRequestData($request), $step->model());
         }
 
         if (!$this->getNextStepSlug()) {
@@ -239,14 +239,16 @@ class WizardController extends Controller
      * Get wizard step.
      *
      * @param  string|null $slug
+     * @param  \Illuminate\Http\Request  $request
      * @return \Ycs77\LaravelWizard\Step
      *
      * @throws \Ycs77\LaravelWizard\Exceptions\StepNotFoundException
      */
-    protected function getWizardStep($slug)
+    protected function getWizardStep($slug, $request)
     {
         try {
             $step = $this->wizard()->getStep($slug);
+            $step->setModel($request);
         } catch (StepNotFoundException $e) {
             abort(404);
         }
@@ -267,13 +269,15 @@ class WizardController extends Controller
     /**
      * Save wizard data.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    protected function save()
+    protected function save(Request $request)
     {
         /** @var \Ycs77\LaravelWizard\Step $step */
         foreach ($this->wizard()->stepRepo()->all() as $step) {
-            $step->saveData($step->data());
+            $step->setModel($request);
+            $step->saveData($step->data(), $step->model());
         }
 
         $data = $this->wizard()->cache()->get();

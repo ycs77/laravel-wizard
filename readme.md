@@ -36,10 +36,10 @@ php artisan vendor:publish --tag=wizard-resources
 Now you can quickly generate the wizard controller and the wizard steps:
 
 ```bash
-php artisan make:wizard UserSetup UsernameStep,PhoneStep
+php artisan make:wizard UserSetup NameStep,EmailStep
 ```
 
-This command generate the `UserSetupWizardController`, `UsernameStep`, `PhoneStep` class, and append the wizard route to `routes/web.php`.
+This command generate the `UserSetupWizardController`, `NameStep`, `EmailStep` class, and append the wizard route to `routes/web.php`.
 
 *routes/web.php*
 ```php
@@ -52,51 +52,63 @@ Wizard::routes('wizard/user', 'UserWizardController', 'wizard.user');
 
 ### 2. Set steps
 
-This is generated UsernameStep class, you can to `rules` method set form validation, and save `$data` to your database via the `saveData` method:
+This is generated NameStep class, you can to `rules` method set form validation, and save `$data` to your database via the `saveData` method:
 
 ```php
 <?php
 
 namespace App\Steps\User;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Ycs77\LaravelWizard\Step;
 
-class UsernameStep extends Step
+class NameStep extends Step
 {
     /**
      * The step slug.
      *
      * @var string
      */
-    protected $slug = 'username';
+    protected $slug = 'name';
 
     /**
      * The step show label text.
      *
      * @var string
      */
-    protected $label = 'Username';
+    protected $label = 'Name';
 
     /**
      * The step form view path.
      *
      * @var string
      */
-    protected $view = 'steps.user.username';
+    protected $view = 'steps.user.name';
+
+    /**
+     * Set the step model.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
+    public function setModel(Request $request)
+    {
+        $this->model = User::find(1);
+    }
 
     /**
      * Save this step form data.
      *
      * @param  array|null  $data
+     * @param  \Illuminate\Database\Eloquent\Model|null  $data
      * @return void
      */
-    public function saveData($data = null)
+    public function saveData($data = null, $model = null)
     {
-        $data = Arr::except($data, 'username');
-        Auth::user()->update($data);
+        $data = Arr::only($data, 'name');
+        $model->update($data);
     }
 
     /**
@@ -108,7 +120,7 @@ class UsernameStep extends Step
     public function rules(Request $request)
     {
         return [
-            'username' => 'required|string|min:4|max:20|regex:/^[A-Za-z0-9]+$/',
+            'name' => 'required',
         ];
     }
 }
@@ -116,24 +128,24 @@ class UsernameStep extends Step
 
 And add steps view, for example:
 
-*resources/views/steps/user_setup/username.blade.php*
+*resources/views/steps/user_setup/name.blade.php*
 ```php
 <div class="form-group">
-    <label for="username">Username</label>
-    <input type="text" name="username" id="username" class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}" value="{{ old('username') ?? $step->data('username') }}">
-    @if ($errors->has('username'))
-        <span class="invalid-feedback">{{ $errors->first('username') }}</span>
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') ?? $step->data('name') }}">
+    @if ($errors->has('name'))
+        <span class="invalid-feedback">{{ $errors->first('name') }}</span>
     @endif
 </div>
 ```
 
-*resources/views/steps/user_setup/phone.blade.php*
+*resources/views/steps/user_setup/email.blade.php*
 ```php
 <div class="form-group">
-    <label for="phone">Phone</label>
-    <input type="tel" name="phone" id="phone" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" value="{{ old('phone') ?? $step->data('phone') }}">
-    @if ($errors->has('phone'))
-        <span class="invalid-feedback">{{ $errors->first('phone') }}</span>
+    <label for="email">E-mail</label>
+    <input type="email" name="email" id="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') ?? $step->data('email') }}">
+    @if ($errors->has('email'))
+        <span class="invalid-feedback">{{ $errors->first('email') }}</span>
     @endif
 </div>
 ```
@@ -159,7 +171,7 @@ yarn add bootstrap-steps
 **Make controller**:
 
 ```bash
-php artisan make:wizard:controller UserSetupController steps=UsernameStep,PhoneStep
+php artisan make:wizard:controller UserSetupController steps=NameStep,EmailStep
 ```
 
 The `make:wizard` and `make:wizard:controller` difference, is `make:wizard` will append route and no confirm generate step.
@@ -167,13 +179,13 @@ The `make:wizard` and `make:wizard:controller` difference, is `make:wizard` will
 **Make step**:
 
 ```bash
-php artisan make:wizard:step UsernameStep
+php artisan make:wizard:step NameStep
 ```
 
 Or use options:
 
 ```bash
-php artisan make:wizard:step UsernameStep --label="Username" --slug=username --view=steps.user.username --wizard=user
+php artisan make:wizard:step NameStep --label="Name" --slug=name --view=steps.user.name --wizard=user
 ```
 
 [ico-version]: https://img.shields.io/packagist/v/ycs77/laravel-wizard.svg?style=flat

@@ -16,16 +16,9 @@ abstract class Step
     /**
      * The step model instance.
      *
-     * @var \Illuminate\Database\Eloquent\Model
+     * @var \Illuminate\Database\Eloquent\Model|null
      */
     protected $model;
-
-    /**
-     * The step model class name.
-     *
-     * @var string
-     */
-    protected $modelClass;
 
     /**
      * The step index.
@@ -73,10 +66,6 @@ abstract class Step
     {
         $this->wizard = $wizard;
         $this->index = $index;
-
-        if ($this->modelClass) {
-            $this->model = $this->wizard->getApp()->make($this->modelClass);
-        }
     }
 
     /**
@@ -142,12 +131,34 @@ abstract class Step
     }
 
     /**
+     * Get the step model instance.
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function model()
+    {
+        return $this->model;
+    }
+
+    /**
+     * Set the step model.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
+    public function setModel(Request $request)
+    {
+        //
+    }
+
+    /**
      * Save this step form data.
      *
      * @param  array|null  $data
+     * @param  \Illuminate\Database\Eloquent\Model|null  $data
      * @return void
      */
-    abstract public function saveData($data = null);
+    abstract public function saveData($data = null, $model = null);
 
     /**
      * Validation rules.
@@ -215,15 +226,5 @@ abstract class Step
         $this->wizard->cacheStepData($cacheData, $nextStepIndex);
 
         return $this->wizard->cache()->get();
-    }
-
-    /**
-     * Get the step model instance.
-     *
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    public function getModel()
-    {
-        return $this->model;
     }
 }

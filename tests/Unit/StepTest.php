@@ -2,6 +2,7 @@
 
 namespace Ycs77\LaravelWizard\Test\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Ycs77\LaravelWizard\CacheManager;
 use Ycs77\LaravelWizard\Test\Stubs\StepFirstStub;
@@ -12,6 +13,8 @@ use Ycs77\LaravelWizard\Wizard;
 
 class StepTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * The wizard instance.
      *
@@ -54,13 +57,16 @@ class StepTest extends TestCase
     public function testGetStepModel()
     {
         // arrange
-        $expected = $this->app->make(User::class);
+        $request = Request::create('http:://example.com/');
+        $this->step->setModel($request);
+
+        $expected = User::where('name', 'Lucas Yang')->first();
 
         // act
-        $actual = $this->step->getModel();
+        $actual = $this->step->model();
 
         // assert
-        $this->assertEquals($expected, $actual);
+        $this->assertTrue($actual->is($expected));
     }
 
     public function testMakeFromStatic()
