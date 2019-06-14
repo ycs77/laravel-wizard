@@ -2,53 +2,57 @@
 
 @section('content')
     <div class="container my-3">
-        <h1 class="text-center">{{ $wizardTitle }}</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1 class="text-center">{{ $wizardTitle }}</h1>
 
-        <div class="steps-scroll mb-3">
-            <ul class="steps">
-                @foreach ($stepRepo->all() as $key => $_step)
-                    <?php
-                        $stepClass = '';
-                        if ($step->index() == $_step->index()) {
-                            $stepClass = $errors->isEmpty() ? 'step-active' : 'step-error';
-                        } elseif ($step->index() > $_step->index()) {
-                            $stepClass = 'step-success';
-                        }
-                    ?>
-                    <li class="step {{ $stepClass }}">
-                        <div class="step-content">
-                            <span class="step-circle">{{ $_step->number() }}</span>
-                            <span class="step-text">@lang($_step->label())</span>
-                        </div>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+                <div class="steps-scroll mb-3">
+                    <ul class="steps">
+                        @foreach ($stepRepo->all() as $key => $_step)
+                            <?php
+                                $stepClass = '';
+                                if ($step->index() == $_step->index()) {
+                                    $stepClass = $errors->isEmpty() ? 'step-active' : 'step-error';
+                                } elseif ($step->index() > $_step->index()) {
+                                    $stepClass = 'step-success';
+                                }
+                            ?>
+                            <li class="step {{ $stepClass }}">
+                                <div class="step-content">
+                                    <span class="step-circle">{{ $_step->number() }}</span>
+                                    <span class="step-text">@lang($_step->label())</span>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
 
-        <form action="{{ action($postAction, [$step->slug()]) }}" method="POST" enctype="multipart/form-data">
-            {{ csrf_field() }}
+                <form action="{{ action($postAction, [$step->slug()]) }}" method="POST" enctype="multipart/form-data">
+                    {{ csrf_field() }}
 
-            @include($step->view(), compact('step', 'errors'))
+                    @include($step->view(), compact('step', 'errors'))
 
-            <div class="d-flex justify-content-between align-items-center">
-                @if ($stepRepo->hasPrev())
-                    <a href="{{ action($formAction, ['step' => $stepRepo->prevSlug()]) }}?trigger=back" class="btn btn-primary">
-                        @lang('wizard::generic.back')
-                    </a>
-                @else
-                    <span></span>
-                @endif
+                    <div class="d-flex justify-content-between align-items-center">
+                        @if ($stepRepo->hasPrev())
+                            <a href="{{ action($formAction, ['step' => $stepRepo->prevSlug()]) }}?trigger=back" class="btn btn-primary">
+                                @lang('wizard::generic.back')
+                            </a>
+                        @else
+                            <span></span>
+                        @endif
 
-                @if ($stepRepo->hasNext())
-                    <button type="submit" class="btn btn-primary">
-                        @lang('wizard::generic.next')
-                    </button>
-                @else
-                    <button type="submit" class="btn btn-primary">
-                        @lang('wizard::generic.done')
-                    </button>
-                @endif
+                        @if ($stepRepo->hasNext())
+                            <button type="submit" class="btn btn-primary">
+                                @lang('wizard::generic.next')
+                            </button>
+                        @else
+                            <button type="submit" class="btn btn-primary">
+                                @lang('wizard::generic.done')
+                            </button>
+                        @endif
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 @endsection

@@ -8,7 +8,7 @@
 
         @isset ($wizardData)
             <div class="row justify-content-center mt-3">
-                <div class="col-sm-8">
+                <div class="col-md-8">
                     <ul class="list-group">
                         @foreach ($wizardData as $slug => $stepData)
                             @if ($stepRepo->find($slug))
