@@ -3,6 +3,7 @@
 namespace Ycs77\LaravelWizard;
 
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Arr;
 use Ycs77\LaravelWizard\Exceptions\StepNotFoundException;
 
 class Wizard
@@ -29,6 +30,25 @@ class Wizard
     protected $stepRepo;
 
     /**
+     * The wizard options.
+     *
+     * @var array
+     */
+    protected $options = [];
+
+    /**
+     * The wizard options extract key from config.
+     *
+     * @var array
+     */
+    protected $optionsKeys = [
+        'cache',
+        'driver',
+        'connection',
+        'table',
+    ];
+
+    /**
      * Create a new Wizard instance.
      *
      * @param  \Illuminate\Foundation\Application  $app
@@ -44,15 +64,18 @@ class Wizard
      *
      * @param  string  $name
      * @param  mixed  $steps
+     * @param  array  $options
      * @return self
      */
-    public function make($name, $steps)
+    public function make($name, $steps, $options = [])
     {
         $this->setCache();
         $this->setStepRepo();
 
         $this->cache->setWizardName($name);
         $this->stepRepo->make($steps);
+
+        $this->setOptions($options);
 
         return $this;
     }
@@ -86,7 +109,7 @@ class Wizard
      */
     public function getLastProcessedStepIndex()
     {
-        if ($this->app['config']['wizard.cache']) {
+        if ($this->option('cache')) {
             return $this->cache->getLastProcessedIndex() ?? 0;
         }
 
@@ -139,7 +162,7 @@ class Wizard
      */
     public function setCache($cache = null)
     {
-        $this->cache = $cache ?? new CacheManager($this->app);
+        $this->cache = $cache ?? new CacheManager($this, $this->app);
         return $this;
     }
 
@@ -162,6 +185,44 @@ class Wizard
     public function setStepRepo($stepRepo = null)
     {
         $this->stepRepo = $stepRepo ?? new StepRepository($this);
+        return $this;
+    }
+
+    /**
+     * Get the wizard options.
+     *
+     * @return array
+     */
+    public function options()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Get the wizard option.
+     *
+     * @return mixed
+     */
+    public function option($key)
+    {
+        return $this->options[$key] ?? null;
+    }
+
+    /**
+     * Get the wizard options.
+     *
+     * @param  array  $options
+     * @return self
+     */
+    public function setOptions(array $options = [])
+    {
+        $config = Arr::only(
+            $this->app['config']['wizard'],
+            $this->optionsKeys
+        );
+
+        $this->options = array_merge($config, $options);
+
         return $this;
     }
 

@@ -3,9 +3,17 @@
 namespace Ycs77\LaravelWizard;
 
 use Illuminate\Support\Manager;
+use Ycs77\LaravelWizard\Wizard;
 
 class CacheManager extends Manager
 {
+    /**
+     * The wizard instance.
+     *
+     * @var \Ycs77\LaravelWizard\Wizard
+     */
+    protected $wizard;
+
     /**
      * The wizard name.
      *
@@ -16,12 +24,14 @@ class CacheManager extends Manager
     /**
      * Create a new Wizard Cache manager instance.
      *
+     * @param  \Ycs77\LaravelWizard\Wizard  $wizard
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
      */
-    public function __construct($app)
+    public function __construct(Wizard $wizard, $app)
     {
         $this->app = $app;
+        $this->wizard = $wizard;
     }
 
     /**
@@ -31,7 +41,7 @@ class CacheManager extends Manager
      */
     public function getDefaultDriver()
     {
-        return $this->app['config']['wizard.driver'];
+        return $this->wizard->option('driver');
     }
 
     /**
@@ -54,7 +64,7 @@ class CacheManager extends Manager
      */
     protected function createDatabaseDriver()
     {
-        $table = $this->app['config']['wizard.table'];
+        $table = $this->wizard->option('table');
 
         return new DatabaseStore($this->getDatabaseConnection(), $table, $this->app);
     }
@@ -89,7 +99,7 @@ class CacheManager extends Manager
     protected function getDatabaseConnection()
     {
         return $this->app['db']->connection(
-            $this->app['config']['wizard.connection']
+            $this->wizard->option('connection')
         );
     }
 }

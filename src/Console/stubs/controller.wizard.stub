@@ -22,6 +22,15 @@ class DummyClass extends WizardController
     protected $wizardTitle = 'DummyWizardTitle';
 
     /**
+     * The wizard options.
+     *
+     * Available options reference from Ycs77\LaravelWizard\Wizard::$optionsKeys.
+     *
+     * @var array
+     */
+    protected $wizardOptions = [];
+
+    /**
      * The wizard steps instance.
      *
      * @var array

@@ -14,13 +14,19 @@ class HttpTest extends TestCase
     {
         parent::setUp();
 
-        $controllerClass = '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerStub';
+        $this->setWizardRoutes(
+            '/wizard/test',
+            '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerStub',
+            'wizard.test'
+        );
+    }
 
-        /** @var \Illuminate\Routing\Router $router */
+    protected function setWizardRoutes($uri, $controllerClass, $name)
+    {
         $this->app['router']
             ->middleware('web')
-            ->group(function ($router) use ($controllerClass) {
-                Wizard::routes('/wizard/test', $controllerClass, 'wizard.test');
+            ->group(function () use ($uri, $controllerClass, $name) {
+                Wizard::routes($uri, $controllerClass, $name);
             });
     }
 
@@ -126,6 +132,22 @@ class HttpTest extends TestCase
 
         $response = $this->post('/wizard/test/step-first-stub');
         $response->assertRedirect('/wizard/test/step-second-stub');
+
+        $this->assertEquals([
+            'first' => true,
+        ], $this->app['session']->get('test-steps-queue'));
+    }
+
+    public function testWizardSetNoCacheFromControllerNowRunStepSaveData()
+    {
+        $this->setWizardRoutes(
+            '/wizard/no-cache',
+            '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerOptionsStub',
+            'wizard.no-cache'
+        );
+
+        $response = $this->post('/wizard/no-cache/step-first-stub');
+        $response->assertRedirect('/wizard/no-cache/step-second-stub');
 
         $this->assertEquals([
             'first' => true,

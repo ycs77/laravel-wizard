@@ -37,9 +37,9 @@ class WizardTest extends TestCase
     {
         // arrange
         /** @param \Mockery\MockInterface $mock */
-        $cache = $this->mock(CacheManager::class, function ($mock) {
-            $mock->shouldReceive('getLastProcessedIndex')->once()->andReturn(1);
-        });
+        $cache = $this->mock(CacheManager::class, [$this->wizard, $this->app]);
+        $cache->shouldReceive('getLastProcessedIndex')->once()->andReturn(1);
+        $this->wizard->setOptions();
         $this->wizard->setCache($cache);
 
         // act
@@ -52,7 +52,9 @@ class WizardTest extends TestCase
     public function testGetLastProcessedStepIndexFromNoCache()
     {
         // arrange
-        $this->app['config']->set('wizard.cache', false);
+        $this->wizard->setOptions([
+            'cache' => false,
+        ]);
 
         // act
         $actual = $this->wizard->getLastProcessedStepIndex();

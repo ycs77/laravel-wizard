@@ -38,6 +38,15 @@ class WizardController extends Controller
     protected $wizardTitle = '';
 
     /**
+     * The wizard options.
+     *
+     * Available options reference from Ycs77\LaravelWizard\Wizard::$optionsKeys.
+     *
+     * @var array
+     */
+    protected $wizardOptions = [];
+
+    /**
      * The wizard steps instance.
      *
      * @var array
@@ -59,7 +68,7 @@ class WizardController extends Controller
      */
     public function __construct(Wizard $wizard)
     {
-        $this->wizard = $wizard->make($this->wizardName, $this->steps);
+        $this->wizard = $wizard->make($this->wizardName, $this->steps, $this->wizardOptions);
     }
 
     /**
@@ -112,7 +121,7 @@ class WizardController extends Controller
 
         $this->validate($request, $step->rules($request));
 
-        if (config('wizard.cache')) {
+        if ($this->wizard()->option('cache')) {
             $step->cacheProgress($request);
         } else {
             $step->saveData($step->getRequestData($request), $step->model());
@@ -120,7 +129,7 @@ class WizardController extends Controller
 
         if (!$this->getNextStepSlug()) {
             // Wizard done...
-            $data = config('wizard.cache') ? $this->save($request) : null;
+            $data = $this->wizard()->option('cache') ? $this->save($request) : null;
 
             return $this->doneRedirectTo($data);
         }

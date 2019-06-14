@@ -47,7 +47,7 @@ This command generate the `UserSetupWizardController`, `NameStep`, `EmailStep` c
 ```php
 ...
 
-Wizard::routes('wizard/user', 'UserWizardController', 'wizard.user');
+Wizard::routes('wizard/user', 'UserSetupWizardController', 'wizard.user');
 ```
 
 > If you can't use auto append route, you can set `config/wizard.php` attribute `append_route` to `false`.
@@ -56,6 +56,7 @@ Wizard::routes('wizard/user', 'UserWizardController', 'wizard.user');
 
 This is generated NameStep class, you can to `rules` method set form validation, and save `$data` to your database via the `saveData` method:
 
+*app/Steps/User/NameStep.php*
 ```php
 <?php
 
@@ -166,6 +167,22 @@ Or use yarn:
 
 ```bash
 yarn add bootstrap-steps
+```
+
+### Override wizard configuration on wizard controller
+
+Add `wizardOptions` property to `controller`, you can use `cache`, `driver`, `connection`, `table` options to override configuration.
+
+*app/Http/Controllers/UserSetupWizardController.php*
+```php
+/**
+ * The wizard options.
+ *
+ * @var array
+ */
+protected $wizardOptions = [
+    'cache' => false,
+];
 ```
 
 ## Commands
