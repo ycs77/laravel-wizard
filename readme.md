@@ -9,6 +9,8 @@ A web setup wizard for Laravel application.
 
 > This package is adapted from [smajti1/laravel-wizard](https://github.com/smajti1/laravel-wizard).
 
+![Laravel wizard main image.](docs/laravel-wizard-main-image.jpg)
+
 ## Install
 
 Via Composer:
