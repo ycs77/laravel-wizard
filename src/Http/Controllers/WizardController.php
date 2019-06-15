@@ -68,7 +68,8 @@ class WizardController extends Controller
      */
     public function __construct(Wizard $wizard)
     {
-        $this->wizard = $wizard->make($this->wizardName, $this->steps, $this->wizardOptions);
+        $this->wizard = $wizard;
+        $this->wizard->load($this->wizardName, $this->steps, $this->wizardOptions);
     }
 
     /**

@@ -60,14 +60,14 @@ class Wizard
     }
 
     /**
-     * Make a new wizard.
+     * Load the wizard dependencies.
      *
      * @param  string  $name
      * @param  mixed  $steps
      * @param  array  $options
      * @return self
      */
-    public function make($name, $steps, $options = [])
+    public function load($name, $steps, $options = [])
     {
         $this->setCache();
         $this->setStepRepo();
@@ -76,8 +76,6 @@ class Wizard
         $this->stepRepo->make($steps);
 
         $this->setOptions($options);
-
-        return $this;
     }
 
     /**
@@ -157,12 +155,12 @@ class Wizard
     /**
      * Set the wizard cache instance.
      *
-     * @param  \Ycs77\LaravelWizard\Contracts\CacheStore|null
+     * @param  \Ycs77\LaravelWizard\Contracts\CacheStore|null $cache
      * @return self
      */
     public function setCache($cache = null)
     {
-        $this->cache = $cache ?? new CacheManager($this, $this->app);
+        $this->cache = $cache ?? $this->app['wizard.cache'];
         return $this;
     }
 
@@ -179,7 +177,7 @@ class Wizard
     /**
      * Set the step repository instance.
      *
-     * @param  \Ycs77\LaravelWizard\StepRepository|null
+     * @param  \Ycs77\LaravelWizard\StepRepository|null $stepRepo
      * @return self
      */
     public function setStepRepo($stepRepo = null)
@@ -201,9 +199,10 @@ class Wizard
     /**
      * Get the wizard option.
      *
+     * @param  string  $key
      * @return mixed
      */
-    public function option($key)
+    public function option(string $key)
     {
         return $this->options[$key] ?? null;
     }

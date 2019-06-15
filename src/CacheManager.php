@@ -2,6 +2,7 @@
 
 namespace Ycs77\LaravelWizard;
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Manager;
 use Ycs77\LaravelWizard\Wizard;
 
@@ -28,7 +29,7 @@ class CacheManager extends Manager
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
      */
-    public function __construct(Wizard $wizard, $app)
+    public function __construct(Wizard $wizard, Application $app)
     {
         $this->app = $app;
         $this->wizard = $wizard;
