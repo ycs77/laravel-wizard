@@ -54,7 +54,7 @@ Wizard::routes('wizard/user', 'UserSetupWizardController', 'wizard.user');
 
 ### 2. Set steps
 
-This is generated NameStep class, you can to `rules` method set form validation, and save `$data` to your database via the `saveData` method:
+This is generated NameStep class, you can to `setModel` method get the model, to `rules` method set form validation, and save `$data` to your database via the `saveData` method:
 
 *app/Steps/User/NameStep.php*
 ```php
