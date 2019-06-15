@@ -36,7 +36,7 @@ class DummyClass extends Step
      */
     public function setModel(Request $request)
     {
-        //
+        // $this->model =
     }
 
     /**
