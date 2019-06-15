@@ -21,16 +21,7 @@ class WizardServiceProvider extends ServiceProvider
             return new Wizard($app);
         });
 
-        $this->app->singleton('wizard.cache', function ($app) {
-            return new CacheManager($app['wizard'], $app);
-        });
-
-        $this->app->singleton('wizard.cache.store', function ($app) {
-            return $app['wizard.cache']->driver();
-        });
-
         $this->app->alias('wizard', Wizard::class);
-        $this->app->alias('wizard.cache', CacheManager::class);
 
         $this->mergeConfigFrom(__DIR__ . '/../config/wizard.php', 'wizard');
     }

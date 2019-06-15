@@ -160,7 +160,7 @@ class Wizard
      */
     public function setCache($cache = null)
     {
-        $this->cache = $cache ?? $this->app['wizard.cache'];
+        $this->cache = $cache ?? new CacheManager($this, $this->app);
         return $this;
     }
 
