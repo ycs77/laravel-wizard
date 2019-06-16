@@ -53,7 +53,7 @@ abstract class Step
      *
      * @var array
      */
-    protected $inputExcept = ['_token', '_method'];
+    protected $inputExcept = ['_token', '_method', '_trigger'];
 
     /**
      * Create a new step instance.

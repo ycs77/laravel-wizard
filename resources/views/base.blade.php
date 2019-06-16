@@ -32,24 +32,26 @@
 
                     @include($step->view(), compact('step', 'errors'))
 
-                    <div class="d-flex justify-content-between align-items-center">
-                        @if ($stepRepo->hasPrev())
-                            <a href="{{ action($formAction, ['step' => $stepRepo->prevSlug()]) }}?trigger=back" class="btn btn-primary">
-                                @lang('wizard::generic.back')
-                            </a>
-                        @else
-                            <span></span>
-                        @endif
+                    <div class="d-flex align-items-center">
+                        <div class="mr-auto">
+                            @if ($stepRepo->hasPrev())
+                                <button type="button" class="btn btn-primary" onclick="this.form.action = '{{ action($postAction, [$step->slug(), '_trigger' => 'back']) }}'; this.form.submit();">
+                                    @lang('wizard::generic.back')
+                                </button>
+                            @endif
+                        </div>
 
-                        @if ($stepRepo->hasNext())
-                            <button type="submit" class="btn btn-primary">
-                                @lang('wizard::generic.next')
-                            </button>
-                        @else
-                            <button type="submit" class="btn btn-primary">
-                                @lang('wizard::generic.done')
-                            </button>
-                        @endif
+                        <div class="ml-auto">
+                            @if ($stepRepo->hasNext())
+                                <button type="submit" class="btn btn-primary">
+                                    @lang('wizard::generic.next')
+                                </button>
+                            @else
+                                <button type="submit" class="btn btn-primary">
+                                    @lang('wizard::generic.done')
+                                </button>
+                            @endif
+                        </div>
                     </div>
                 </form>
             </div>

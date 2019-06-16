@@ -84,7 +84,7 @@ class HttpTest extends TestCase
         $this->assertDatabaseHas('users', [
             'name' => 'John',
         ]);
-        $this->assertDatabaseHas('posts',[
+        $this->assertDatabaseHas('posts', [
             'title' => 'Title',
             'content' => 'Content.',
         ]);
@@ -108,16 +108,33 @@ class HttpTest extends TestCase
         $response->assertRedirect('/wizard/test/post-step-stub');
     }
 
-    public function testWizardStepTriggerFromBack()
+    public function testWizardStepTriggerToBack()
     {
         $this->session([
             'laravel_wizard.test' => [
+                'user-step-stub' => [
+                    'name' => 'John',
+                ],
                 '_last_index' => 1,
             ],
         ]);
 
-        $response = $this->get('/wizard/test/user-step-stub?trigger=back');
+        $response = $this->post('/wizard/test/post-step-stub?_trigger=back', [
+            'title' => 'Title',
+            'content' => 'Content.',
+        ]);
         $response->assertRedirect('/wizard/test/user-step-stub');
+
+        $this->assertEquals([
+            'user-step-stub' => [
+                'name' => 'John',
+            ],
+            'post-step-stub' => [
+                'title' => 'Title',
+                'content' => 'Content.',
+            ],
+            '_last_index' => 0,
+        ], $this->app['session']->get('laravel_wizard.test'));
     }
 
     public function testWizardCacheDatabaseDriver()

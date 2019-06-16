@@ -95,13 +95,6 @@ class WizardController extends Controller
 
         // Check this step is not last processed step.
         if ($step->index() !== $lastProcessedIndex) {
-
-            // If trigger from 'back',
-            // Set this step index and redirect to this step.
-            if ($request->query('trigger') === 'back') {
-                return $this->setThisStepAndRedirectTo($request, $step);
-            }
-
             // Redirect to last processed step.
             return $this->redirectToLastProcessedStep(
                 $request,
@@ -135,6 +128,13 @@ class WizardController extends Controller
             $step->cacheProgress($request);
         } else {
             $step->saveData($request, $step->getRequestData($request), $step->model());
+        }
+
+        // If trigger from 'back',
+        // Set this step index and redirect to prev step.
+        if ($request->query('_trigger') === 'back') {
+            $prevStep = $this->wizard()->stepRepo()->prev();
+            return $this->setThisStepAndRedirectTo($request, $prevStep);
         }
 
         if (!$this->getNextStepSlug()) {
@@ -174,10 +174,12 @@ class WizardController extends Controller
      */
     protected function setThisStepAndRedirectTo(Request $request, Step $step)
     {
-        $this->wizard()->cacheStepData(
-            $this->wizard()->cache()->get(),
-            $step->index()
-        );
+        if ($this->wizard()->option('cache')) {
+            $this->wizard()->cacheStepData(
+                $this->wizard()->cache()->get(),
+                $step->index()
+            );
+        }
 
         return redirect()->route(
             $request->route()->getName(),
