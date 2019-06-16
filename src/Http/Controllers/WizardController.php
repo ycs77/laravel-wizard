@@ -265,7 +265,7 @@ class WizardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return int
      */
-    public function getLastProcessedStepIndex(Request $request)
+    protected function getLastProcessedStepIndex(Request $request)
     {
         if ($this->wizard()->option('cache')) {
             return $this->wizard()->cache()->getLastProcessedIndex() ?? 0;
@@ -312,7 +312,7 @@ class WizardController extends Controller
      *
      * @return string|null
      */
-    public function getNextStepSlug()
+    protected function getNextStepSlug()
     {
         return $this->wizard()->stepRepo()->nextSlug();
     }
