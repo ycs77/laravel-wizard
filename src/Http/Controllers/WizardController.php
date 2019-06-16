@@ -9,12 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use Ycs77\LaravelWizard\Exceptions\StepNotFoundException;
+use Ycs77\LaravelWizard\Http\Controllers\Traits\WizardControllerEvents;
 use Ycs77\LaravelWizard\Step;
 use Ycs77\LaravelWizard\Wizard;
 
 class WizardController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, WizardControllerEvents;
 
     /**
      * The wizard instance.
@@ -81,6 +82,11 @@ class WizardController extends Controller
      */
     public function create(Request $request, $step = null)
     {
+        // Before wizard step create event.
+        if ($redirectTo = $this->beforeWizardStepCreate($request)) {
+            return $redirectTo;
+        }
+
         $lastProcessedIndex = $this->getLastProcessedStepIndex($request);
 
         // If step is null, redirect to last processed index.
@@ -102,6 +108,11 @@ class WizardController extends Controller
             );
         }
 
+        // Wizard step created event.
+        if ($redirectTo = $this->wizardStepCreated($request, $step)) {
+            return $redirectTo;
+        }
+
         $wizard = $this->wizard();
         $wizardTitle = $this->wizardTitle;
         $stepRepo = $this->wizard()->stepRepo();
@@ -120,9 +131,17 @@ class WizardController extends Controller
      */
     public function store(Request $request, string $step)
     {
+        // Before wizard step save event.
+        if ($redirectTo = $this->beforeWizardStepSave($request)) {
+            return $redirectTo;
+        }
+
         $step = $this->getWizardStep($request, $step);
 
         $this->validate($request, $step->rules($request));
+
+        // Wizard step validated event.
+        $this->wizardStepFormValidated($request);
 
         if ($this->wizard()->option('cache')) {
             $step->cacheProgress($request);
@@ -130,9 +149,14 @@ class WizardController extends Controller
             $step->saveData($request, $step->getRequestData($request), $step->model());
         }
 
+        // Wizard step saved event.
+        if ($redirectTo = $this->wizardStepSaved($request, $step)) {
+            return $redirectTo;
+        }
+
         // If trigger from 'back',
         // Set this step index and redirect to prev step.
-        if ($request->query('_trigger') === 'back') {
+        if ($request->query('_trigger') === 'back' && $this->beforeBackWizardStep($request)) {
             $prevStep = $this->wizard()->stepRepo()->prev();
             return $this->setThisStepAndRedirectTo($request, $prevStep);
         }
@@ -142,6 +166,9 @@ class WizardController extends Controller
             if ($this->wizard()->option('cache')) {
                 $data = $this->save($request);
             }
+
+            // Wizard ended event.
+            $this->wizardEnded($request, $data);
 
             return $this->doneRedirectTo($data ?? null);
         }
@@ -323,7 +350,7 @@ class WizardController extends Controller
      * Notice: If
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return void
+     * @return array
      */
     protected function save(Request $request)
     {
