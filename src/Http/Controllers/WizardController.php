@@ -81,8 +81,17 @@ class WizardController extends Controller
      */
     public function create(Request $request, $step = null)
     {
-        $step = $this->getWizardStep($step, $request);
         $lastProcessedIndex = $this->wizard()->getLastProcessedStepIndex();
+
+        // If step is null, redirect to last processed index.
+        if (is_null($step)) {
+            return $this->redirectToLastProcessedStep(
+                $request,
+                $lastProcessedIndex
+            );
+        }
+
+        $step = $this->getWizardStep($step, $request);
 
         // Check this step is not last processed step.
         if ($step->index() !== $lastProcessedIndex) {
@@ -155,28 +164,6 @@ class WizardController extends Controller
     }
 
     /**
-     * Step redirect response.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function redirectTo()
-    {
-        return redirect($this->getActionUrl('create', [$this->getNextStepSlug()]));
-    }
-
-    /**
-     * Done redirect response.
-     *
-     * @param  array|null  $withData
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function doneRedirectTo($withData = null)
-    {
-        $withData = base64_encode(json_encode($withData ?? []));
-        return redirect($this->getActionUrl('done'))->with('wizard_data', $withData);
-    }
-
-    /**
      * Set this step and redirect to this step.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -211,6 +198,28 @@ class WizardController extends Controller
             $request->route()->getName(),
             [$lastProcessedStep->slug()]
         );
+    }
+
+    /**
+     * Step redirect response.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function redirectTo()
+    {
+        return redirect($this->getActionUrl('create', [$this->getNextStepSlug()]));
+    }
+
+    /**
+     * Done redirect response.
+     *
+     * @param  array|null  $withData
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function doneRedirectTo($withData = null)
+    {
+        $withData = base64_encode(json_encode($withData ?? []));
+        return redirect($this->getActionUrl('done'))->with('wizard_data', $withData);
     }
 
     /**

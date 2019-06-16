@@ -33,8 +33,7 @@ class HttpTest extends TestCase
     public function testGetWizardFormFromFirstStep()
     {
         $response = $this->get('/wizard/test');
-        $response->assertStatus(200);
-        $response->assertSee('Name');
+        $response->assertRedirect('/wizard/test/step-first-stub');
     }
 
     public function testGetWizardFormFromLastProcessedStep()
@@ -49,8 +48,7 @@ class HttpTest extends TestCase
         ]);
 
         $response = $this->get('/wizard/test');
-        $response->assertStatus(200);
-        $response->assertSee('Phone');
+        $response->assertRedirect('/wizard/test/step-second-stub');
     }
 
     public function testRunAllWizardSteps()
