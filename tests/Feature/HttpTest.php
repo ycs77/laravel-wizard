@@ -19,6 +19,8 @@ class HttpTest extends TestCase
             '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerStub',
             'wizard.test'
         );
+
+        $this->authenticate();
     }
 
     protected function setWizardRoutes($uri, $controllerClass, $name)
@@ -33,14 +35,14 @@ class HttpTest extends TestCase
     public function testGetWizardFormFromFirstStep()
     {
         $response = $this->get('/wizard/test');
-        $response->assertRedirect('/wizard/test/step-first-stub');
+        $response->assertRedirect('/wizard/test/user-step-stub');
     }
 
     public function testGetWizardFormFromLastProcessedStep()
     {
         $this->session([
             'laravel_wizard.test' => [
-                'step-first-stub' => [
+                'user-step-stub' => [
                     'name' => 'Lucas Yang',
                 ],
                 '_last_index' => 1,
@@ -48,35 +50,44 @@ class HttpTest extends TestCase
         ]);
 
         $response = $this->get('/wizard/test');
-        $response->assertRedirect('/wizard/test/step-second-stub');
+        $response->assertRedirect('/wizard/test/post-step-stub');
     }
 
     public function testRunAllWizardSteps()
     {
         // Get first step
-        $response = $this->get('/wizard/test/step-first-stub');
+        $response = $this->get('/wizard/test/user-step-stub');
         $response->assertStatus(200);
 
         // Post first step
-        $response = $this->post('/wizard/test/step-first-stub');
-        $response->assertRedirect('/wizard/test/step-second-stub');
+        $response = $this->post('/wizard/test/user-step-stub', [
+            'name' => 'John',
+        ]);
+        $response->assertRedirect('/wizard/test/post-step-stub');
 
         // Get second step
-        $response = $this->get('/wizard/test/step-second-stub');
+        $response = $this->get('/wizard/test/post-step-stub');
         $response->assertStatus(200);
 
         // Post second step
-        $response = $this->post('/wizard/test/step-second-stub');
+        $response = $this->post('/wizard/test/post-step-stub', [
+            'title' => 'Title',
+            'content' => 'Content.',
+        ]);
         $response->assertRedirect('/wizard/test/done');
 
         // Get done page
         $response = $this->get('/wizard/test/done');
         $response->assertStatus(200);
 
-        $this->assertEquals([
-            'first' => true,
-            'second' => true,
-        ], $this->app['session']->get('test-steps-queue'));
+        // Assert data from database
+        $this->assertDatabaseHas('users', [
+            'name' => 'John',
+        ]);
+        $this->assertDatabaseHas('posts',[
+            'title' => 'Title',
+            'content' => 'Content.',
+        ]);
     }
 
     public function testWizardFormThrowStepNotFoundException()
@@ -93,8 +104,8 @@ class HttpTest extends TestCase
             ],
         ]);
 
-        $response = $this->get('/wizard/test/step-first-stub');
-        $response->assertRedirect('/wizard/test/step-second-stub');
+        $response = $this->get('/wizard/test/user-step-stub');
+        $response->assertRedirect('/wizard/test/post-step-stub');
     }
 
     public function testWizardStepTriggerFromBack()
@@ -105,21 +116,21 @@ class HttpTest extends TestCase
             ],
         ]);
 
-        $response = $this->get('/wizard/test/step-first-stub?trigger=back');
-        $response->assertRedirect('/wizard/test/step-first-stub');
+        $response = $this->get('/wizard/test/user-step-stub?trigger=back');
+        $response->assertRedirect('/wizard/test/user-step-stub');
     }
 
     public function testWizardCacheDatabaseDriver()
     {
         $this->app['config']->set('wizard.driver', 'database');
 
-        $this->authenticate();
-
-        $response = $this->post('/wizard/test/step-first-stub');
-        $response->assertRedirect('/wizard/test/step-second-stub');
+        $response = $this->post('/wizard/test/user-step-stub', [
+            'name' => 'John',
+        ]);
+        $response->assertRedirect('/wizard/test/post-step-stub');
 
         $this->assertDatabaseHas('wizard', [
-            'payload' => '{"step-first-stub":[],"_last_index":1}',
+            'payload' => '{"user-step-stub":{"name":"John"},"_last_index":1}',
             'user_id' => 1,
         ]);
     }
@@ -128,12 +139,14 @@ class HttpTest extends TestCase
     {
         $this->app['config']->set('wizard.cache', false);
 
-        $response = $this->post('/wizard/test/step-first-stub');
-        $response->assertRedirect('/wizard/test/step-second-stub');
+        $response = $this->post('/wizard/test/user-step-stub', [
+            'name' => 'John',
+        ]);
+        $response->assertRedirect('/wizard/test/post-step-stub');
 
-        $this->assertEquals([
-            'first' => true,
-        ], $this->app['session']->get('test-steps-queue'));
+        $this->assertDatabaseHas('users', [
+            'name' => 'John',
+        ]);
     }
 
     public function testWizardSetNoCacheFromControllerNowRunStepSaveData()
@@ -144,11 +157,13 @@ class HttpTest extends TestCase
             'wizard.no-cache'
         );
 
-        $response = $this->post('/wizard/no-cache/step-first-stub');
-        $response->assertRedirect('/wizard/no-cache/step-second-stub');
+        $response = $this->post('/wizard/no-cache/user-step-stub', [
+            'name' => 'John',
+        ]);
+        $response->assertRedirect('/wizard/no-cache/post-step-stub');
 
-        $this->assertEquals([
-            'first' => true,
-        ], $this->app['session']->get('test-steps-queue'));
+        $this->assertDatabaseHas('users', [
+            'name' => 'John',
+        ]);
     }
 }

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container my-5">
-        <h1 class="text-center">
+        <h1 class="text-center mb-4">
             {{ __($doneText ?? 'wizard::generic.done') }}
         </h1>
 

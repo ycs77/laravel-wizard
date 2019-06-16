@@ -3,8 +3,8 @@
 namespace Ycs77\LaravelWizard\Test\Unit;
 
 use Ycs77\LaravelWizard\StepRepository;
-use Ycs77\LaravelWizard\Test\Stubs\StepFirstStub;
-use Ycs77\LaravelWizard\Test\Stubs\StepSecondStub;
+use Ycs77\LaravelWizard\Test\Stubs\UserStepStub;
+use Ycs77\LaravelWizard\Test\Stubs\PostStepStub;
 use Ycs77\LaravelWizard\Test\TestCase;
 use Ycs77\LaravelWizard\Wizard;
 
@@ -41,8 +41,8 @@ class StepRepositoryTest extends TestCase
         ]);
 
         $this->stepsStub = [
-            new StepFirstStub($this->wizard, 0),
-            new StepSecondStub($this->wizard, 1),
+            new UserStepStub($this->wizard, 0),
+            new PostStepStub($this->wizard, 1),
         ];
     }
 
@@ -72,16 +72,16 @@ class StepRepositoryTest extends TestCase
     {
         $this->initStepsItems();
 
-        $this->assertEquals($this->stepsStub[0], $this->step->find('step-first-stub'));
-        $this->assertEquals($this->stepsStub[1], $this->step->find('step-second-stub'));
+        $this->assertEquals($this->stepsStub[0], $this->step->find('user-step-stub'));
+        $this->assertEquals($this->stepsStub[1], $this->step->find('post-step-stub'));
         $this->assertNull($this->step->find('not-found'));
     }
 
     public function testMakeStepFormStepClassName()
     {
         $this->step->make([
-            StepFirstStub::class,
-            StepSecondStub::class,
+            UserStepStub::class,
+            PostStepStub::class,
         ]);
 
         $this->assertEquals($this->stepsStub, $this->step->all());
@@ -89,7 +89,7 @@ class StepRepositoryTest extends TestCase
 
     public function testMakeStepFormStepInstance()
     {
-        $this->step->make(StepFirstStub::class, 0);
+        $this->step->make(UserStepStub::class, 0);
 
         $this->assertEquals([$this->stepsStub[0]], $this->step->all());
     }
@@ -200,7 +200,7 @@ class StepRepositoryTest extends TestCase
         $this->initStepsItems();
 
         $this->step->setCurrentIndex(1);
-        $this->assertEquals('step-first-stub', $this->step->prevSlug());
+        $this->assertEquals('user-step-stub', $this->step->prevSlug());
 
         $this->step->setCurrentIndex(0);
         $this->assertNull($this->step->prevSlug());
@@ -211,7 +211,7 @@ class StepRepositoryTest extends TestCase
         $this->initStepsItems();
 
         $this->step->setCurrentIndex(0);
-        $this->assertEquals('step-second-stub', $this->step->nextSlug());
+        $this->assertEquals('post-step-stub', $this->step->nextSlug());
 
         $this->step->setCurrentIndex(1);
         $this->assertNull($this->step->nextSlug());

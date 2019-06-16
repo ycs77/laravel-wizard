@@ -91,7 +91,7 @@ class NameStep extends Step
     protected $view = 'steps.user.name';
 
     /**
-     * Set the step model.
+     * Set the step model instance or the relationships instance.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return void
@@ -104,11 +104,12 @@ class NameStep extends Step
     /**
      * Save this step form data.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  array|null  $data
-     * @param  \Illuminate\Database\Eloquent\Model|null  $data
+     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null  $model
      * @return void
      */
-    public function saveData($data = null, $model = null)
+    public function saveData(Request $request, $data = null, $model = null)
     {
         $data = Arr::only($data, 'name');
         $model->update($data);
@@ -183,6 +184,39 @@ Add `wizardOptions` property to `controller`, you can use `cache`, `driver`, `co
 protected $wizardOptions = [
     'cache' => false,
 ];
+```
+
+### Set step relationships model
+
+Similarly, you can set the relationships model in `setModel` method of `Step`.
+
+```php
+use Illuminate\Support\Arr;
+
+/**
+ * Set the step model instance or the relationships instance.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @return void
+ */
+public function setModel(Request $request)
+{
+    $this->model = $request->user()->posts();
+}
+
+/**
+ * Save this step form data.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  array|null  $data
+ * @param  \Illuminate\Database\Eloquent\Model\Illuminate\Database\Eloquent\Relations\relation|null $model
+ * @return void
+ */
+public function saveData(Request $request, $data = null,$model = null)
+{
+    $data = Arr::only($data, ['title', 'content']);
+    $model->create($data);
+}
 ```
 
 ## Commands

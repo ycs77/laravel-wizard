@@ -3,54 +3,55 @@
 namespace Ycs77\LaravelWizard\Test\Stubs;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Ycs77\LaravelWizard\Step;
 
-class StepSecondStub extends Step
+class UserStepStub extends Step
 {
     /**
      * The step slug.
      *
      * @var string
      */
-    protected $slug = 'step-second-stub';
+    protected $slug = 'user-step-stub';
 
     /**
      * The step show label text.
      *
      * @var string
      */
-    protected $label = 'Step second stub';
+    protected $label = 'User step stub';
 
     /**
      * The step form view path.
      *
      * @var string
      */
-    protected $view = 'steps.second';
+    protected $view = 'steps.user';
 
     /**
-     * Set the step model.
+     * Set the step model instance or the relationships instance.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
     public function setModel(Request $request)
     {
-        //
+        $this->model = $request->user();
     }
 
     /**
      * Save this step form data.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  array|null  $data
-     * @param  \Illuminate\Database\Eloquent\Model|null  $data
+     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null  $model
      * @return void
      */
-    public function saveData($data = null, $model = null)
+    public function saveData(Request $request, $data = null, $model = null)
     {
-        $queue = session('test-steps-queue', []);
-        $queue['second'] = true;
-        session()->put('test-steps-queue', $queue);
+        $data = Arr::only($data, 'name');
+        $model->update($data);
     }
 
     /**
@@ -61,6 +62,8 @@ class StepSecondStub extends Step
      */
     public function rules(Request $request)
     {
-        return [];
+        return [
+            'name' => 'required',
+        ];
     }
 }

@@ -5,9 +5,8 @@ namespace Ycs77\LaravelWizard\Test\Unit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Ycs77\LaravelWizard\CacheManager;
-use Ycs77\LaravelWizard\Test\Stubs\StepFirstStub;
-use Ycs77\LaravelWizard\Test\Stubs\StepSecondStub;
-use Ycs77\LaravelWizard\Test\Stubs\User;
+use Ycs77\LaravelWizard\Test\Stubs\UserStepStub;
+use Ycs77\LaravelWizard\Test\Stubs\PostStepStub;
 use Ycs77\LaravelWizard\Test\TestCase;
 use Ycs77\LaravelWizard\Wizard;
 
@@ -34,7 +33,7 @@ class StepTest extends TestCase
         parent::setUp();
 
         $this->wizard = $this->mock(Wizard::class, [$this->app])->makePartial();
-        $this->step = $this->mock(StepFirstStub::class, [$this->wizard, 0])->makePartial();
+        $this->step = $this->mock(UserStepStub::class, [$this->wizard, 0])->makePartial();
     }
 
     protected function tearDown()
@@ -49,29 +48,14 @@ class StepTest extends TestCase
     {
         $this->assertEquals(0, $this->step->index());
         $this->assertEquals(1, $this->step->number());
-        $this->assertEquals('step-first-stub', $this->step->slug());
-        $this->assertEquals('Step first stub', $this->step->label());
-        $this->assertEquals('steps.first', $this->step->view());
-    }
-
-    public function testGetStepModel()
-    {
-        // arrange
-        $request = Request::create('http:://example.com/');
-        $this->step->setModel($request);
-
-        $expected = User::where('name', 'Lucas Yang')->first();
-
-        // act
-        $actual = $this->step->model();
-
-        // assert
-        $this->assertTrue($actual->is($expected));
+        $this->assertEquals('user-step-stub', $this->step->slug());
+        $this->assertEquals('User step stub', $this->step->label());
+        $this->assertEquals('steps.user', $this->step->view());
     }
 
     public function testMakeFromStatic()
     {
-        $this->assertNotNull(StepFirstStub::make($this->wizard, 0));
+        $this->assertNotNull(UserStepStub::make($this->wizard, 0));
     }
 
     public function testGetData()
@@ -81,7 +65,7 @@ class StepTest extends TestCase
 
         $this->step->shouldReceive('getDataKey')
             ->once()
-            ->andReturn('step-first-stub');
+            ->andReturn('user-step-stub');
         /** @param \Mockery\MockInterface $mock */
         $cache = $this->mock(CacheManager::class, function ($mock) {
             $mock->shouldReceive('get')->once()->andReturn(['field' => 'data']);
@@ -97,15 +81,15 @@ class StepTest extends TestCase
 
     public function testGetDataKey()
     {
-        $this->assertEquals('step-first-stub', $this->step->getDataKey());
-        $this->assertEquals('step-first-stub.field', $this->step->getDataKey('field'));
+        $this->assertEquals('user-step-stub', $this->step->getDataKey());
+        $this->assertEquals('user-step-stub.field', $this->step->getDataKey('field'));
     }
 
     public function testCacheProgress()
     {
         // arrange
         $expected = [
-            'step-first-stub' => [
+            'user-step-stub' => [
                 'name' => 'Lucas Yang',
             ],
             '_last_index' => 1,
@@ -127,7 +111,7 @@ class StepTest extends TestCase
         $this->wizard->shouldReceive('cacheStepData')
             ->once()
             ->with([
-                'step-first-stub' => [
+                'user-step-stub' => [
                     'name' => 'Lucas Yang',
                 ],
             ], 1);
@@ -143,17 +127,17 @@ class StepTest extends TestCase
     {
         // arrange
         $expected = [
-            'step-first-stub' => [
+            'user-step-stub' => [
                 'name' => 'Lucas Yang',
             ],
-            'step-second-stub' => [
+            'post-step-stub' => [
                 'phone' => '12345678',
             ],
             '_last_index' => 1,
         ];
         $request = Request::create('http://example.com');
 
-        $this->step = $this->mock(StepSecondStub::class, [$this->wizard, 1])->makePartial();
+        $this->step = $this->mock(PostStepStub::class, [$this->wizard, 1])->makePartial();
         $this->step->shouldReceive('getRequestData')
             ->once()
             ->andReturn(['phone' => '12345678']);
@@ -163,7 +147,7 @@ class StepTest extends TestCase
             $mock->shouldReceive('get')
                 ->twice()
                 ->andReturn([
-                    'step-first-stub' => [
+                    'user-step-stub' => [
                         'name' => 'Lucas Yang',
                     ],
                     '_last_index' => 1,
@@ -174,10 +158,10 @@ class StepTest extends TestCase
         $this->wizard->shouldReceive('cacheStepData')
             ->once()
             ->with([
-                'step-first-stub' => [
+                'user-step-stub' => [
                     'name' => 'Lucas Yang',
                 ],
-                'step-second-stub' => [
+                'post-step-stub' => [
                     'phone' => '12345678',
                 ],
                 '_last_index' => 1,

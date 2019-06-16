@@ -29,7 +29,7 @@ class DummyClass extends Step
     protected $view = 'DummyViewPath';
 
     /**
-     * Set the step model.
+     * Set the step model instance or the relationships instance.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return void
@@ -42,11 +42,12 @@ class DummyClass extends Step
     /**
      * Save this step form data.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  array|null  $data
-     * @param  \Illuminate\Database\Eloquent\Model|null  $data
+     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null  $model
      * @return void
      */
-    public function saveData($data = null, $model = null)
+    public function saveData(Request $request, $data = null, $model = null)
     {
         //
     }

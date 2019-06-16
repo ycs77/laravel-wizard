@@ -3,60 +3,55 @@
 namespace Ycs77\LaravelWizard\Test\Stubs;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Ycs77\LaravelWizard\Step;
-use Ycs77\LaravelWizard\Test\Stubs\User;
 
-class StepFirstStub extends Step
+class PostStepStub extends Step
 {
     /**
      * The step slug.
      *
      * @var string
      */
-    protected $slug = 'step-first-stub';
+    protected $slug = 'post-step-stub';
 
     /**
      * The step show label text.
      *
      * @var string
      */
-    protected $label = 'Step first stub';
+    protected $label = 'Post step stub';
 
     /**
      * The step form view path.
      *
      * @var string
      */
-    protected $view = 'steps.first';
+    protected $view = 'steps.post';
 
     /**
-     * Set the step model.
+     * Set the step model instance or the relationships instance.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
     public function setModel(Request $request)
     {
-        $this->model = User::firstOrCreate([
-            'name' => 'Lucas Yang',
-        ], [
-            'email' => 'yangchenshin77@gmail.com',
-            'password' => 'password',
-        ]);
+        $this->model = $request->user()->posts();
     }
 
     /**
      * Save this step form data.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  array|null  $data
-     * @param  \Illuminate\Database\Eloquent\Model|null  $data
+     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null  $model
      * @return void
      */
-    public function saveData($data = null, $model = null)
+    public function saveData(Request $request, $data = null, $model = null)
     {
-        $queue = session('test-steps-queue', []);
-        $queue['first'] = true;
-        session()->put('test-steps-queue', $queue);
+        $data = Arr::only($data, ['title', 'content']);
+        $model->create($data);
     }
 
     /**
@@ -67,6 +62,9 @@ class StepFirstStub extends Step
      */
     public function rules(Request $request)
     {
-        return [];
+        return [
+            'title' => 'required|max:50',
+            'content' => 'required',
+        ];
     }
 }

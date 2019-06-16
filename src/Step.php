@@ -14,9 +14,9 @@ abstract class Step
     protected $wizard;
 
     /**
-     * The step model instance.
+     * The step model instance or the relationships instance.
      *
-     * @var \Illuminate\Database\Eloquent\Model|null
+     * @var \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null
      */
     protected $model;
 
@@ -131,9 +131,9 @@ abstract class Step
     }
 
     /**
-     * Get the step model instance.
+     * Get the step model instance or the relationships instance.
      *
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null
      */
     public function model()
     {
@@ -141,7 +141,7 @@ abstract class Step
     }
 
     /**
-     * Set the step model.
+     * Set the step model instance or the relationships instance.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return void
@@ -154,11 +154,12 @@ abstract class Step
     /**
      * Save this step form data.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  array|null  $data
-     * @param  \Illuminate\Database\Eloquent\Model|null  $data
+     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null  $model
      * @return void
      */
-    abstract public function saveData($data = null, $model = null);
+    abstract public function saveData(Request $request, $data = null, $model = null);
 
     /**
      * Validation rules.
@@ -190,9 +191,7 @@ abstract class Step
      */
     public function data($key = '')
     {
-        return $this->wizard
-            ->cache()
-            ->get($this->getDataKey($key));
+        return $this->wizard->cache()->get($this->getDataKey($key));
     }
 
     /**

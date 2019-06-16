@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWizardTestTable extends Migration
+class CreateWizardTestTables extends Migration
 {
     /**
      * Run the migrations.
@@ -19,6 +19,15 @@ class CreateWizardTestTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
+            $table->timestamps();
+        });
+
+        Schema::create('posts', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('title');
+            $table->text('content');
             $table->timestamps();
         });
 
@@ -38,6 +47,7 @@ class CreateWizardTestTable extends Migration
     public function down()
     {
         Schema::dropIfExists('wizard');
+        Schema::dropIfExists('posts');
         Schema::dropIfExists('users');
     }
 }

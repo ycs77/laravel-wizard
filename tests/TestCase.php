@@ -93,11 +93,15 @@ class TestCase extends OrchestraTestCase
     protected function authenticate()
     {
         $user = User::create([
-            'name' => 'Name',
-            'email' => 'example@email.com',
+            'name' => 'Lucas Yang',
+            'email' => 'yangchenshin77@gmail.com',
             'password' => bcrypt('password'),
         ]);
 
         $this->actingAs($user);
+
+        $this->app['request']->setUserResolver(function () use ($user) {
+            return $user;
+        });
     }
 }

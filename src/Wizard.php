@@ -4,7 +4,6 @@ namespace Ycs77\LaravelWizard;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
-use Ycs77\LaravelWizard\Exceptions\StepNotFoundException;
 
 class Wizard
 {
@@ -76,42 +75,6 @@ class Wizard
         $this->stepRepo->make($steps);
 
         $this->setOptions($options);
-    }
-
-    /**
-     * Get first step or last processed step.
-     *
-     * @param  string|null $slug
-     * @return \Ycs77\LaravelWizard\Step
-     *
-     * @throws \Ycs77\LaravelWizard\Exceptions\StepNotFoundException
-     */
-    public function getStep($slug = null)
-    {
-        $step = isset($slug)
-            ? $this->stepRepo->find($slug)
-            : $this->stepRepo->get($this->getLastProcessedStepIndex());
-
-        if (is_null($step)) {
-            throw new StepNotFoundException();
-        }
-
-        $this->stepRepo->setCurrentIndex($step->index());
-        return $step;
-    }
-
-    /**
-     * Get the last processed step index.
-     *
-     * @return int
-     */
-    public function getLastProcessedStepIndex()
-    {
-        if ($this->option('cache')) {
-            return $this->cache->getLastProcessedIndex() ?? 0;
-        }
-
-        return 0;
     }
 
     /**

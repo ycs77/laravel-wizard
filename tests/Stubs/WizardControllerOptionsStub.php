@@ -30,8 +30,8 @@ class WizardControllerOptionsStub extends WizardController
      * @var array
      */
     protected $steps = [
-        StepFirstStub::class,
-        StepSecondStub::class,
+        UserStepStub::class,
+        PostStepStub::class,
     ];
 
     /**
