@@ -38,16 +38,16 @@ php artisan vendor:publish --tag=wizard-views
 Now you can quickly generate the wizard controller and the wizard steps:
 
 ```bash
-php artisan make:wizard UserSetup NameStep,EmailStep
+php artisan make:wizard User NameStep,EmailStep
 ```
 
-This command generate the `UserSetupWizardController`, `NameStep`, `EmailStep` class, and append the wizard route to `routes/web.php`.
+This command generate the `UserWizardController`, `NameStep`, `EmailStep` class, and append the wizard route to `routes/web.php`.
 
 *routes/web.php*
 ```php
 ...
 
-Wizard::routes('wizard/user', 'UserSetupWizardController', 'wizard.user');
+Wizard::routes('wizard/user', 'UserWizardController', 'wizard.user');
 ```
 
 > If you can't use auto append route, you can set `config/wizard.php` attribute `append_route` to `false`.
@@ -132,7 +132,7 @@ class NameStep extends Step
 
 And add steps view, for example:
 
-*resources/views/steps/user_setup/name.blade.php*
+*resources/views/steps/user/name.blade.php*
 ```php
 <div class="form-group">
     <label for="name">Name</label>
@@ -143,7 +143,7 @@ And add steps view, for example:
 </div>
 ```
 
-*resources/views/steps/user_setup/email.blade.php*
+*resources/views/steps/user/email.blade.php*
 ```php
 <div class="form-group">
     <label for="email">E-mail</label>
@@ -154,7 +154,7 @@ And add steps view, for example:
 </div>
 ```
 
-Next, browse the URL `/wizard/user_setup`, start use the Laravel Wizard.
+Next, browse the URL `/wizard/user`, start use the Laravel Wizard.
 
 ### 3. Use wizard steps CSS package
 
@@ -170,11 +170,13 @@ Or use yarn:
 yarn add bootstrap-steps
 ```
 
+## Advanced
+
 ### Override wizard configuration on wizard controller
 
 Add `wizardOptions` property to `controller`, you can use `cache`, `driver`, `connection`, `table` options to override configuration.
 
-*app/Http/Controllers/UserSetupWizardController.php*
+*app/Http/Controllers/UserWizardController.php*
 ```php
 /**
  * The wizard options.
@@ -228,7 +230,7 @@ public function saveData(Request $request, $data = null,$model = null)
 **Make controller**:
 
 ```bash
-php artisan make:wizard:controller UserSetupController steps=NameStep,EmailStep
+php artisan make:wizard:controller UserController steps=NameStep,EmailStep
 ```
 
 The `make:wizard` and `make:wizard:controller` difference, is `make:wizard` will append route and no confirm generate step.
