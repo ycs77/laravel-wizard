@@ -47,7 +47,10 @@ class WizardServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/wizard'),
+        ], 'wizard-views');
+
+        $this->publishes([
             __DIR__ . '/../resources/lang' => resource_path('lang/vendor/wizard'),
-        ], 'wizard-resources');
+        ], 'wizard-languages');
     }
 }

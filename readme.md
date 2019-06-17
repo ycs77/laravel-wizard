@@ -25,10 +25,10 @@ Publish config:
 php artisan vendor:publish --tag=wizard-config
 ```
 
-The this package view is use [Bootstrap 4](https://getbootstrap.com/), but if you don't want to use, you can publish views and translations to custom it:
+The this package view is use [Bootstrap 4](https://getbootstrap.com/), but if you don't want to use, you can publish views to custom it, or [Customize a specific wizard base view](#customize-a-specific-wizard-base-view):
 
 ```bash
-php artisan vendor:publish --tag=wizard-resources
+php artisan vendor:publish --tag=wizard-views
 ```
 
 ## Usage
@@ -185,6 +185,10 @@ protected $wizardOptions = [
     'cache' => false,
 ];
 ```
+
+### Customize a specific wizard base view
+
+If you want to customize the wizard base view, you can copy the view to `resources/views/user`. (`user` is `wizardName` property value on wizard controller),
 
 ### Set step relationships model
 

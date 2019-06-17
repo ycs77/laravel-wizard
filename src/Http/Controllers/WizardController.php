@@ -119,7 +119,7 @@ class WizardController extends Controller
         $formAction = $this->getActionMethod('create');
         $postAction = $this->getActionMethod('store');
 
-        return view('wizard::base', compact('wizard', 'wizardTitle', 'stepRepo', 'step', 'formAction', 'postAction'));
+        return view($this->getViewPath('base'), compact('wizard', 'wizardTitle', 'stepRepo', 'step', 'formAction', 'postAction'));
     }
 
     /**
@@ -189,7 +189,7 @@ class WizardController extends Controller
         $stepRepo = $this->wizard()->stepRepo();
         $doneText = $this->doneText;
 
-        return view('wizard::done', compact('wizardData', 'stepRepo', 'doneText'));
+        return view($this->getViewPath('done'), compact('wizardData', 'stepRepo', 'doneText'));
     }
 
     /**
@@ -342,6 +342,22 @@ class WizardController extends Controller
     protected function getNextStepSlug()
     {
         return $this->wizard()->stepRepo()->nextSlug();
+    }
+
+    /**
+     * Get view path
+     *
+     * @param  string  $view
+     * @return string
+     */
+    public function getViewPath($view)
+    {
+        $viewPath = "wizards.{$this->wizardName}.$view";
+        if (view()->exists($viewPath)) {
+            return $viewPath;
+        }
+
+        return "wizard::$view";
     }
 
     /**
