@@ -27,20 +27,23 @@ class Wizard extends Facade
             'store' => 'store',
             'done' => 'done',
             'done_url' => 'done',
+            'use_done' => true,
         ], $options);
 
         /** @var \Illuminate\Routing\Router $router */
         $router = static::$app['router'];
 
-        $router->get(
-            "$uri/{$options['done_url']}",
-            "$controllerClass@{$options['done']}"
-        )->name("$name.{$options['done']}");
+        if ($options['use_done']) {
+            $router->get(
+                "$uri/{$options['done_url']}",
+                "$controllerClass@{$options['done']}"
+            )->name("$name.{$options['done']}");
+        }
 
         $router->get(
             "$uri/{step?}",
             "$controllerClass@{$options['create']}"
-        )->name("$name.{$options['create']}");
+        )->name("$name");
 
         $router->post(
             "$uri/{step}",
