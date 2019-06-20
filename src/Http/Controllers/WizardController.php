@@ -55,6 +55,13 @@ class WizardController extends Controller
     protected $steps = [];
 
     /**
+     * The data with to the wizard form view.
+     *
+     * @var array
+     */
+    protected $withViewData = [];
+
+    /**
      * The wizard done show texts.
      *
      * @var string
@@ -108,18 +115,27 @@ class WizardController extends Controller
             );
         }
 
-        // Wizard step created event.
-        if ($redirectTo = $this->wizardStepCreated($request, $step)) {
-            return $redirectTo;
-        }
-
         $wizard = $this->wizard();
         $wizardTitle = $this->wizardTitle;
         $stepRepo = $this->wizard()->stepRepo();
         $formAction = $this->getActionMethod('create');
         $postAction = $this->getActionMethod('store');
 
-        return view($this->getViewPath('base'), compact('wizard', 'wizardTitle', 'stepRepo', 'step', 'formAction', 'postAction'));
+        $this->pushWithViewData(compact(
+            'wizard',
+            'wizardTitle',
+            'step',
+            'stepRepo',
+            'formAction',
+            'postAction'
+        ));
+
+        // Wizard step created event.
+        if ($redirectTo = $this->wizardStepCreated($request, $step)) {
+            return $redirectTo;
+        }
+
+        return view($this->getViewPath('base'), $this->withViewData);
     }
 
     /**
@@ -343,12 +359,31 @@ class WizardController extends Controller
     }
 
     /**
-     * Get view path
+     * Push the data with to the wizard form view.
+     *
+     * Example:
+     *
+     * $this->pushWithViewData(compact(
+     *     'data'
+     * ));
+     *
+     * @param  array  $data
+     * @return void
+     */
+    protected function pushWithViewData(array $data)
+    {
+        foreach ($data as $key => $value) {
+            $this->withViewData[$key] = $value;
+        }
+    }
+
+    /**
+     * Get view path.
      *
      * @param  string  $view
      * @return string
      */
-    public function getViewPath($view)
+    protected function getViewPath($view)
     {
         $viewPath = "wizards.{$this->wizardName}.$view";
         if (view()->exists($viewPath)) {
