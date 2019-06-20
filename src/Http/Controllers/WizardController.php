@@ -186,12 +186,10 @@ class WizardController extends Controller
      */
     public function done(Request $request)
     {
-        $wizardData = $request->session()->get('wizard_data');
-        $wizardData = json_decode(base64_decode($wizardData), true);
         $stepRepo = $this->wizard()->stepRepo();
         $doneText = $this->doneText;
 
-        return view($this->getViewPath('done'), compact('wizardData', 'stepRepo', 'doneText'));
+        return view($this->getViewPath('done'), compact('stepRepo', 'doneText'));
     }
 
     /**
@@ -251,8 +249,6 @@ class WizardController extends Controller
      */
     protected function doneRedirectTo($withData = null)
     {
-        $withData = $withData ? base64_encode(json_encode($withData)) : null;
-        session()->put('wizard_data', $withData);
         return redirect($this->getActionUrl('done'));
     }
 
