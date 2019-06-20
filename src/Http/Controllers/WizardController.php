@@ -162,6 +162,8 @@ class WizardController extends Controller
         }
 
         if (!$this->getNextStepSlug()) {
+            $data = null;
+
             // Wizard done...
             if ($this->wizard()->option('cache')) {
                 $data = $this->save($request);
@@ -170,7 +172,7 @@ class WizardController extends Controller
             // Wizard ended event.
             $this->wizardEnded($request, $data);
 
-            return $this->doneRedirectTo($data ?? null);
+            return $this->doneRedirectTo($data);
         }
 
         return $this->redirectTo();
@@ -249,7 +251,7 @@ class WizardController extends Controller
      */
     protected function doneRedirectTo($withData = null)
     {
-        $withData = base64_encode(json_encode($withData ?? []));
+        $withData = $withData ? base64_encode(json_encode($withData)) : null;
         session()->put('wizard_data', $withData);
         return redirect($this->getActionUrl('done'));
     }

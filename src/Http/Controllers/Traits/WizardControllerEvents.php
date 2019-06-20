@@ -79,10 +79,10 @@ trait WizardControllerEvents
      * On wizard ended event.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  array $data
+     * @param  array|null $data
      * @return void
      */
-    protected function wizardEnded(Request $request, array $data)
+    protected function wizardEnded(Request $request, $data)
     {
         //
     }
