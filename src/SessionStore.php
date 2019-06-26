@@ -20,7 +20,7 @@ class SessionStore implements CacheStore
      *
      * @var string
      */
-    protected $wizardKey = '';
+    protected $wizardKey;
 
     /**
      * Create a new wizard cache session store instance.
@@ -29,7 +29,7 @@ class SessionStore implements CacheStore
      * @param string  $key
      * @return void
      */
-    public function __construct(Session $session, string $wizardKey = '')
+    public function __construct(Session $session, string $wizardKey)
     {
         $this->session = $session;
         $this->wizardKey = $wizardKey;
