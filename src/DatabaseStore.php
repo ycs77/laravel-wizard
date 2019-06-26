@@ -114,13 +114,12 @@ class DatabaseStore implements CacheStore
     /**
      * Checks if an a step data.
      *
-     * @param  string  $stepKey
      * @param  string  $key
      * @return bool
      */
-    public function has(string $stepKey, string $key = '')
+    public function has(string $key)
     {
-        $data = $this->get($stepKey, $key);
+        $data = $this->get($key);
         return isset($data);
     }
 
