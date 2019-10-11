@@ -137,7 +137,7 @@ class StepRepository implements StepRepositoryContract
      */
     public function current($step = null)
     {
-        if ($step) {
+        if ($step instanceof \Ycs77\LaravelWizard\Step) {
             $this->currentIndex = $step->index();
         }
 
