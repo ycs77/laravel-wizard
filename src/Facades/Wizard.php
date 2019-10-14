@@ -28,13 +28,12 @@ class Wizard extends Facade
      * @param  array  $options
      * @return void
      */
-    static public function routes(
+    public static function routes(
         string $uri,
         string $controllerClass,
         string $name,
         $options = []
-    )
-    {
+    ) {
         $options = array_merge([
             'create' => 'create',
             'store' => 'store',

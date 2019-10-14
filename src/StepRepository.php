@@ -74,6 +74,7 @@ class StepRepository implements StepRepositoryContract
     public function set($steps)
     {
         $this->steps = new Collection($steps);
+
         return $this;
     }
 

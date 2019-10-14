@@ -4,8 +4,8 @@ namespace Ycs77\LaravelWizard\Test\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
-use Ycs77\LaravelWizard\Test\Stubs\UserStepStub;
 use Ycs77\LaravelWizard\Test\Stubs\PostStepStub;
+use Ycs77\LaravelWizard\Test\Stubs\UserStepStub;
 use Ycs77\LaravelWizard\Test\TestCase;
 use Ycs77\LaravelWizard\Wizard;
 

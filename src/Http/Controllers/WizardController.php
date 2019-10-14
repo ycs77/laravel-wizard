@@ -173,6 +173,7 @@ class WizardController extends Controller
         // Set this step index and redirect to prev step.
         if ($request->query('_trigger') === 'back' && $this->beforeBackWizardStep($request)) {
             $prevStep = $this->wizard()->stepRepo()->prev();
+
             return $this->setThisStepAndRedirectTo($request, $prevStep);
         }
 
@@ -408,6 +409,7 @@ class WizardController extends Controller
 
         $data = $this->wizard()->cache()->get();
         $this->wizard()->cache()->clear();
+
         return $data;
     }
 
