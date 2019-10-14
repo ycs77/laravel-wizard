@@ -35,10 +35,8 @@ class StepRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->wizard = $this->mock(Wizard:: class, [$this->app])->makePartial();
-        $this->step = $this->app->makeWith(StepRepository::class, [
-            'wizard' => $this->wizard,
-        ]);
+        $this->wizard = $this->mock(Wizard:: class)->makePartial();
+        $this->step = $this->app->makeWith(StepRepository::class, [$this->wizard]);
 
         $this->stepsStub = [
             new UserStepStub($this->wizard, 0),

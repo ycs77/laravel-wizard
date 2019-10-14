@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use Ycs77\LaravelWizard\Exceptions\StepNotFoundException;
 use Ycs77\LaravelWizard\Http\Controllers\Traits\WizardControllerEvents;
 use Ycs77\LaravelWizard\Step;
-use Ycs77\LaravelWizard\Wizard;
+use Ycs77\LaravelWizard\WizardFactory;
 
 class WizardController extends Controller
 {
@@ -71,13 +71,12 @@ class WizardController extends Controller
     /**
      * Create new wizard controller.
      *
-     * @param  \Ycs77\LaravelWizard\Wizard  $wizard
+     * @param  \Ycs77\LaravelWizard\WizardFactory  $factory
      * @return void
      */
-    public function __construct(Wizard $wizard)
+    public function __construct(WizardFactory $factory)
     {
-        $this->wizard = $wizard;
-        $this->wizard->load($this->wizardName, $this->steps, $this->wizardOptions);
+        $this->wizard = $factory->make($this->wizardName, $this->steps, $this->wizardOptions);
     }
 
     /**
@@ -386,6 +385,7 @@ class WizardController extends Controller
     protected function getViewPath($view)
     {
         $viewPath = "wizards.{$this->wizardName}.$view";
+
         if (view()->exists($viewPath)) {
             return $viewPath;
         }

@@ -18,10 +18,10 @@ class WizardServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('wizard', function ($app) {
-            return new Wizard($app);
+            return new WizardFactory($app);
         });
 
-        $this->app->alias('wizard', Wizard::class);
+        $this->app->alias('wizard', WizardFactory::class);
 
         $this->mergeConfigFrom(__DIR__ . '/../config/wizard.php', 'wizard');
     }
@@ -33,10 +33,12 @@ class WizardServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->commands(WizardMakeCommand::class);
-        $this->commands(WizardControllerMakeCommand::class);
-        $this->commands(StepMakeCommand::class);
-        $this->commands(TableCommand::class);
+        $this->commands([
+            WizardMakeCommand::class,
+            WizardControllerMakeCommand::class,
+            StepMakeCommand::class,
+            TableCommand::class,
+        ]);
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'wizard');
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'wizard');

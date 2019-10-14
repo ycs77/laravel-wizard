@@ -20,7 +20,7 @@ class WizardTest extends TestCase
     {
         parent::setUp();
 
-        $this->wizard = $this->mock(Wizard::class, [$this->app])->makePartial();
+        $this->wizard = new Wizard($this->app, 'test-wizard');
     }
 
     protected function tearDown()

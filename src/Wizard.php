@@ -17,7 +17,7 @@ class Wizard
     /**
      * The wizard cache manager instance.
      *
-     * @var \Ycs77\LaravelWizard\Contracts\CacheStore|\Ycs77\LaravelWizard\CacheManager
+     * @var \Ycs77\LaravelWizard\Contracts\CacheStore
      */
     protected $cache;
 
@@ -27,6 +27,13 @@ class Wizard
      * @var \Ycs77\LaravelWizard\StepRepository
      */
     protected $stepRepo;
+
+    /**
+     * The wizard name.
+     *
+     * @var string
+     */
+    protected $name;
 
     /**
      * The wizard options.
@@ -51,28 +58,14 @@ class Wizard
      * Create a new Wizard instance.
      *
      * @param  \Illuminate\Foundation\Application  $app
+     * @param  string  $name
+     * @param  array  $options
      * @return void
      */
-    public function __construct(Application $app)
+    public function __construct(Application $app, string $name, $options = [])
     {
         $this->app = $app;
-    }
-
-    /**
-     * Load the wizard dependencies.
-     *
-     * @param  string  $name
-     * @param  mixed  $steps
-     * @param  array  $options
-     * @return self
-     */
-    public function load($name, $steps, $options = [])
-    {
-        $this->setCache();
-        $this->setStepRepo();
-
-        $this->cache->setWizardName($name);
-        $this->stepRepo->make($steps);
+        $this->name = $name;
 
         $this->setOptions($options);
     }
@@ -108,7 +101,7 @@ class Wizard
     /**
      * Get the wizard cache instance.
      *
-     * @return \Ycs77\LaravelWizard\Contracts\CacheStore|\Ycs77\LaravelWizard\CacheManager
+     * @return \Ycs77\LaravelWizard\Contracts\CacheStore
      */
     public function cache()
     {
@@ -123,7 +116,7 @@ class Wizard
      */
     public function setCache($cache = null)
     {
-        $this->cache = $cache ?? new CacheManager($this, $this->app);
+        $this->cache = $cache ?? (new CacheManager($this, $this->app))->driver();
         return $this;
     }
 
@@ -154,7 +147,7 @@ class Wizard
      *
      * @return array
      */
-    public function options()
+    public function getOptions()
     {
         return $this->options;
     }
@@ -196,6 +189,16 @@ class Wizard
     public function getApp()
     {
         return $this->app;
+    }
+
+    /**
+     * Get the wizard name.
+     *
+     * @return  string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**

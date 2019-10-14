@@ -4,7 +4,6 @@ namespace Ycs77\LaravelWizard\Test\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
-use Ycs77\LaravelWizard\CacheManager;
 use Ycs77\LaravelWizard\Test\Stubs\UserStepStub;
 use Ycs77\LaravelWizard\Test\Stubs\PostStepStub;
 use Ycs77\LaravelWizard\Test\TestCase;
@@ -32,7 +31,7 @@ class StepTest extends TestCase
     {
         parent::setUp();
 
-        $this->wizard = $this->mock(Wizard::class, [$this->app])->makePartial();
+        $this->wizard = $this->mock(Wizard::class)->makePartial();
         $this->step = $this->mock(UserStepStub::class, [$this->wizard, 0])->makePartial();
     }
 
@@ -67,7 +66,7 @@ class StepTest extends TestCase
             ->once()
             ->andReturn('user-step-stub');
         /** @param \Mockery\MockInterface $mock */
-        $cache = $this->mock(CacheManager::class, function ($mock) {
+        $cache = $this->mock(CacheStore::class, function ($mock) {
             $mock->shouldReceive('get')->once()->andReturn(['field' => 'data']);
         });
         $this->wizard->shouldReceive('cache')->once()->andReturn($cache);
@@ -101,7 +100,7 @@ class StepTest extends TestCase
             ->andReturn(['name' => 'Lucas Yang']);
 
         /** @param \Mockery\MockInterface $mock */
-        $cache = $this->mock(CacheManager::class, function ($mock) use ($expected) {
+        $cache = $this->mock(CacheStore::class, function ($mock) use ($expected) {
             $mock->shouldReceive('get')
                 ->twice()
                 ->andReturn([], $expected);
@@ -143,7 +142,7 @@ class StepTest extends TestCase
             ->andReturn(['phone' => '12345678']);
 
         /** @param \Mockery\MockInterface $mock */
-        $cache = $this->mock(CacheManager::class, function ($mock) use ($expected) {
+        $cache = $this->mock(CacheStore::class, function ($mock) use ($expected) {
             $mock->shouldReceive('get')
                 ->twice()
                 ->andReturn([

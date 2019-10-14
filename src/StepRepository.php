@@ -80,7 +80,7 @@ class StepRepository implements StepRepositoryContract
     /**
      * Make new step instance.
      *
-     * @param  mixed  $stepClass
+     * @param  array|string  $stepClass
      * @param  int|null  $index
      * @return self
      */
@@ -91,7 +91,7 @@ class StepRepository implements StepRepositoryContract
                 $step = new $_stepClass($this->wizard, $_index);
                 $this->steps->push($step);
             }
-        } else {
+        } elseif (is_string($stepClass)) {
             $step = new $stepClass($this->wizard, $index);
             $this->steps->push($step);
         }

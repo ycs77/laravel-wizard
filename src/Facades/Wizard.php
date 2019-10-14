@@ -4,8 +4,21 @@ namespace Ycs77\LaravelWizard\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @see \Ycs77\LaravelWizard\WizardFactory
+ */
 class Wizard extends Facade
 {
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor()
+    {
+        return 'wizard';
+    }
+
     /**
      * Undocumented function
      *

@@ -71,25 +71,13 @@ class CacheManager extends Manager
     }
 
     /**
-     * Set the wizard key.
-     *
-     * @param  string  $wizardName
-     * @return self
-     */
-    public function setWizardName(string $wizardName)
-    {
-        $this->wizardName = $wizardName;
-        return $this;
-    }
-
-    /**
      * Get session key.
      *
      * @return string
      */
     protected function getSessionKey()
     {
-        return 'laravel_wizard.' . $this->wizardName;
+        return 'laravel_wizard.' . $this->wizard->getName();
     }
 
     /**
