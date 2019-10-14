@@ -78,19 +78,22 @@ class StepRepository implements StepRepositoryContract
     }
 
     /**
-     * Make new step instance.
+     * Push the steps to step repository.
      *
-     * @param  array|string  $stepClass
+     * @param  array|\Ycs77\LaravelWizard\Step|string  $stepClass
      * @param  int|null  $index
      * @return self
      */
-    public function make($stepClass, int $index = null)
+    public function push($stepClass, int $index = null)
     {
         if (is_array($stepClass)) {
-            foreach ($stepClass as $_index => $_stepClass) {
-                $step = new $_stepClass($this->wizard, $_index);
+            $steps = $stepClass;
+            foreach ($steps as $stepIndex => $stepClass) {
+                $step = new $stepClass($this->wizard, $stepIndex);
                 $this->steps->push($step);
             }
+        } elseif ($stepClass instanceof Step) {
+            $this->steps->push($stepClass);
         } elseif (is_string($stepClass)) {
             $step = new $stepClass($this->wizard, $index);
             $this->steps->push($step);

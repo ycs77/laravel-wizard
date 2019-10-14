@@ -39,7 +39,7 @@ class WizardFactory
         $wizard->setCache();
         $wizard->setStepRepo();
 
-        $wizard->stepRepo()->make($steps);
+        $wizard->stepRepo()->push($steps);
 
         return $wizard;
     }

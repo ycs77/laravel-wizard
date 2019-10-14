@@ -29,13 +29,13 @@ interface StepRepository
     public function set($steps);
 
     /**
-     * Make new step instance.
+     * Push the steps to step repository.
      *
-     * @param  mixed  $stepClass
+     * @param  array|\Ycs77\LaravelWizard\Step|string  $stepClass
      * @param  int|null  $index
      * @return self
      */
-    public function make($stepClass, int $index = null);
+    public function push($stepClass, int $index = null);
 
     /**
      * Get all steps.

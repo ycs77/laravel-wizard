@@ -36,7 +36,7 @@ class StepRepositoryTest extends TestCase
         parent::setUp();
 
         $this->wizard = $this->mock(Wizard:: class)->makePartial();
-        $this->step = $this->app->makeWith(StepRepository::class, [$this->wizard]);
+        $this->stepRepo = $this->app->makeWith(StepRepository::class, [$this->wizard]);
 
         $this->stepsStub = [
             new UserStepStub($this->wizard, 0),
@@ -46,7 +46,7 @@ class StepRepositoryTest extends TestCase
 
     protected function tearDown()
     {
-        $this->step = null;
+        $this->stepRepo = null;
         $this->wizard = null;
 
         parent::tearDown();
@@ -54,182 +54,182 @@ class StepRepositoryTest extends TestCase
 
     protected function initStepsItems()
     {
-        $this->step->set($this->stepsStub);
+        $this->stepRepo->set($this->stepsStub);
     }
 
     public function testGetStep()
     {
         $this->initStepsItems();
 
-        $this->assertEquals($this->stepsStub[0], $this->step->get(0));
-        $this->assertEquals($this->stepsStub[1], $this->step->get(1));
-        $this->assertNull($this->step->get(2));
+        $this->assertEquals($this->stepsStub[0], $this->stepRepo->get(0));
+        $this->assertEquals($this->stepsStub[1], $this->stepRepo->get(1));
+        $this->assertNull($this->stepRepo->get(2));
     }
 
     public function testFindStep()
     {
         $this->initStepsItems();
 
-        $this->assertEquals($this->stepsStub[0], $this->step->find('user-step-stub'));
-        $this->assertEquals($this->stepsStub[1], $this->step->find('post-step-stub'));
-        $this->assertNull($this->step->find('not-found'));
+        $this->assertEquals($this->stepsStub[0], $this->stepRepo->find('user-step-stub'));
+        $this->assertEquals($this->stepsStub[1], $this->stepRepo->find('post-step-stub'));
+        $this->assertNull($this->stepRepo->find('not-found'));
     }
 
-    public function testMakeStepFormStepClassName()
+    public function testPushStepFormStepClassName()
     {
-        $this->step->make([
+        $this->stepRepo->push([
             UserStepStub::class,
             PostStepStub::class,
         ]);
 
-        $this->assertEquals($this->stepsStub, $this->step->all());
+        $this->assertEquals($this->stepsStub, $this->stepRepo->all());
     }
 
-    public function testMakeStepFormStepInstance()
+    public function testPushStepFormStepInstance()
     {
-        $this->step->make(UserStepStub::class, 0);
+        $this->stepRepo->push(UserStepStub::class, 0);
 
-        $this->assertEquals([$this->stepsStub[0]], $this->step->all());
+        $this->assertEquals([$this->stepsStub[0]], $this->stepRepo->all());
     }
 
     public function testGetAllSteps()
     {
         $this->initStepsItems();
 
-        $this->assertEquals($this->stepsStub, $this->step->all());
+        $this->assertEquals($this->stepsStub, $this->stepRepo->all());
     }
 
     public function testStepsCount()
     {
         $this->initStepsItems();
 
-        $this->assertEquals(2, $this->step->count());
+        $this->assertEquals(2, $this->stepRepo->count());
     }
 
     public function testGetOriginalSteps()
     {
         $this->initStepsItems();
 
-        $this->assertEquals(collect($this->stepsStub), $this->step->original());
+        $this->assertEquals(collect($this->stepsStub), $this->stepRepo->original());
     }
 
     public function testGetAndSetCurrentStep()
     {
         $this->initStepsItems();
 
-        $this->assertEquals(0, $this->step->current()->index());
+        $this->assertEquals(0, $this->stepRepo->current()->index());
 
-        $this->step->current($this->stepsStub[1]);
-        $this->assertEquals(1, $this->step->current()->index());
+        $this->stepRepo->current($this->stepsStub[1]);
+        $this->assertEquals(1, $this->stepRepo->current()->index());
 
-        $this->step->setCurrentIndex(0);
-        $this->assertEquals(0, $this->step->current()->index());
+        $this->stepRepo->setCurrentIndex(0);
+        $this->assertEquals(0, $this->stepRepo->current()->index());
     }
 
     public function testFirstStep()
     {
         $this->initStepsItems();
 
-        $this->assertEquals($this->stepsStub[0], $this->step->first());
+        $this->assertEquals($this->stepsStub[0], $this->stepRepo->first());
     }
 
     public function testLastStep()
     {
         $this->initStepsItems();
 
-        $this->assertEquals($this->stepsStub[1], $this->step->last());
+        $this->assertEquals($this->stepsStub[1], $this->stepRepo->last());
     }
 
     public function testPrevStep()
     {
         $this->initStepsItems();
 
-        $this->step->setCurrentIndex(1);
-        $this->assertEquals($this->stepsStub[0], $this->step->prev());
+        $this->stepRepo->setCurrentIndex(1);
+        $this->assertEquals($this->stepsStub[0], $this->stepRepo->prev());
 
-        $this->step->setCurrentIndex(0);
-        $this->assertNull($this->step->prev());
+        $this->stepRepo->setCurrentIndex(0);
+        $this->assertNull($this->stepRepo->prev());
     }
 
     public function testNextStep()
     {
         $this->initStepsItems();
 
-        $this->step->setCurrentIndex(0);
-        $this->assertEquals($this->stepsStub[1], $this->step->next());
+        $this->stepRepo->setCurrentIndex(0);
+        $this->assertEquals($this->stepsStub[1], $this->stepRepo->next());
 
-        $this->step->setCurrentIndex(1);
-        $this->assertNull($this->step->next());
+        $this->stepRepo->setCurrentIndex(1);
+        $this->assertNull($this->stepRepo->next());
     }
 
     public function testHasStep()
     {
         $this->initStepsItems();
 
-        $this->assertTrue($this->step->has(0));
-        $this->assertTrue($this->step->has(1));
-        $this->assertFalse($this->step->has(2));
+        $this->assertTrue($this->stepRepo->has(0));
+        $this->assertTrue($this->stepRepo->has(1));
+        $this->assertFalse($this->stepRepo->has(2));
     }
 
     public function testHasPrevStep()
     {
         $this->initStepsItems();
 
-        $this->step->setCurrentIndex(1);
-        $this->assertTrue($this->step->hasPrev());
+        $this->stepRepo->setCurrentIndex(1);
+        $this->assertTrue($this->stepRepo->hasPrev());
 
-        $this->step->setCurrentIndex(0);
-        $this->assertFalse($this->step->hasPrev());
+        $this->stepRepo->setCurrentIndex(0);
+        $this->assertFalse($this->stepRepo->hasPrev());
     }
 
     public function testHasNextStep()
     {
         $this->initStepsItems();
 
-        $this->step->setCurrentIndex(0);
-        $this->assertTrue($this->step->hasNext());
+        $this->stepRepo->setCurrentIndex(0);
+        $this->assertTrue($this->stepRepo->hasNext());
 
-        $this->step->setCurrentIndex(1);
-        $this->assertFalse($this->step->hasNext());
+        $this->stepRepo->setCurrentIndex(1);
+        $this->assertFalse($this->stepRepo->hasNext());
     }
 
     public function testPrevSlugStep()
     {
         $this->initStepsItems();
 
-        $this->step->setCurrentIndex(1);
-        $this->assertEquals('user-step-stub', $this->step->prevSlug());
+        $this->stepRepo->setCurrentIndex(1);
+        $this->assertEquals('user-step-stub', $this->stepRepo->prevSlug());
 
-        $this->step->setCurrentIndex(0);
-        $this->assertNull($this->step->prevSlug());
+        $this->stepRepo->setCurrentIndex(0);
+        $this->assertNull($this->stepRepo->prevSlug());
     }
 
     public function testNextSlugStep()
     {
         $this->initStepsItems();
 
-        $this->step->setCurrentIndex(0);
-        $this->assertEquals('post-step-stub', $this->step->nextSlug());
+        $this->stepRepo->setCurrentIndex(0);
+        $this->assertEquals('post-step-stub', $this->stepRepo->nextSlug());
 
-        $this->step->setCurrentIndex(1);
-        $this->assertNull($this->step->nextSlug());
+        $this->stepRepo->setCurrentIndex(1);
+        $this->assertNull($this->stepRepo->nextSlug());
     }
 
     public function testIsEmptyStep()
     {
-        $this->step->set([]);
-        $this->assertTrue($this->step->isEmpty());
+        $this->stepRepo->set([]);
+        $this->assertTrue($this->stepRepo->isEmpty());
 
-        $this->step->set($this->stepsStub);
-        $this->assertFalse($this->step->isEmpty());
+        $this->stepRepo->set($this->stepsStub);
+        $this->assertFalse($this->stepRepo->isEmpty());
     }
 
     public function testIsNotEmptyStep()
     {
-        $this->step->set($this->stepsStub);
-        $this->assertTrue($this->step->isNotEmpty());
+        $this->stepRepo->set($this->stepsStub);
+        $this->assertTrue($this->stepRepo->isNotEmpty());
 
-        $this->step->set([]);
-        $this->assertFalse($this->step->isNotEmpty());
+        $this->stepRepo->set([]);
+        $this->assertFalse($this->stepRepo->isNotEmpty());
     }
 }
