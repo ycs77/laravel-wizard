@@ -52,11 +52,6 @@ class StepTest extends TestCase
         $this->assertEquals('steps.user', $this->step->view());
     }
 
-    public function testMakeFromStatic()
-    {
-        $this->assertNotNull(UserStepStub::make($this->wizard, 0));
-    }
-
     public function testGetData()
     {
         // arrange

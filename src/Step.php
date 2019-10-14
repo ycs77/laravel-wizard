@@ -69,18 +69,6 @@ abstract class Step
     }
 
     /**
-     * Make a new static step.
-     *
-     * @param  \Ycs77\LaravelWizard\Wizard  $wizard
-     * @param  int  $index
-     * @return self
-     */
-    public static function make(Wizard $wizard, int $index)
-    {
-        return new static(...func_get_args());
-    }
-
-    /**
      * Get the step index.
      *
      * @return int
