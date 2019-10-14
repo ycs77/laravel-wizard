@@ -3,8 +3,8 @@
 namespace Ycs77\LaravelWizard\Test\Unit;
 
 use Ycs77\LaravelWizard\StepRepository;
-use Ycs77\LaravelWizard\Test\Stubs\UserStepStub;
 use Ycs77\LaravelWizard\Test\Stubs\PostStepStub;
+use Ycs77\LaravelWizard\Test\Stubs\UserStepStub;
 use Ycs77\LaravelWizard\Test\TestCase;
 use Ycs77\LaravelWizard\Wizard;
 

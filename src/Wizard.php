@@ -117,6 +117,7 @@ class Wizard
     public function setCache($cache = null)
     {
         $this->cache = $cache ?? (new CacheManager($this->app, $this))->driver();
+
         return $this;
     }
 
@@ -139,6 +140,7 @@ class Wizard
     public function setStepRepo($stepRepo = null)
     {
         $this->stepRepo = $stepRepo ?? new StepRepository($this);
+
         return $this;
     }
 
