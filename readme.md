@@ -54,7 +54,7 @@ Wizard::routes('wizard/user', 'UserWizardController', 'wizard.user');
 
 ### 2. Set steps
 
-This is generated NameStep class, you can to `setModel` method get the model, to `rules` method set form validation, and save `$data` to your database via the `saveData` method:
+This is generated NameStep class, you can to `model` method set the model, to `rules` method set form validation, and save `$data` to your database via the `saveData` method:
 
 *app/Steps/User/NameStep.php*
 ```php
@@ -94,11 +94,11 @@ class NameStep extends Step
      * Set the step model instance or the relationships instance.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\Relation|null
      */
-    public function setModel(Request $request)
+    public function model(Request $request)
     {
-        $this->model = User::find(1);
+        return User::find(1);
     }
 
     /**
@@ -106,7 +106,7 @@ class NameStep extends Step
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  array|null  $data
-     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null  $model
+     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\Relation|null  $model
      * @return void
      */
     public function saveData(Request $request, $data = null, $model = null)
@@ -192,9 +192,9 @@ protected $wizardOptions = [
 
 If you want to customize the wizard base view, you can copy the view to `resources/views/user`. (`user` is `wizardName` property value on wizard controller),
 
-### Set step relationships model
+### Set relationships model of the step
 
-Similarly, you can set the relationships model in `setModel` method of `Step`.
+Similarly, you can set the relationships model in `model` method of the `Step`.
 
 ```php
 use Illuminate\Support\Arr;
@@ -203,11 +203,11 @@ use Illuminate\Support\Arr;
  * Set the step model instance or the relationships instance.
  *
  * @param  \Illuminate\Http\Request  $request
- * @return void
+ * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\Relation|null
  */
-public function setModel(Request $request)
+public function model(Request $request)
 {
-    $this->model = $request->user()->posts();
+    return $request->user()->posts();
 }
 
 /**
@@ -215,10 +215,10 @@ public function setModel(Request $request)
  *
  * @param  \Illuminate\Http\Request  $request
  * @param  array|null  $data
- * @param  \Illuminate\Database\Eloquent\Model\Illuminate\Database\Eloquent\Relations\relation|null  $model
+ * @param  \Illuminate\Database\Eloquent\Model\Illuminate\Database\Eloquent\Relations\Relation|null  $model
  * @return void
  */
-public function saveData(Request $request, $data = null,$model = null)
+public function saveData(Request $request, $data = null, $model = null)
 {
     $data = Arr::only($data, ['title', 'content']);
     $model->create($data);

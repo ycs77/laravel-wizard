@@ -33,11 +33,11 @@ class PostStepStub extends Step
      * Set the step model instance or the relationships instance.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\Relation|null
      */
-    public function setModel(Request $request)
+    public function model(Request $request)
     {
-        $this->model = $request->user()->posts();
+        return $request->user()->posts();
     }
 
     /**
@@ -45,7 +45,7 @@ class PostStepStub extends Step
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  array|null  $data
-     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null  $model
+     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\Relation|null  $model
      * @return void
      */
     public function saveData(Request $request, $data = null, $model = null)

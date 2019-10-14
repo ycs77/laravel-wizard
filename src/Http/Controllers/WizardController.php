@@ -161,7 +161,7 @@ class WizardController extends Controller
         if ($this->wizard()->option('cache')) {
             $step->cacheProgress($request);
         } else {
-            $step->saveData($request, $step->getRequestData($request), $step->model());
+            $step->saveData($request, $step->getRequestData($request), $step->getModel());
         }
 
         // Wizard step saved event.
@@ -325,6 +325,7 @@ class WizardController extends Controller
      */
     protected function getWizardStep(Request $request, $slug)
     {
+        /** @var \Ycs77\LaravelWizard\Step|null $step */
         try {
             if (isset($slug)) {
                 $step = $this->wizard()->stepRepo()->find($slug);
@@ -406,7 +407,7 @@ class WizardController extends Controller
         /** @var \Ycs77\LaravelWizard\Step $step */
         foreach ($this->wizard()->stepRepo()->all() as $step) {
             $step->setModel($request);
-            $step->saveData($request, $step->data(), $step->model());
+            $step->saveData($request, $step->data(), $step->getModel());
         }
 
         $data = $this->wizard()->cache()->get();

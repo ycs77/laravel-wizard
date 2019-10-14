@@ -16,7 +16,7 @@ abstract class Step
     /**
      * The step model instance or the relationships instance.
      *
-     * @var \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null
+     * @var \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\Relation|null
      */
     protected $model;
 
@@ -121,9 +121,9 @@ abstract class Step
     /**
      * Get the step model instance or the relationships instance.
      *
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\Relation|null
      */
-    public function model()
+    public function getModel()
     {
         return $this->model;
     }
@@ -136,6 +136,17 @@ abstract class Step
      */
     public function setModel(Request $request)
     {
+        $this->model = $this->model($request);
+    }
+
+    /**
+     * Set the step model instance or the relationships instance.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\Relation|null
+     */
+    public function model(Request $request)
+    {
         //
     }
 
@@ -144,7 +155,7 @@ abstract class Step
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  array|null  $data
-     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\relation|null  $model
+     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\Relation|null  $model
      * @return void
      */
     abstract public function saveData(Request $request, $data = null, $model = null);
