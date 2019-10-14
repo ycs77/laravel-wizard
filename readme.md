@@ -11,6 +11,24 @@ A web setup wizard for Laravel application.
 
 ![Laravel wizard main image.](docs/laravel-wizard-main-image.jpg)
 
+## Table of Contents
+
+- [Laravel wizard](#laravel-wizard)
+  - [Table of Contents](#table-of-contents)
+  - [Install](#install)
+  - [Usage](#usage)
+    - [1. Generate controller and wizard steps](#1-generate-controller-and-wizard-steps)
+    - [2. Set steps](#2-set-steps)
+    - [3. Install wizard steps CSS package](#3-install-wizard-steps-css-package)
+  - [Cache Driver](#cache-driver)
+    - [Database](#database)
+  - [Controller](#controller)
+    - [Setting Configuration](#setting-configuration)
+  - [Customize View](#customize-view)
+  - [Step](#step)
+    - [Set relationships model](#set-relationships-model)
+  - [Commands](#commands)
+
 ## Install
 
 Via Composer:
@@ -54,7 +72,7 @@ Wizard::routes('wizard/user', 'UserWizardController', 'wizard.user');
 
 ### 2. Set steps
 
-This is generated NameStep class, you can to `model` method set the model, to `rules` method set form validation, and save `$data` to your database via the `saveData` method:
+This is generated NameStep class, you can to `model` method set the model, to `rules` method set form validation, and save `$data` to your database via the `saveData` method, for example:
 
 *app/Steps/User/NameStep.php*
 ```php
@@ -133,7 +151,7 @@ class NameStep extends Step
 And add steps view, for example:
 
 *resources/views/steps/user/name.blade.php*
-```php
+```blade
 <div class="form-group">
     <label for="name">Name</label>
     <input type="text" name="name" id="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') ?? $step->data('name') }}">
@@ -144,7 +162,7 @@ And add steps view, for example:
 ```
 
 *resources/views/steps/user/email.blade.php*
-```php
+```blade
 <div class="form-group">
     <label for="email">E-mail</label>
     <input type="email" name="email" id="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') ?? $step->data('email') }}">
@@ -156,9 +174,9 @@ And add steps view, for example:
 
 Next, browse the URL `/wizard/user`, start use the Laravel Wizard.
 
-### 3. Use wizard steps CSS package
+### 3. Install wizard steps CSS package
 
-This package is based on the [Bootstrap Steps](https://github.com/ycs77/bootstrap-steps) as the CSS package, use NPM installation to use:
+The CSS for this package default view is based on the [Bootstrap Steps](https://github.com/ycs77/bootstrap-steps), use NPM installation to use:
 
 ```bash
 npm install bootstrap-steps
@@ -182,9 +200,9 @@ php artisan wizard:table
 php artisan migrate
 ```
 
-## Advanced
+## Controller
 
-### Override wizard configuration on wizard controller
+### Setting Configuration
 
 Add `wizardOptions` property to `controller`, you can use `cache`, `driver`, `connection`, `table` options to override configuration.
 
@@ -200,11 +218,13 @@ protected $wizardOptions = [
 ];
 ```
 
-### Customize a specific wizard base view
+## Customize View
 
 If you want to customize the wizard base view, you can copy the view to `resources/views/user`. (`user` is `wizardName` property value on wizard controller),
 
-### Set relationships model of the step
+## Step
+
+### Set relationships model
 
 Similarly, you can set the relationships model in `model` method of the `Step`.
 
