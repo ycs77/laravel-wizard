@@ -116,7 +116,7 @@ class Wizard
      */
     public function setCache($cache = null)
     {
-        $this->cache = $cache ?? (new CacheManager($this, $this->app))->driver();
+        $this->cache = $cache ?? (new CacheManager($this->app, $this))->driver();
         return $this;
     }
 

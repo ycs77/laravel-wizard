@@ -25,11 +25,11 @@ class CacheManager extends Manager
     /**
      * Create a new Wizard Cache manager instance.
      *
-     * @param  \Ycs77\LaravelWizard\Wizard  $wizard
      * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Ycs77\LaravelWizard\Wizard  $wizard
      * @return void
      */
-    public function __construct(Wizard $wizard, Application $app)
+    public function __construct(Application $app, Wizard $wizard)
     {
         $this->app = $app;
         $this->wizard = $wizard;
