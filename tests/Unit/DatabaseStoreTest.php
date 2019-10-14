@@ -48,7 +48,7 @@ class DatabaseStoreTest extends TestCase
 
         // arrange
         $expected = ['step' => ['field' => 'data']];
-        $this->app['db']->table('wizard')->insert([
+        $this->app['db']->table('wizards')->insert([
             'payload' => '{"step":{"field":"data"}}',
             'user_id' => 1,
         ]);
@@ -64,7 +64,7 @@ class DatabaseStoreTest extends TestCase
     {
         // arrange
         $expected = ['step' => ['field' => 'data']];
-        $this->app['db']->table('wizard')->insert([
+        $this->app['db']->table('wizards')->insert([
             'payload' => '{"step":{"field":"data"}}',
             'ip_address' => '127.0.0.1',
         ]);
@@ -82,7 +82,7 @@ class DatabaseStoreTest extends TestCase
 
         // arrange
         $expected = ['field' => 'data'];
-        $this->app['db']->table('wizard')->insert([
+        $this->app['db']->table('wizards')->insert([
             'payload' => '{"step":{"field":"data"}}',
             'user_id' => 1,
         ]);
@@ -100,7 +100,7 @@ class DatabaseStoreTest extends TestCase
 
         // arrange
         $expected = 'data';
-        $this->app['db']->table('wizard')->insert([
+        $this->app['db']->table('wizards')->insert([
             'payload' => '{"step":{"field":"data"}}',
             'user_id' => 1,
         ]);
@@ -117,7 +117,7 @@ class DatabaseStoreTest extends TestCase
         $this->authenticate();
 
         // arrange
-        $this->app['db']->table('wizard')->insert([
+        $this->app['db']->table('wizards')->insert([
             'payload' => '{"step":{"field":"data"},"_last_index":0}',
             'user_id' => 1,
         ]);
@@ -137,7 +137,7 @@ class DatabaseStoreTest extends TestCase
         $this->cache->set(['step' => ['field' => 'data']]);
 
         // assert
-        $this->assertDatabaseHas('wizard', [
+        $this->assertDatabaseHas('wizards', [
             'payload' => '{"step":{"field":"data"}}',
             'user_id' => 1,
         ]);
@@ -151,7 +151,7 @@ class DatabaseStoreTest extends TestCase
         $this->cache->set(['step' => ['field' => 'data']], 1);
 
         // assert
-        $this->assertDatabaseHas('wizard', [
+        $this->assertDatabaseHas('wizards', [
             'payload' => '{"step":{"field":"data"},"_last_index":1}',
             'user_id' => 1,
         ]);
@@ -165,7 +165,7 @@ class DatabaseStoreTest extends TestCase
         $this->cache->put('step', ['field' => 'data']);
 
         // assert
-        $this->assertDatabaseHas('wizard', [
+        $this->assertDatabaseHas('wizards', [
             'payload' => '{"step":{"field":"data"}}',
             'user_id' => 1,
         ]);
@@ -176,7 +176,7 @@ class DatabaseStoreTest extends TestCase
         $this->authenticate();
 
         // arrange
-        $this->app['db']->table('wizard')->insert([
+        $this->app['db']->table('wizards')->insert([
             'payload' => '{"step":{"field":"data"}}',
             'user_id' => 1,
         ]);
@@ -193,7 +193,7 @@ class DatabaseStoreTest extends TestCase
         $this->authenticate();
 
         // arrange
-        $this->app['db']->table('wizard')->insert([
+        $this->app['db']->table('wizards')->insert([
             'payload' => '{"step":{"field":"data"},"_last_index":1}',
             'user_id' => 1,
         ]);
@@ -202,7 +202,7 @@ class DatabaseStoreTest extends TestCase
         $this->cache->clear();
 
         // assert
-        $this->assertDatabaseMissing('wizard',[
+        $this->assertDatabaseMissing('wizards',[
             'payload' => '{"step":{"field":"data"},"_last_index":1}',
             'user_id' => 1,
         ]);

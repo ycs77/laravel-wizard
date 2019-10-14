@@ -31,7 +31,7 @@ class CreateWizardTestTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('wizard', function (Blueprint $table) {
+        Schema::create('wizards', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->ipAddress('ip_address')->nullable();
@@ -46,7 +46,7 @@ class CreateWizardTestTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wizard');
+        Schema::dropIfExists('wizards');
         Schema::dropIfExists('posts');
         Schema::dropIfExists('users');
     }

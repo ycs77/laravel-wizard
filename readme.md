@@ -170,6 +170,18 @@ Or use yarn:
 yarn add bootstrap-steps
 ```
 
+## Cache Driver
+
+### Database
+
+In order to use the `database` wizard cache driver, you will need a database table to hold the wizards cache data. To generate a migration that creates this table, run the `wizard:table` Artisan command:
+
+```
+php artisan wizard:table
+
+php artisan migrate
+```
+
 ## Advanced
 
 ### Override wizard configuration on wizard controller

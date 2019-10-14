@@ -146,7 +146,7 @@ class HttpTest extends TestCase
         ]);
         $response->assertRedirect('/wizard/test/post-step-stub');
 
-        $this->assertDatabaseHas('wizard', [
+        $this->assertDatabaseHas('wizards', [
             'payload' => '{"user-step-stub":{"name":"John"},"_last_index":1}',
             'user_id' => 1,
         ]);

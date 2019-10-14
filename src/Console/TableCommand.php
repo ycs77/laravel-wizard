@@ -36,7 +36,7 @@ class TableCommand extends Command
     protected $composer;
 
     /**
-     * Create a new queue job table command instance.
+     * Create a new wizard table command instance.
      *
      * @param  \Illuminate\Filesystem\Filesystem  $files
      * @param  \Illuminate\Support\Composer    $composer
@@ -76,7 +76,7 @@ class TableCommand extends Command
      * @param  string  $table
      * @return string
      */
-    protected function createBaseMigration($table = 'jobs')
+    protected function createBaseMigration($table = 'wizards')
     {
         return $this->laravel['migration.creator']->create(
             'create_' . $table . '_table',
@@ -85,7 +85,7 @@ class TableCommand extends Command
     }
 
     /**
-     * Replace the generated migration with the job table stub.
+     * Replace the generated migration with the wizard table stub.
      *
      * @param  string  $path
      * @param  string  $table

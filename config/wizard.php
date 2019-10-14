@@ -91,6 +91,6 @@ return [
     |
     */
 
-    'table' => 'wizard',
+    'table' => 'wizards',
 
 ];
