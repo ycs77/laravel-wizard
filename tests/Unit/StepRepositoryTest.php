@@ -31,7 +31,7 @@ class StepRepositoryTest extends TestCase
      */
     protected $stepsStub;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

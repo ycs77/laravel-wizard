@@ -16,7 +16,7 @@ class WizardTest extends TestCase
      */
     protected $wizard;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

@@ -27,7 +27,7 @@ class StepTest extends TestCase
      */
     protected $step;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

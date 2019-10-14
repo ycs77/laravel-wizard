@@ -10,9 +10,15 @@ php:
   - 7.2
   - 7.3
 
-before_script:
-  - travis_retry composer self-update
-  - travis_retry composer install --prefer-source --no-interaction
+env:
+  matrix:
+    - LARAVEL=5.5.*
+
+matrix:
+  fast_finish: true
+
+install:
+  - travis_retry composer require "illuminate/contracts=${LARAVEL}" --dev --prefer-dist --no-interaction --no-suggest
 
 script:
   - vendor/bin/phpunit

@@ -10,7 +10,7 @@ class HttpTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

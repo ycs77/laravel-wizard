@@ -17,7 +17,7 @@ class DatabaseStoreTest extends TestCase
      */
     protected $cache;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

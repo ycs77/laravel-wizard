@@ -16,6 +16,7 @@ A web setup wizard for Laravel application.
 
 - [Laravel wizard](#laravel-wizard)
   - [Table of Contents](#table-of-contents)
+  - [Version Compatibility](#version-compatibility)
   - [Install](#install)
   - [Usage](#usage)
     - [1. Generate controller and wizard steps](#1-generate-controller-and-wizard-steps)
@@ -29,6 +30,12 @@ A web setup wizard for Laravel application.
   - [Step](#step)
     - [Set relationships model](#set-relationships-model)
   - [Commands](#commands)
+
+## Version Compatibility
+
+ Laravel Wizard | Laravel
+:---------------|:----------
+ 1.0.x          | 5.5.x
 
 ## Install
 
