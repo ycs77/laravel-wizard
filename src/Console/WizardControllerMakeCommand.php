@@ -165,7 +165,7 @@ class WizardControllerMakeCommand extends GeneratorCommand
      * Create a step for the wizard.
      *
      * @param  string  $stepClass
-     * @param  boolean  $force
+     * @param  bool  $force
      * @return void
      */
     public function createWizardStep(string $stepClass, bool $force = false)
