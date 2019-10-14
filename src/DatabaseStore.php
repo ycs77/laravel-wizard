@@ -61,6 +61,7 @@ class DatabaseStore implements CacheStore
         }
 
         $data = json_decode($data['payload'], true);
+
         return $key ? Arr::get($data, $key) : $data;
     }
 
@@ -120,6 +121,7 @@ class DatabaseStore implements CacheStore
     public function has(string $key)
     {
         $data = $this->get($key);
+
         return isset($data);
     }
 

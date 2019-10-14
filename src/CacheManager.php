@@ -4,7 +4,6 @@ namespace Ycs77\LaravelWizard;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Manager;
-use Ycs77\LaravelWizard\Wizard;
 
 class CacheManager extends Manager
 {

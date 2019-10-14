@@ -202,7 +202,7 @@ class DatabaseStoreTest extends TestCase
         $this->cache->clear();
 
         // assert
-        $this->assertDatabaseMissing('wizards',[
+        $this->assertDatabaseMissing('wizards', [
             'payload' => '{"step":{"field":"data"},"_last_index":1}',
             'user_id' => 1,
         ]);

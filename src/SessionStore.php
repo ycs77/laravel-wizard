@@ -44,6 +44,7 @@ class SessionStore implements CacheStore
     public function get(string $key = '')
     {
         $data = $this->session->get($this->wizardKey, []);
+
         return $key ? Arr::get($data, $key) : $data;
     }
 
@@ -66,7 +67,7 @@ class SessionStore implements CacheStore
      */
     public function set(array $data, $lastIndex = null)
     {
-        if (isset( $lastIndex) && is_numeric($lastIndex)) {
+        if (isset($lastIndex) && is_numeric($lastIndex)) {
             $data['_last_index'] = (int)$lastIndex;
         }
 
@@ -97,6 +98,7 @@ class SessionStore implements CacheStore
     public function has(string $key)
     {
         $data = $this->get($key);
+
         return isset($data);
     }
 
