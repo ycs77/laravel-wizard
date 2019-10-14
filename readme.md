@@ -35,9 +35,9 @@ A web setup wizard for Laravel application.
 
  Laravel Wizard | Laravel                  | PHP
 :---------------|:-------------------------|:----
- 1.0.x          | 5.5.x                    | ~7.0
- 1.1.x          | 5.6.x\|5.7.x\|5.8.x      | ~7.1.3
- 2.x            | 5.6.x\|5.7.x\|5.8.x\|6.x | ~7.1.3
+ 1.0.x          | 5.5.x                    | ^7.0
+ 1.1.x          | 5.6.x\|5.7.x\|5.8.x      | ^7.1.3
+ 2.x            | 5.6.x\|5.7.x\|5.8.x\|6.x | ^7.1.3
 
 ## Install
 
@@ -53,7 +53,7 @@ Publish config:
 php artisan vendor:publish --tag=wizard-config
 ```
 
-The this package view is use [Bootstrap 4](https://getbootstrap.com/), but if you don't want to use, you can publish views to custom it, or [Customize a specific wizard base view](#customize-a-specific-wizard-base-view):
+The this package view is use [Bootstrap 4](https://getbootstrap.com/), but if you don't want to use, you can publish views to custom it, or [Customize View](#customize-view):
 
 ```bash
 php artisan vendor:publish --tag=wizard-views
