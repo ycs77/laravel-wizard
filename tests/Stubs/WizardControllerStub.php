@@ -14,6 +14,13 @@ class WizardControllerStub extends WizardController
     protected $wizardName = 'test';
 
     /**
+     * The wizard title.
+     *
+     * @var string
+     */
+    protected $wizardTitle = 'Test';
+
+    /**
      * The wizard steps instance.
      *
      * @var array

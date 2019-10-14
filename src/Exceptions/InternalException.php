@@ -1,0 +1,25 @@
+<?php
+
+namespace Ycs77\LaravelWizard\Exceptions;
+
+use Exception;
+
+class InternalException extends Exception
+{
+    /**
+     * Undocumented function
+     *
+     * @param  string  $message
+     * @param  int  $code
+     * @param  Throwable|null  $previous
+     * @return mixed
+     */
+    public function __construct(string $message = '', int $code = 0, \Throwable $previous = null)
+    {
+        if (!config('app.debug')) {
+            abort($code);
+        }
+
+        return parent::__construct($message, $code, $previous);
+    }
+}

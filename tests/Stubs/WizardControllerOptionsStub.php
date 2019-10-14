@@ -2,17 +2,8 @@
 
 namespace Ycs77\LaravelWizard\Test\Stubs;
 
-use Ycs77\LaravelWizard\Http\Controllers\WizardController;
-
-class WizardControllerOptionsStub extends WizardController
+class WizardControllerOptionsStub extends WizardControllerStub
 {
-    /**
-     * The wizard name.
-     *
-     * @var string
-     */
-    protected $wizardName = 'test';
-
     /**
      * The wizard options.
      *
@@ -23,24 +14,4 @@ class WizardControllerOptionsStub extends WizardController
     protected $wizardOptions = [
         'cache' => false,
     ];
-
-    /**
-     * The wizard steps instance.
-     *
-     * @var array
-     */
-    protected $steps = [
-        UserStepStub::class,
-        PostStepStub::class,
-    ];
-
-    /**
-     * Get controller main class name.
-     *
-     * @return string
-     */
-    public function getControllerClass()
-    {
-        return static::class;
-    }
 }

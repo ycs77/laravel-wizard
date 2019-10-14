@@ -326,24 +326,20 @@ class WizardController extends Controller
     protected function getWizardStep(Request $request, $slug)
     {
         /** @var \Ycs77\LaravelWizard\Step|null $step */
-        try {
-            if (isset($slug)) {
-                $step = $this->wizard()->stepRepo()->find($slug);
-            } else {
-                $lastProcessedStepIndex = $this->getLastProcessedStepIndex($request);
-                $step = $this->wizard()->stepRepo()->get($lastProcessedStepIndex);
-            }
-
-            if (is_null($step)) {
-                throw new StepNotFoundException();
-            }
-
-            $this->wizard()->stepRepo()->setCurrentIndex($step->index());
-
-            $step->setModel($request);
-        } catch (StepNotFoundException $e) {
-            abort(404);
+        if (isset($slug)) {
+            $step = $this->wizard()->stepRepo()->find($slug);
+        } else {
+            $lastProcessedStepIndex = $this->getLastProcessedStepIndex($request);
+            $step = $this->wizard()->stepRepo()->get($lastProcessedStepIndex);
         }
+
+        if (is_null($step)) {
+            throw new StepNotFoundException($this->wizardTitle, $slug);
+        }
+
+        $this->wizard()->stepRepo()->setCurrentIndex($step->index());
+
+        $step->setModel($request);
 
         return $step;
     }
