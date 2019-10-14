@@ -197,6 +197,16 @@ Or use yarn:
 yarn add bootstrap-steps
 ```
 
+Import to app.scss file and run `npm run dev` or `yarn run dev`:
+
+*resources/sass/app.scss*
+```scss
+...
+
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-steps/scss/bootstrap-steps';
+```
+
 ## Cache Driver
 
 ### Database
