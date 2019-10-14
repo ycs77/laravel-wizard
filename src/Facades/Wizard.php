@@ -20,7 +20,7 @@ class Wizard extends Facade
     }
 
     /**
-     * Undocumented function
+     * Register the wizard routes.
      *
      * @param  string  $uri
      * @param  string  $controllerClass
