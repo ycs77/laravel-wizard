@@ -2,7 +2,7 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
-[![Build Status][ico-circleci]][link-circleci]
+[![Build Status][ico-ci]][link-ci]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 A web setup wizard for Laravel application.
@@ -279,11 +279,11 @@ Or use options:
 php artisan make:wizard:step NameStep --label="Name" --slug=name --view=steps.user.name --wizard=user
 ```
 
-[ico-version]: https://img.shields.io/packagist/v/ycs77/laravel-wizard.svg?style=flat
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat
-[ico-circleci]: https://img.shields.io/circleci/project/github/ycs77/laravel-wizard/master.svg?style=flat
-[ico-downloads]: https://img.shields.io/packagist/dt/ycs77/laravel-wizard.svg?style=flat
+[ico-version]: https://img.shields.io/packagist/v/ycs77/laravel-wizard?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
+[ico-ci]: https://img.shields.io/travis/ycs77/laravel-wizard?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/ycs77/laravel-wizard?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/ycs77/laravel-wizard
-[link-circleci]: https://circleci.com/gh/ycs77/laravel-wizard
+[link-ci]: https://travis-ci.org/ycs77/laravel-wizard
 [link-downloads]: https://packagist.org/packages/ycs77/laravel-wizard
