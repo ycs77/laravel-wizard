@@ -16,14 +16,14 @@ class WizardTest extends TestCase
      */
     protected $wizard;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->wizard = new Wizard($this->app, 'test-wizard');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->wizard = null;
 

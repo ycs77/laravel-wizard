@@ -33,9 +33,10 @@ A web setup wizard for Laravel application.
 
 ## Version Compatibility
 
- Laravel Wizard | Laravel
-:---------------|:----------
- 1.0.x          | 5.5.x
+ Laravel Wizard | Laravel             | PHP
+:---------------|:--------------------|:----
+ 1.0.x          | 5.5.x               | ~7.0
+ 1.1.x          | 5.6.x\|5.7.x\|5.8.x | ~7.1.3
 
 ## Install
 

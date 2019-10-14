@@ -3,7 +3,6 @@
 namespace Ycs77\LaravelWizard\Test;
 
 use Mockery;
-use Orchestra\Database\ConsoleServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 use Ycs77\LaravelWizard\Facades\Wizard as WizardFacade;
 use Ycs77\LaravelWizard\Test\Stubs\User;
@@ -16,7 +15,7 @@ class TestCase extends OrchestraTestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setUpTheTestEnvironment();
 
@@ -56,7 +55,6 @@ class TestCase extends OrchestraTestCase
     {
         return [
             WizardServiceProvider::class,
-            ConsoleServiceProvider::class,
         ];
     }
 

@@ -27,7 +27,7 @@ class StepTest extends TestCase
      */
     protected $step;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -35,7 +35,7 @@ class StepTest extends TestCase
         $this->step = $this->mock(UserStepStub::class, [$this->wizard, 0])->makePartial();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->step = null;
         $this->wizard = null;
