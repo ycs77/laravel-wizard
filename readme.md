@@ -215,7 +215,7 @@ public function setModel(Request $request)
  *
  * @param  \Illuminate\Http\Request  $request
  * @param  array|null  $data
- * @param  \Illuminate\Database\Eloquent\Model\Illuminate\Database\Eloquent\Relations\relation|null $model
+ * @param  \Illuminate\Database\Eloquent\Model\Illuminate\Database\Eloquent\Relations\relation|null  $model
  * @return void
  */
 public function saveData(Request $request, $data = null,$model = null)

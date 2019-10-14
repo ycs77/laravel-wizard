@@ -25,8 +25,8 @@ class SessionStore implements CacheStore
     /**
      * Create a new wizard cache session store instance.
      *
-     * @param \Illuminate\Contracts\Session\Session  $session
-     * @param string  $key
+     * @param  \Illuminate\Contracts\Session\Session  $session
+     * @param  string  $key
      * @return void
      */
     public function __construct(Session $session, string $wizardKey)

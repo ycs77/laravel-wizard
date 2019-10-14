@@ -118,7 +118,7 @@ class Wizard
     /**
      * Set the wizard cache instance.
      *
-     * @param  \Ycs77\LaravelWizard\Contracts\CacheStore|null $cache
+     * @param  \Ycs77\LaravelWizard\Contracts\CacheStore|null  $cache
      * @return self
      */
     public function setCache($cache = null)
@@ -140,7 +140,7 @@ class Wizard
     /**
      * Set the step repository instance.
      *
-     * @param  \Ycs77\LaravelWizard\StepRepository|null $stepRepo
+     * @param  \Ycs77\LaravelWizard\StepRepository|null  $stepRepo
      * @return self
      */
     public function setStepRepo($stepRepo = null)

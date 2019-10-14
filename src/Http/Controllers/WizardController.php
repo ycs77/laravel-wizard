@@ -319,7 +319,7 @@ class WizardController extends Controller
      * Get wizard step.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string|null $slug
+     * @param  string|null  $slug
      * @return \Ycs77\LaravelWizard\Step
      *
      * @throws \Ycs77\LaravelWizard\Exceptions\StepNotFoundException

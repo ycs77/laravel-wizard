@@ -43,7 +43,7 @@ class StepRepository implements StepRepositoryContract
     /**
      * Get step instance.
      *
-     * @param  int $key
+     * @param  int  $key
      * @return \Ycs77\LaravelWizard\Step|null
      */
     public function get(int $key)
@@ -54,7 +54,7 @@ class StepRepository implements StepRepositoryContract
     /**
      * Find step by slug.
      *
-     * @param  string $slug
+     * @param  string  $slug
      * @return \Ycs77\LaravelWizard\Step|null
      */
     public function find(string $slug)
