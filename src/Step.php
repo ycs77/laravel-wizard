@@ -119,6 +119,26 @@ abstract class Step
     }
 
     /**
+     * Get the step belongs wizard.
+     *
+     * @return \Ycs77\LaravelWizard\Wizard
+     */
+    public function getWizard()
+    {
+        return $this->wizard;
+    }
+
+    /**
+     * Get the step repository.
+     *
+     * @return \Ycs77\LaravelWizard\StepRepository
+     */
+    public function getRepo()
+    {
+        return $this->wizard->stepRepo();
+    }
+
+    /**
      * Get the step model instance or the relationships instance.
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\Relation|null
