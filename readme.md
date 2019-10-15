@@ -241,7 +241,15 @@ protected $wizardOptions = [
 
 ## Customize View
 
-If you want to customize the wizard base view, you can copy the view to `resources/views/user`. (`user` is `wizardName` property value on wizard controller),
+First, publish layouts:
+
+```bash
+php artisan vendor:publish --tag=wizard-views
+```
+
+Now you can customize `resources/views/vendor/wizard/*.blade.php` in your laravel project.
+
+But if you want custom only one wizard view base view, you can copy the views from `resources/views/vendor/wizard/*.blade.php` to `resources/views/wizards/user/*.blade.php`. (`user` is `wizardName` property value on your wizard controller),
 
 ## Step
 

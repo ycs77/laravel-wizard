@@ -2,6 +2,7 @@
 
 namespace Ycs77\LaravelWizard\Http\Controllers;
 
+use Closure;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -114,20 +115,15 @@ class WizardController extends Controller
             );
         }
 
-        $wizard = $this->wizard();
-        $wizardTitle = $this->wizardTitle;
-        $stepRepo = $this->wizard()->stepRepo();
-        $formAction = $this->getActionMethod('create');
-        $postAction = $this->getActionMethod('store');
-
-        $this->pushWithViewData(compact(
-            'wizard',
-            'wizardTitle',
-            'step',
-            'stepRepo',
-            'formAction',
-            'postAction'
-        ));
+        $this->pushWithViewData([
+            'wizard' => $this->wizard(),
+            'wizardTitle' => $this->wizardTitle,
+            'step' => $step,
+            'stepRepo' => $this->wizard()->stepRepo(),
+            'formAction' => $this->getActionMethod('create'),
+            'postAction' => $this->getActionMethod('store'),
+            'getViewPath' => Closure::fromCallable([$this, 'getViewPath']),
+        ]);
 
         // Wizard step created event.
         if ($redirectTo = $this->wizardStepCreated($request, $step)) {
@@ -380,7 +376,7 @@ class WizardController extends Controller
      * @param  string  $view
      * @return string
      */
-    protected function getViewPath($view)
+    public function getViewPath($view)
     {
         $viewPath = "wizards.{$this->wizardName}.$view";
 
