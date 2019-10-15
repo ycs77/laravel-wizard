@@ -2,27 +2,40 @@
 
 namespace Ycs77\LaravelWizard\Exceptions;
 
-class StepNotFoundException extends InternalException
+use Facade\IgnitionContracts\BaseSolution;
+use Facade\IgnitionContracts\ProvidesSolution;
+use Facade\IgnitionContracts\Solution;
+use Ycs77\LaravelWizard\Wizard;
+
+class StepNotFoundException extends InternalException implements ProvidesSolution
 {
     /**
-     * The step slug.
-     *
      * @var string
      */
-    protected $slug;
+    protected $stepSlug;
 
     /**
-     * The wizard title.
-     *
+     * @var \Ycs77\LaravelWizard\Wizard
+     */
+    protected $wizard;
+
+    /**
      * @var string
      */
-    protected $wizardTitle;
+    protected $controllerClass;
 
-    public function __construct(string $wizardTitle, string $slug)
+    public function __construct($stepSlug, Wizard $wizard, string $controllerClass)
     {
-        parent::__construct("Step [$slug] is not found to wizard $wizardTitle.", 404);
+        $this->stepSlug = $stepSlug;
+        $this->wizard = $wizard;
+        $this->controllerClass = $controllerClass;
 
-        $this->slug = $slug;
-        $this->wizardTitle = $wizardTitle;
+        parent::__construct("Step [$stepSlug] is not found to {$this->wizard->getTitle()} wizard.", 404);
+    }
+
+    public function getSolution(): Solution
+    {
+        return BaseSolution::create('Step not found to WizardController')
+            ->setSolutionDescription("Register Step `{$this->stepSlug}` to the `steps` property of your `{$this->controllerClass}`.");
     }
 }

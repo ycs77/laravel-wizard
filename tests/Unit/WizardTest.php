@@ -20,7 +20,7 @@ class WizardTest extends TestCase
     {
         parent::setUp();
 
-        $this->wizard = new Wizard($this->app, 'test-wizard');
+        $this->wizard = new Wizard($this->app, 'test-wizard', 'Test');
     }
 
     protected function tearDown(): void

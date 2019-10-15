@@ -28,13 +28,14 @@ class WizardFactory
      * Make the new wizard.
      *
      * @param  string  $name
+     * @param  string  $title
      * @param  array|string  $steps
      * @param  array  $options
      * @return \Ycs77\LaravelWizard\Wizard
      */
-    public function make(string $name, $steps, $options = [])
+    public function make(string $name, string $title, $steps, $options = [])
     {
-        $wizard = new Wizard($this->app, $name, $options);
+        $wizard = new Wizard($this->app, $name, $title, $options);
 
         $wizard->setCache();
         $wizard->setStepRepo();
