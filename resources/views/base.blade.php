@@ -7,7 +7,7 @@
                 <h1 class="text-center">{{ $wizardTitle }}</h1>
 
                 <div class="mb-3">
-                    @include('wizard::steps_bar')
+                    @include($getViewPath('steps_bar'))
                 </div>
 
                 <form action="{{ action($postAction, [$step->slug()]) }}" method="POST" enctype="multipart/form-data">
