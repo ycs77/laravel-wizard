@@ -28,6 +28,8 @@ A web setup wizard for Laravel application.
     - [Setting Configuration](#setting-configuration)
   - [Customize View](#customize-view)
   - [Step](#step)
+    - [Get cache data](#get-cache-data)
+    - [Step repository](#step-repository)
     - [Save data on other step](#save-data-on-other-step)
     - [Set relationships model](#set-relationships-model)
   - [Commands](#commands)
@@ -244,6 +246,48 @@ protected $wizardOptions = [
 If you want to customize the wizard base view, you can copy the view to `resources/views/user`. (`user` is `wizardName` property value on wizard controller),
 
 ## Step
+
+### Get cache data
+
+For example, `FirstStep` has `name` and `email` fields, `SecondStep` has `age` and `phone` fields. you can use step's `data` method to get step data:
+
+```php
+$name = $firstStep->data('name');
+// Bob
+
+$data = $secondStep->data();
+// ['age' => '30', 'phone' => '0900111222']
+```
+
+### Step repository
+
+Step repository saves all steps data, if you want use other step, you need to use it:
+
+From wizard:
+
+```php
+$stepRepo = $wizard->stepRepo();
+```
+
+From step:
+
+```php
+$stepRepo = $step->getRepo();
+```
+
+Get previous step:
+
+```php
+$prevStep = $step->getRepo()->prev();
+```
+
+Get next step:
+
+```php
+$nextStep = $step->getRepo()->next();
+```
+
+Step repository all can use method detailed reference: https://github.com/ycs77/laravel-wizard/blob/master/src/StepRepository.php
 
 ### Save data on other step
 
