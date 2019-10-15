@@ -28,6 +28,7 @@ A web setup wizard for Laravel application.
     - [Setting Configuration](#setting-configuration)
   - [Customize View](#customize-view)
   - [Step](#step)
+    - [Save data on other step](#save-data-on-other-step)
     - [Set relationships model](#set-relationships-model)
   - [Commands](#commands)
 
@@ -241,6 +242,57 @@ protected $wizardOptions = [
 If you want to customize the wizard base view, you can copy the view to `resources/views/user`. (`user` is `wizardName` property value on wizard controller),
 
 ## Step
+
+### Save data on other step
+
+Suppose there are now two Steps `NameStep` and `EmailStep`.
+First, don't set the Model for all Steps, but don't use the last one:
+
+*app/Steps/User/NameStep.php*
+```php
+...
+
+class NameStep extends Step
+{
+    ...
+
+    public function model(Request $request)
+    {
+        //
+    }
+
+    public function saveData(Request $request, $data = null, $model = null)
+    {
+        //
+    }
+}
+```
+
+Next, receive all the data in the last Step and save Model:
+
+*app/Steps/User/EmailStep.php*
+```php
+...
+
+class EmailStep extends Step
+{
+    ...
+
+    public function model(Request $request)
+    {
+        return new User();
+    }
+
+    public function saveData(Request $request, $data = null, $model = null)
+    {
+        $data = $this->wizard->stepRepo()->original()->reduce(function ($carry, $step) {
+            return array_merge($carry, $step->data());
+        }, []);
+
+        $model->fill($data)->save();
+    }
+}
+```
 
 ### Set relationships model
 
