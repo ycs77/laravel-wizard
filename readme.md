@@ -286,7 +286,7 @@ class EmailStep extends Step
 
     public function saveData(Request $request, $data = null, $model = null)
     {
-        $data = $this->wizard->stepRepo()->original()->reduce(function ($carry, $step) {
+        $data = $this->getRepo()->original()->reduce(function ($carry, $step) {
             return array_merge($carry, $step->data());
         }, []);
 
