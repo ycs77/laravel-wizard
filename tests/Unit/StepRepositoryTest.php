@@ -75,6 +75,16 @@ class StepRepositoryTest extends TestCase
         $this->assertNull($this->stepRepo->find('not-found'));
     }
 
+    public function testFindStepKey()
+    {
+        $this->initStepsItems();
+
+        $this->assertEquals(0, $this->stepRepo->findKey('user-step-stub'));
+        $this->assertEquals(1, $this->stepRepo->findKey('post-step-stub'));
+        $this->assertNull($this->stepRepo->findKey('not-found'));
+        $this->assertEquals(0, $this->stepRepo->findKey('not-found', 0));
+    }
+
     public function testPushStepFormStepClassName()
     {
         $this->stepRepo->push([
