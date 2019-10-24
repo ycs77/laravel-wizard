@@ -1,4 +1,4 @@
-# Laravel wizard
+# Laravel Wizard
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -14,7 +14,7 @@ A web setup wizard for Laravel application.
 
 ## Table of Contents
 
-- [Laravel wizard](#laravel-wizard)
+- [Laravel Wizard](#laravel-wizard)
   - [Table of Contents](#table-of-contents)
   - [Version Compatibility](#version-compatibility)
   - [Install](#install)
