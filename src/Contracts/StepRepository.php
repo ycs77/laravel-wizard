@@ -21,6 +21,14 @@ interface StepRepository
     public function find(string $slug);
 
     /**
+     * Find step key by slug.
+     *
+     * @param  string  $slug
+     * @return int|null
+     */
+    public function findKey(string $slug, int $default = null);
+
+    /**
      * Set the steps.
      *
      * @param  mixed  $item

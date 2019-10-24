@@ -94,7 +94,7 @@ class WizardController extends Controller
             return $redirectTo;
         }
 
-        $lastProcessedIndex = $this->getLastProcessedStepIndex($request);
+        $lastProcessedIndex = $this->getLastProcessedStepIndex($request, $step);
 
         // If step is null, redirect to last processed index.
         if (is_null($step)) {
@@ -300,12 +300,15 @@ class WizardController extends Controller
      * Get the last processed step index.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  string|null  $stepSlug
      * @return int
      */
-    protected function getLastProcessedStepIndex(Request $request)
+    protected function getLastProcessedStepIndex(Request $request, string $stepSlug = null)
     {
         if ($this->wizard()->option('cache')) {
             return $this->wizard()->cache()->getLastProcessedIndex() ?? 0;
+        } elseif (is_string($stepSlug)) {
+            return $this->wizard()->stepRepo()->findKey($stepSlug, 0);
         }
 
         return 0;
@@ -320,7 +323,7 @@ class WizardController extends Controller
      *
      * @throws \Ycs77\LaravelWizard\Exceptions\StepNotFoundException
      */
-    protected function getWizardStep(Request $request, $slug)
+    protected function getWizardStep(Request $request, string $slug = null)
     {
         /** @var \Ycs77\LaravelWizard\Step|null $step */
         if (isset($slug)) {

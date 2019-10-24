@@ -59,10 +59,22 @@ class StepRepository implements StepRepositoryContract
      */
     public function find(string $slug)
     {
-        /** @param \Ycs77\LaravelWizard\Step $step */
-        return $this->steps->first(function ($step) use ($slug) {
+        return $this->steps->first(function (Step $step) use ($slug) {
             return $step->slug() === $slug;
         });
+    }
+
+    /**
+     * Find step key by slug.
+     *
+     * @param  string  $slug
+     * @return int|null
+     */
+    public function findKey(string $slug, int $default = null)
+    {
+        return $this->steps->filter(function (Step $step) use ($slug) {
+            return $step->slug() === $slug;
+        })->keys()->first(null, $default);
     }
 
     /**
