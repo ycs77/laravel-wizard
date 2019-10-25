@@ -192,6 +192,28 @@ abstract class Step
     }
 
     /**
+     * Get custom messages for validator errors.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function validateMessages(Request $request)
+    {
+        return [];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function validateAttributes(Request $request)
+    {
+        return [];
+    }
+
+    /**
      * Get request input data.
      *
      * @param  Request  $request
