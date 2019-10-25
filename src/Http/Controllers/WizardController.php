@@ -149,7 +149,9 @@ class WizardController extends Controller
 
         $step = $this->getWizardStep($request, $step);
 
-        $this->validate($request, $step->rules($request));
+        if ($this->canValidate($request)) {
+            $this->validate($request, $step->rules($request));
+        }
 
         // Wizard step validated event.
         $this->wizardStepFormValidated($request);
@@ -241,6 +243,17 @@ class WizardController extends Controller
             $request->route()->getName(),
             [$lastProcessedStep->slug()]
         );
+    }
+
+    /**
+     * Return whether to validate.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function canValidate(Request $request)
+    {
+        return $request->query('_trigger') !== 'back';
     }
 
     /**

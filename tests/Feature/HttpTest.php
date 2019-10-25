@@ -187,6 +187,35 @@ class HttpTest extends TestCase
         ], $this->app['session']->get('laravel_wizard.test'));
     }
 
+    public function testWizardStepTriggerToBackNoValidate()
+    {
+        $this->session([
+            'laravel_wizard.test' => [
+                'user-step-stub' => [
+                    'name' => 'John',
+                ],
+                '_last_index' => 1,
+            ],
+        ]);
+
+        $response = $this->post('/wizard/test/post-step-stub?_trigger=back', [
+            'title' => 'Over 50 words title.........................................',
+            'content' => null,
+        ]);
+        $response->assertRedirect('/wizard/test/user-step-stub');
+
+        $this->assertEquals([
+            'user-step-stub' => [
+                'name' => 'John',
+            ],
+            'post-step-stub' => [
+                'title' => 'Over 50 words title.........................................',
+                'content' => null,
+            ],
+            '_last_index' => 0,
+        ], $this->app['session']->get('laravel_wizard.test'));
+    }
+
     public function testWizardCacheDatabaseDriver()
     {
         $this->app['config']->set('wizard.driver', 'database');
