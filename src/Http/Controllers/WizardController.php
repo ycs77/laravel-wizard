@@ -149,8 +149,14 @@ class WizardController extends Controller
 
         $step = $this->getWizardStep($request, $step);
 
+        // Form validation.
         if ($this->canValidate($request)) {
-            $this->validate($request, $step->rules($request));
+            $this->validate(
+                $request,
+                $step->rules($request),
+                $step->validateMessages($request),
+                $step->validateAttributes($request)
+            );
         }
 
         // Wizard step validated event.
