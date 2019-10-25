@@ -32,6 +32,7 @@ A web setup wizard for Laravel application.
     - [Step repository](#step-repository)
     - [Save data on other step](#save-data-on-other-step)
     - [Set relationships model](#set-relationships-model)
+  - [Common Problems](#common-problems)
   - [Commands](#commands)
 
 ## Version Compatibility
@@ -381,15 +382,43 @@ public function saveData(Request $request, $data = null, $model = null)
 }
 ```
 
+## Common Problems
+
+**Error: "Serialization of 'Illuminate\Http\UploadedFile' is not allowed"**:
+
+Set `cache` in `config/wizard.php` to `false`:
+
+```php
+'cache' => false,
+```
+
+Or set to your WizardController `wizardOptions` method:
+
+```php
+protected $wizardOptions = [
+    'cache' => false,
+];
+```
+
+If disable cache, the data will be saved in the data immediately after each step is sent. If you are afraid to save the data repeatedly, you can hide the Prev button, or use `Model::updateOrCreate()` (https://laravel.com/docs/6.x/eloquent#other-creation-methods).
+
 ## Commands
+
+**Make wizard**:
+
+The `make:wizard` command and `make:wizard:controller` command difference, is `make:wizard` command will append route and no confirm generate step.
+
+```bash
+php artisan make:wizard User NameStep,EmailStep
+```
 
 **Make controller**:
 
-```bash
-php artisan make:wizard:controller UserController steps=NameStep,EmailStep
-```
+The `make:wizard:controller` command only generate the `WizardController`, `NameStep`, `EmailStep` class.
 
-The `make:wizard` and `make:wizard:controller` difference, is `make:wizard` will append route and no confirm generate step.
+```bash
+php artisan make:wizard:controller UserController --steps=NameStep,EmailStep
+```
 
 **Make step**:
 
