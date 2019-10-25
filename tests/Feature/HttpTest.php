@@ -90,6 +90,47 @@ class HttpTest extends TestCase
         ]);
     }
 
+    public function testRunAllWizardStepsCloseCache()
+    {
+        $this->app['config']->set('wizard.cache', false);
+
+        // Get first step
+        $response = $this->get('/wizard/test/user-step-stub');
+        $response->assertStatus(200);
+
+        // Post first step
+        $response = $this->post('/wizard/test/user-step-stub', [
+            'name' => 'John',
+        ]);
+        $response->assertRedirect('/wizard/test/post-step-stub');
+
+        // Assert user data from database
+        $this->assertDatabaseHas('users', [
+            'name' => 'John',
+        ]);
+
+        // Get second step
+        $response = $this->get('/wizard/test/post-step-stub');
+        $response->assertStatus(200);
+
+        // Post second step
+        $response = $this->post('/wizard/test/post-step-stub', [
+            'title' => 'Title',
+            'content' => 'Content.',
+        ]);
+        $response->assertRedirect('/wizard/test/done');
+
+        // Get done page
+        $response = $this->get('/wizard/test/done');
+        $response->assertStatus(200);
+
+        // Assert post data from database
+        $this->assertDatabaseHas('posts', [
+            'title' => 'Title',
+            'content' => 'Content.',
+        ]);
+    }
+
     public function testThrowStepNotFoundException()
     {
         $this->app['config']->set('app.debug', false);
@@ -141,6 +182,35 @@ class HttpTest extends TestCase
             'post-step-stub' => [
                 'title' => 'Title',
                 'content' => 'Content.',
+            ],
+            '_last_index' => 0,
+        ], $this->app['session']->get('laravel_wizard.test'));
+    }
+
+    public function testWizardStepTriggerToBackNoValidate()
+    {
+        $this->session([
+            'laravel_wizard.test' => [
+                'user-step-stub' => [
+                    'name' => 'John',
+                ],
+                '_last_index' => 1,
+            ],
+        ]);
+
+        $response = $this->post('/wizard/test/post-step-stub?_trigger=back', [
+            'title' => 'Over 50 words title.........................................',
+            'content' => null,
+        ]);
+        $response->assertRedirect('/wizard/test/user-step-stub');
+
+        $this->assertEquals([
+            'user-step-stub' => [
+                'name' => 'John',
+            ],
+            'post-step-stub' => [
+                'title' => 'Over 50 words title.........................................',
+                'content' => null,
             ],
             '_last_index' => 0,
         ], $this->app['session']->get('laravel_wizard.test'));
