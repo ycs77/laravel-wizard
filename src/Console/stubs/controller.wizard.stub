@@ -2,11 +2,14 @@
 
 namespace DummyNamespace;
 
+use DummyRootNamespaceHttp\Controllers\Controller;
 DummyFullStepsClasses
-use Ycs77\LaravelWizard\Http\Controllers\WizardController;
+use Ycs77\LaravelWizard\Wizardable;
 
-class DummyClass extends WizardController
+class DummyClass extends Controller
 {
+    use Wizardable;
+
     /**
      * The wizard name.
      *
@@ -23,8 +26,6 @@ class DummyClass extends WizardController
 
     /**
      * The wizard options.
-     *
-     * Available options reference from Ycs77\LaravelWizard\Wizard::$optionsKeys.
      *
      * @var array
      */
