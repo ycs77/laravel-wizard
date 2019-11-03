@@ -63,9 +63,10 @@ trait Wizardable
             'wizardTitle' => $this->wizardTitle(),
             'step' => $step,
             'stepRepo' => $this->wizard()->stepRepo(),
-            'formAction' => $this->getActionMethod('create'),
-            'postAction' => $this->getActionMethod('store'),
+            'formAction' => 'create',
+            'postAction' => 'store',
             'getViewPath' => Closure::fromCallable([$this, 'getViewPath']),
+            'getActionUrl' => Closure::fromCallable([$this, 'getActionUrl']),
         ]);
 
         // Wizard step created event.
@@ -171,10 +172,7 @@ trait Wizardable
             );
         }
 
-        return redirect()->route(
-            $request->route()->getName(),
-            [$step->slug()]
-        );
+        return $this->redirectTo($step->slug());
     }
 
     /**
@@ -188,10 +186,7 @@ trait Wizardable
     {
         $lastProcessedStep = $this->wizard()->stepRepo()->get($lastProcessedIndex);
 
-        return redirect()->route(
-            $request->route()->getName(),
-            [$lastProcessedStep->slug()]
-        );
+        return $this->redirectTo($lastProcessedStep->slug());
     }
 
     /**
@@ -208,11 +203,16 @@ trait Wizardable
     /**
      * Step redirect response.
      *
+     * @param  string|null $step
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectTo()
+    protected function redirectTo($step = null)
     {
-        return redirect($this->getActionUrl('create', [$this->getNextStepSlug()]));
+        if (is_null($step)) {
+            $step = $this->getNextStepSlug();
+        }
+
+        return redirect($this->getActionUrl('create', [$step]));
     }
 
     /**
@@ -240,7 +240,7 @@ trait Wizardable
     }
 
     /**
-     * Get action class method name.
+     * Get the action class method name.
      *
      * @param  string  $method
      * @return string
@@ -261,14 +261,20 @@ trait Wizardable
     }
 
     /**
-     * Get action URL.
+     * Get the action URL.
      *
      * @param  string  $method
      * @return string
      */
     public function getActionUrl(string $method, $parameters = [])
     {
-        return action($this->getActionMethod($method), $parameters);
+        // If the method string does not match @, it must be converted
+        // to the action method name.
+        if (preg_match('/^[^@]+$/', $method)) {
+            $method = $this->getActionMethod($method);
+        }
+
+        return action($method, $parameters);
     }
 
     /**

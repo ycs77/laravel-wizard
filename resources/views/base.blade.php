@@ -10,7 +10,7 @@
                     @include($getViewPath('steps_bar'))
                 </div>
 
-                <form action="{{ action($postAction, [$step->slug()]) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ $getActionUrl($postAction, [$step->slug()]) }}" method="POST" enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     @include($step->view(), compact('step', 'errors'))
@@ -18,7 +18,7 @@
                     <div class="d-flex align-items-center">
                         <div class="mr-auto">
                             @if ($stepRepo->hasPrev())
-                                <button type="button" class="btn btn-primary" onclick="this.form.action = '{{ action($postAction, [$step->slug(), '_trigger' => 'back']) }}'; this.form.submit();">
+                                <button type="button" class="btn btn-primary" onclick="this.form.action = '{{ $getActionUrl($postAction, [$step->slug(), '_trigger' => 'back']) }}'; this.form.submit();">
                                     @lang('wizard::generic.back')
                                 </button>
                             @endif
