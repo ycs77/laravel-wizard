@@ -2,10 +2,16 @@
 
 namespace Ycs77\LaravelWizard\Test\Stubs;
 
-use Ycs77\LaravelWizard\Http\Controllers\WizardController;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller;
+use Ycs77\LaravelWizard\Wizardable;
 
-class WizardControllerStub extends WizardController
+class WizardControllerStub extends Controller
 {
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Wizardable;
+
     /**
      * The wizard name.
      *
@@ -29,14 +35,4 @@ class WizardControllerStub extends WizardController
         UserStepStub::class,
         PostStepStub::class,
     ];
-
-    /**
-     * Get controller main class name.
-     *
-     * @return string
-     */
-    public function getControllerClass()
-    {
-        return static::class;
-    }
 }

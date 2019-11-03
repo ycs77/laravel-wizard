@@ -61,6 +61,8 @@ class WizardControllerMakeCommand extends GeneratorCommand
      */
     protected function buildClass($name)
     {
+        $controllerNamespace = $this->getNamespace($name);
+
         $replace = $this->buildWizardNameReplacement();
 
         if ($this->option('steps')) {
@@ -69,6 +71,8 @@ class WizardControllerMakeCommand extends GeneratorCommand
             $replace["DummyFullStepsClasses\n"] = '';
             $replace['DummyStepsClasses'] = '';
         }
+
+        $replace["use {$controllerNamespace}\Controller;\n"] = '';
 
         return str_replace(
             array_keys($replace),
@@ -132,18 +136,20 @@ class WizardControllerMakeCommand extends GeneratorCommand
             $stepClass = $this->parseStep($stepClass);
 
             if (!class_exists($stepClass)) {
-                if (!$this->option('force')) {
+                if ($this->option('force')) {
+                    $this->createWizardStep($stepClass, true);
+                } else {
                     if ($this->confirm("A {$stepClass} step does not exist. Do you want to generate it?", true)) {
                         $this->createWizardStep($stepClass);
                     }
-                } else {
-                    $this->createWizardStep($stepClass, true);
                 }
             }
 
             $fullStepsClasses[] = "use {$stepClass};";
             $stepsClasses[] = class_basename($stepClass) . '::class,';
         }
+
+        sort($fullStepsClasses);
 
         $fullStepsClassesText = implode(PHP_EOL, $fullStepsClasses);
         $stepsClassesText = implode(PHP_EOL . '        ', $stepsClasses);
