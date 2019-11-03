@@ -1,12 +1,10 @@
 preset: laravel
 
 enabled:
-  - alpha_ordered_imports
   - concat_with_spaces
 
 disabled:
   - cast_spaces
   - concat_without_spaces
-  - length_ordered_imports
   - not_operator_with_successor_space
   - phpdoc_to_comment
