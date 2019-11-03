@@ -36,6 +36,13 @@ class Wizard
     protected $name;
 
     /**
+     * The wizard title.
+     *
+     * @var string
+     */
+    protected $title;
+
+    /**
      * The wizard options.
      *
      * @var array
@@ -59,13 +66,15 @@ class Wizard
      *
      * @param  \Illuminate\Foundation\Application  $app
      * @param  string  $name
+     * @param  string  $title
      * @param  array  $options
      * @return void
      */
-    public function __construct(Application $app, string $name, $options = [])
+    public function __construct(Application $app, string $name, string $title, $options = [])
     {
         $this->app = $app;
         $this->name = $name;
+        $this->title = $title;
 
         $this->setOptions($options);
     }
@@ -201,6 +210,16 @@ class Wizard
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Get the wizard title.
+     *
+     * @return  string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 
     /**

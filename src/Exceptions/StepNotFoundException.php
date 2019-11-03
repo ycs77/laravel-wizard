@@ -2,27 +2,31 @@
 
 namespace Ycs77\LaravelWizard\Exceptions;
 
+use Ycs77\LaravelWizard\Wizard;
+
 class StepNotFoundException extends InternalException
 {
     /**
-     * The step slug.
-     *
      * @var string
      */
-    protected $slug;
+    protected $stepSlug;
 
     /**
-     * The wizard title.
-     *
+     * @var \Ycs77\LaravelWizard\Wizard
+     */
+    protected $wizard;
+
+    /**
      * @var string
      */
-    protected $wizardTitle;
+    protected $controllerClass;
 
-    public function __construct(string $wizardTitle, string $slug)
+    public function __construct($stepSlug, Wizard $wizard, string $controllerClass)
     {
-        parent::__construct("Step [$slug] is not found to wizard $wizardTitle.", 404);
+        $this->stepSlug = $stepSlug;
+        $this->wizard = $wizard;
+        $this->controllerClass = $controllerClass;
 
-        $this->slug = $slug;
-        $this->wizardTitle = $wizardTitle;
+        parent::__construct("Step [$stepSlug] is not found to {$this->wizard->getTitle()} wizard.", 404);
     }
 }
