@@ -143,7 +143,7 @@ class HttpTest extends TestCase
     {
         $response = $this->get('/wizard/test/step-not-found');
         $response->assertStatus(500);
-        $response->assertSee('Step [step-not-found] is not found to wizard Test.');
+        $response->assertSee('Step [step-not-found] is not found to Test wizard.');
     }
 
     public function testWizardStepNotEquialToLastProcessedStep()

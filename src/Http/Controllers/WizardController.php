@@ -77,7 +77,12 @@ class WizardController extends Controller
      */
     public function __construct(WizardFactory $factory)
     {
-        $this->wizard = $factory->make($this->wizardName, $this->steps, $this->wizardOptions);
+        $this->wizard = $factory->make(
+            $this->wizardName,
+            $this->wizardTitle,
+            $this->steps,
+            $this->wizardOptions
+        );
     }
 
     /**
@@ -353,7 +358,7 @@ class WizardController extends Controller
         }
 
         if (is_null($step)) {
-            throw new StepNotFoundException($this->wizardTitle, $slug);
+            throw new StepNotFoundException($slug, $this->wizard, static::class);
         }
 
         $this->wizard()->stepRepo()->setCurrentIndex($step->index());

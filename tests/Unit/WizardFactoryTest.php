@@ -14,7 +14,7 @@ class WizardFactoryTest extends TestCase
     {
         $factory = new WizardFactory($this->app);
 
-        $wizard = $factory->make('test-wizard', [UserStepStub::class]);
+        $wizard = $factory->make('test-wizard', 'Test', [UserStepStub::class]);
 
         $this->assertEquals('test-wizard', $wizard->getName());
         $this->assertInstanceOf(CacheStore::class, $wizard->cache());
