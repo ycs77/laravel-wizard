@@ -30,6 +30,7 @@ A web setup wizard for Laravel application.
   - [Step](#step)
     - [Get cache data](#get-cache-data)
     - [Step repository](#step-repository)
+    - [Passing data to views](#passing-data-to-views)
     - [Save data on other step](#save-data-on-other-step)
     - [Set relationships model](#set-relationships-model)
   - [Common Problems](#common-problems)
@@ -295,6 +296,51 @@ $nextStep = $step->getRepo()->next();
 ```
 
 Step repository all can use method detailed reference: https://github.com/ycs77/laravel-wizard/blob/master/src/StepRepository.php
+
+### Passing data to views
+
+Because each step is injected into the view of the step, so just add the method to return the data in the step class. For example, pass the data of the select options to view:
+
+*app/Steps/User/NameStep.php*
+```php
+<?php
+
+...
+
+class NameStep extends Step
+{
+    ...
+
+    public function getOptions()
+    {
+        return [
+            'Taylor',
+            'Lucas',
+        ];
+    }
+}
+
+```
+
+*resources/views/steps/user/name.blade.php*
+```blade
+<div class="form-group">
+    <label for="name">Select name</label>
+    <select id="name" name="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}">
+        <option value="">Select...</option>
+        @foreach ($step->getOptions() as $option)
+            <option value="{{ $option }}" @if (old('name') ?? $step->data('name') === $option) @endif>{{ $option }}</option>
+        @endforeach
+    </select>
+
+    @if ($errors->has('name'))
+        <span class="invalid-feedback">{{ $errors->first('name') }}</span>
+    @endif
+</div>
+
+```
+
+The `getOptions` method is custom, can be changed at will.
 
 ### Save data on other step
 
