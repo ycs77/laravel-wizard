@@ -9,8 +9,8 @@ assignees: ''
 
 **Use Version:**
 Use version when bugs appear.
-- Laravel: v6.0.0
-- Laravel Wizard: v2.0.0
+- Laravel: v7.0.0
+- Laravel Wizard: v2.2.0
 
 **Describe the bug**
 A clear and concise description of what the bug is.
