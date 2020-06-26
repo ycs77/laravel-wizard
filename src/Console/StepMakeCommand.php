@@ -114,7 +114,7 @@ class StepMakeCommand extends GeneratorCommand
 
         if (is_null($viewPath)) {
             $viewPathAry = new Collection([
-                $this->laravel['config']['wizard.view_path'],
+                $this->laravel['config']['wizard.step_view_path'],
                 $this->option('wizard'),
                 $this->getStepName(),
             ]);

@@ -372,7 +372,7 @@ trait Wizardable
      */
     public function getViewPath($view)
     {
-        $viewPath = "wizards.{$this->wizardName()}.$view";
+        $viewPath = config('wizard.wizard_view_path') . ".{$this->wizardName()}.$view";
 
         if (view()->exists($viewPath)) {
             return $viewPath;
