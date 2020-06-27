@@ -5,6 +5,7 @@ namespace Ycs77\LaravelWizard\Test\Unit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Ycs77\LaravelWizard\Test\Stubs\PostStepStub;
+use Ycs77\LaravelWizard\Test\Stubs\StepStub;
 use Ycs77\LaravelWizard\Test\Stubs\UserStepStub;
 use Ycs77\LaravelWizard\Test\TestCase;
 use Ycs77\LaravelWizard\Wizard;
@@ -50,6 +51,20 @@ class StepTest extends TestCase
         $this->assertEquals('user-step-stub', $this->step->slug());
         $this->assertEquals('User step stub', $this->step->label());
         $this->assertEquals('steps.user', $this->step->view());
+    }
+
+    public function testGetStepViewFromNoViewPropertyStep()
+    {
+        $this->app['config']->set('wizard.step_view_path', 'steps-dir');
+
+        $this->wizard
+            ->shouldReceive('getName')
+            ->once()
+            ->andReturn('user');
+
+        $step = $this->mock(StepStub::class, [$this->wizard, 0])->makePartial();
+
+        $this->assertEquals('steps-dir.user.step-stub', $step->view());
     }
 
     public function testGetData()

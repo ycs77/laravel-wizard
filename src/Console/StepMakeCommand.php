@@ -3,7 +3,6 @@
 namespace Ycs77\LaravelWizard\Console;
 
 use Illuminate\Console\GeneratorCommand;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -113,18 +112,20 @@ class StepMakeCommand extends GeneratorCommand
         $viewPath = $this->option('view');
 
         if (is_null($viewPath)) {
-            $viewPathAry = new Collection([
-                $this->laravel['config']['wizard.view_path'],
-                $this->option('wizard'),
-                $this->getStepName(),
+            return array_merge($replace, [
+                "\n    DummyViewProperty\n" => '',
             ]);
-            $viewPathAry = $viewPathAry->filter()->all();
-
-            $viewPath = implode('.', $viewPathAry);
         }
 
         return array_merge($replace, [
-            'DummyViewPath' => $viewPath,
+            'DummyViewProperty' => <<<EOT
+/**
+     * The step form view path.
+     *
+     * @var string
+     */
+    protected \$view = '$viewPath';
+EOT
         ]);
     }
 

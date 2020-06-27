@@ -473,7 +473,13 @@ php artisan make:wizard:controller UserController --steps=NameStep,EmailStep
 php artisan make:wizard:step NameStep
 ```
 
-Or use options:
+With step label and wizard:
+
+```bash
+php artisan make:wizard:step NameStep --label="Name" --slug=name --wizard=user
+```
+
+Add custom view path:
 
 ```bash
 php artisan make:wizard:step NameStep --label="Name" --slug=name --view=steps.user.name --wizard=user

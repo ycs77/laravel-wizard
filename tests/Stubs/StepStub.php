@@ -1,27 +1,25 @@
 <?php
 
-namespace DummyNamespace;
+namespace Ycs77\LaravelWizard\Test\Stubs;
 
 use Illuminate\Http\Request;
 use Ycs77\LaravelWizard\Step;
 
-class DummyClass extends Step
+class StepStub extends Step
 {
     /**
      * The step slug.
      *
      * @var string
      */
-    protected $slug = 'DummySlug';
+    protected $slug = 'step-stub';
 
     /**
      * The step show label text.
      *
      * @var string
      */
-    protected $label = 'DummyLabel';
-
-    DummyViewProperty
+    protected $label = 'Step stub';
 
     /**
      * Set the step model instance or the relationships instance.
