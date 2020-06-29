@@ -118,13 +118,6 @@ class NameStep extends Step
     protected $label = 'Name';
 
     /**
-     * The step form view path.
-     *
-     * @var string
-     */
-    protected $view = 'steps.user.name';
-
-    /**
      * Set the step model instance or the relationships instance.
      *
      * @param  \Illuminate\Http\Request  $request
