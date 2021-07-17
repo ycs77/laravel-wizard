@@ -79,8 +79,8 @@ class TableCommand extends Command
     protected function createBaseMigration($table = 'wizards')
     {
         return $this->laravel['migration.creator']->create(
-            'create_' . $table . '_table',
-            $this->laravel->databasePath() . '/migrations'
+            'create_'.$table.'_table',
+            $this->laravel->databasePath().'/migrations'
         );
     }
 
@@ -97,7 +97,7 @@ class TableCommand extends Command
         $stub = str_replace(
             ['{{table}}', '{{tableClassName}}'],
             [$table, $tableClassName],
-            $this->files->get(__DIR__ . '/stubs/migration.stub')
+            $this->files->get(__DIR__.'/stubs/migration.stub')
         );
 
         $this->files->put($path, $stub);

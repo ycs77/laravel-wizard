@@ -68,7 +68,7 @@ class SessionStore implements CacheStore
     public function set(array $data, $lastIndex = null)
     {
         if (isset($lastIndex) && is_numeric($lastIndex)) {
-            $data['_last_index'] = (int)$lastIndex;
+            $data['_last_index'] = (int) $lastIndex;
         }
 
         $this->session->put($this->wizardKey, $data);

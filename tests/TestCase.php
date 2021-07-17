@@ -19,9 +19,9 @@ class TestCase extends OrchestraTestCase
     {
         $this->setUpTheTestEnvironment();
 
-        $this->app['view']->addLocation(__DIR__ . '/../resources/stub_views');
+        $this->app['view']->addLocation(__DIR__.'/../resources/stub_views');
 
-        $this->loadMigrationsFrom(__DIR__ . '/Stubs/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/Stubs/database/migrations');
     }
 
     /**
@@ -41,7 +41,7 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('database.connections.sqlite.database', ':memory:');
 
         // Wizard
-        $app['config']->set('wizard', require __DIR__ . '/../config/wizard.php');
+        $app['config']->set('wizard', require __DIR__.'/../config/wizard.php');
     }
 
     /**

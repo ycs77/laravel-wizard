@@ -47,7 +47,7 @@ class WizardMakeCommand extends Command
      */
     public function appendRoute()
     {
-        $controllerFullClass = $this->laravel['config']['wizard.namespace.controllers'] . '\\' . $this->getControllerName();
+        $controllerFullClass = $this->laravel['config']['wizard.namespace.controllers'].'\\'.$this->getControllerName();
         $nameAry = ['wizard', Str::snake(class_basename($this->getNameInput()))];
 
         $routesText = file_get_contents(base_path('routes/web.php'));
@@ -63,14 +63,14 @@ class WizardMakeCommand extends Command
         if (! Str::contains($routesText, 'use Ycs77\LaravelWizard\Facades\Wizard;')) {
             $routesText = str_replace(
                 "use Illuminate\Support\Facades\Route;",
-                'use Illuminate\Support\Facades\Route;' . "\n" . 'use Ycs77\LaravelWizard\Facades\Wizard;',
+                'use Illuminate\Support\Facades\Route;'."\n".'use Ycs77\LaravelWizard\Facades\Wizard;',
                 $routesText
             );
         }
 
-        $routeText = file_get_contents(__DIR__ . '/stubs/routes.stub');
+        $routeText = file_get_contents(__DIR__.'/stubs/routes.stub');
         $routeText = str_replace('DummyUri', implode('/', $nameAry), $routeText);
-        $routeText = str_replace('DummyController', $this->getControllerName() . '::class', $routeText);
+        $routeText = str_replace('DummyController', $this->getControllerName().'::class', $routeText);
         $routeText = str_replace('DummyName', implode('.', $nameAry), $routeText);
 
         $routesText .= $routeText;
@@ -85,7 +85,7 @@ class WizardMakeCommand extends Command
      */
     public function getControllerName()
     {
-        return $this->getNameInput() . 'WizardController';
+        return $this->getNameInput().'WizardController';
     }
 
     /**

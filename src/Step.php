@@ -119,7 +119,7 @@ abstract class Step
             return $this->view;
         }
 
-        return config('wizard.step_view_path') . ".{$this->wizard->getName()}.{$this->slug}";
+        return config('wizard.step_view_path').".{$this->wizard->getName()}.{$this->slug}";
     }
 
     /**
