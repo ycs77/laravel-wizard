@@ -40,7 +40,7 @@ class WizardServiceProvider extends ServiceProvider
             TableCommand::class,
         ]);
 
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'wizard');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views-bs5', 'wizard');
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'wizard');
 
         $this->publishes([
@@ -48,8 +48,12 @@ class WizardServiceProvider extends ServiceProvider
         ], 'wizard-config');
 
         $this->publishes([
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/wizard'),
-        ], 'wizard-views');
+            __DIR__ . '/../resources/views-bs4' => resource_path('views/vendor/wizard'),
+        ], 'wizard-views-bs4');
+
+        $this->publishes([
+            __DIR__ . '/../resources/views-bs5' => resource_path('views/vendor/wizard'),
+        ], 'wizard-views-bs5');
 
         $this->publishes([
             __DIR__ . '/../resources/lang' => resource_path('lang/vendor/wizard'),

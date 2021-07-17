@@ -44,13 +44,13 @@ A web setup wizard for Laravel application.
 
 ## Version Compatibility
 
- | Laravel Wizard | Laravel                | PHP    |
- | :------------- | :--------------------- | :----- |
- | 1.0.x          | 5.5                    | ^7.0   |
- | 1.1.x          | ^5.6                   | ^7.1.3 |
- | 2.0.x,2.1.x    | ^5.6\|^6.x             | ^7.1.3 |
- | 2.2.x          | ^5.6\|^6.x\|^7.x       | ^7.1.3 |
- | 2.3.x          | ^5.6\|^6.x\|^7.x\|^8.x | ^7.1.3 |
+ | Laravel Wizard | Laravel          | PHP     |
+ | :------------- | :--------------- | :------ |
+ | 1.0.x          | 5.5              | ^7.0    |
+ | 1.1.x          | ^5.6             | ^7.1.3  |
+ | 2.0.x,2.1.x    | ^5.6\|^6.x       | ^7.1.3  |
+ | 2.2.x          | ^5.6\|^6.x\|^7.x | ^7.1.3  |
+ | 2.3.x          | >=5.6            | >=7.1.3 |
 
 ## Install
 
@@ -66,10 +66,16 @@ Publish config:
 php artisan vendor:publish --tag=wizard-config
 ```
 
-The this package view is use [Bootstrap 4](https://getbootstrap.com/), but if you don't want to use, you can publish views to custom it, or [Customize View](#customize-view):
+The this package view is use [Bootstrap 5](https://getbootstrap.com/), but if you don't want to use, you can publish views to custom it, or [Customize View](#customize-view):
 
 ```bash
-php artisan vendor:publish --tag=wizard-views
+php artisan vendor:publish --tag=wizard-views-bs5
+```
+
+Or you can publish Bootstrap 4 view to custom it:
+
+```bash
+php artisan vendor:publish --tag=wizard-views-bs4
 ```
 
 ## Usage
@@ -168,7 +174,7 @@ And add steps view, for example:
 
 *resources/views/steps/user/name.blade.php*
 ```blade
-<div class="form-group">
+<div class="form-group mb-3">
     <label for="name">Name</label>
     <input type="text" name="name" id="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') ?? $step->data('name') }}">
     @if ($errors->has('name'))
@@ -179,7 +185,7 @@ And add steps view, for example:
 
 *resources/views/steps/user/email.blade.php*
 ```blade
-<div class="form-group">
+<div class="form-group mb-3">
     <label for="email">E-mail</label>
     <input type="email" name="email" id="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') ?? $step->data('email') }}">
     @if ($errors->has('email'))
@@ -190,18 +196,16 @@ And add steps view, for example:
 
 Next, browse the URL `/wizard/user`, start use the Laravel Wizard.
 
+If you want to get the layout see [Laravel UI alyouts/app.blade.php](https://github.com/laravel/ui/blob/3.x/src/Auth/bootstrap-stubs/layouts/app.stub).
+
 ### 3. Install wizard steps CSS package
 
 The CSS for this package default view is based on the [Bootstrap Steps](https://github.com/ycs77/bootstrap-steps), use NPM installation to use:
 
 ```bash
-npm install bootstrap-steps
-```
-
-Or use yarn:
-
-```bash
-yarn add bootstrap-steps
+npm install bootstrap bootstrap-steps
+// or Yarn
+yarn add bootstrap bootstrap-steps
 ```
 
 Import to app.scss file and run `npm run dev` or `yarn run dev`:
