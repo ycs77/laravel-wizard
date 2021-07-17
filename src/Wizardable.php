@@ -247,15 +247,7 @@ trait Wizardable
      */
     public function getActionMethod(string $method)
     {
-        $className = static::class;
-        $stepNamespace = config('wizard.namespace.controllers');
-        $rootNamespace = trim(str_replace('/', '\\', $stepNamespace), '\\');
-
-        if (Str::startsWith($className, $rootNamespace)) {
-            $className = trim(str_replace($rootNamespace, '', $className), '\\');
-        } else {
-            $className = '\\' . trim($className, '\\');
-        }
+        $className = '\\' . trim(static::class, '\\');
 
         return "$className@$method";
     }
