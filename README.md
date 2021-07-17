@@ -92,9 +92,13 @@ This command generate the `UserWizardController`, `NameStep`, `EmailStep` class,
 
 *routes/web.php*
 ```php
+use App\Http\Controllers\UserWizardController;
+use Illuminate\Support\Facades\Route;
+use Ycs77\LaravelWizard\Facades\Wizard;
+
 ...
 
-Wizard::routes('wizard/user', 'UserWizardController', 'wizard.user');
+Wizard::routes('wizard/user', UserWizardController::class, 'wizard.user');
 ```
 
 > If you can't use auto append route, you can set `config/wizard.php` attribute `append_route` to `false`.

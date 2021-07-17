@@ -47,18 +47,35 @@ class WizardMakeCommand extends Command
      */
     public function appendRoute()
     {
+        $controllerFullClass = $this->laravel['config']['wizard.namespace.controllers'] . '\\' . $this->getControllerName();
         $nameAry = ['wizard', Str::snake(class_basename($this->getNameInput()))];
+
+        $routesText = file_get_contents(base_path('routes/web.php'));
+
+        if (! Str::contains($routesText, $controllerFullClass)) {
+            $routesText = str_replace(
+                "<?php\n",
+                "<?php\n\nuse $controllerFullClass;",
+                $routesText
+            );
+        }
+
+        if (! Str::contains($routesText, 'use Ycs77\LaravelWizard\Facades\Wizard;')) {
+            $routesText = str_replace(
+                "use Illuminate\Support\Facades\Route;",
+                'use Illuminate\Support\Facades\Route;' . "\n" . 'use Ycs77\LaravelWizard\Facades\Wizard;',
+                $routesText
+            );
+        }
 
         $routeText = file_get_contents(__DIR__ . '/stubs/routes.stub');
         $routeText = str_replace('DummyUri', implode('/', $nameAry), $routeText);
-        $routeText = str_replace('DummyController', $this->getControllerName(), $routeText);
+        $routeText = str_replace('DummyController', $this->getControllerName() . '::class', $routeText);
         $routeText = str_replace('DummyName', implode('.', $nameAry), $routeText);
 
-        file_put_contents(
-            base_path('routes/web.php'),
-            $routeText,
-            FILE_APPEND
-        );
+        $routesText .= $routeText;
+
+        file_put_contents(base_path('routes/web.php'), $routesText);
     }
 
     /**
