@@ -219,7 +219,7 @@ class StepRepository implements StepRepositoryContract
      */
     public function has(int $key)
     {
-        return (bool)$this->get($key);
+        return (bool) $this->get($key);
     }
 
     /**
@@ -229,7 +229,7 @@ class StepRepository implements StepRepositoryContract
      */
     public function hasPrev()
     {
-        return (bool)$this->prev();
+        return (bool) $this->prev();
     }
 
     /**
@@ -239,7 +239,7 @@ class StepRepository implements StepRepositoryContract
      */
     public function hasNext()
     {
-        return (bool)$this->next();
+        return (bool) $this->next();
     }
 
     /**

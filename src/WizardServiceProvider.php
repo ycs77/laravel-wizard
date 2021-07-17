@@ -23,7 +23,7 @@ class WizardServiceProvider extends ServiceProvider
 
         $this->app->alias('wizard', WizardFactory::class);
 
-        $this->mergeConfigFrom(__DIR__ . '/../config/wizard.php', 'wizard');
+        $this->mergeConfigFrom(__DIR__.'/../config/wizard.php', 'wizard');
     }
 
     /**
@@ -40,23 +40,23 @@ class WizardServiceProvider extends ServiceProvider
             TableCommand::class,
         ]);
 
-        $this->loadViewsFrom(__DIR__ . '/../resources/views-bs5', 'wizard');
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'wizard');
+        $this->loadViewsFrom(__DIR__.'/../resources/views-bs5', 'wizard');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'wizard');
 
         $this->publishes([
-            __DIR__ . '/../config/wizard.php' => config_path('wizard.php'),
+            __DIR__.'/../config/wizard.php' => config_path('wizard.php'),
         ], 'wizard-config');
 
         $this->publishes([
-            __DIR__ . '/../resources/views-bs4' => resource_path('views/vendor/wizard'),
+            __DIR__.'/../resources/views-bs4' => resource_path('views/vendor/wizard'),
         ], 'wizard-views-bs4');
 
         $this->publishes([
-            __DIR__ . '/../resources/views-bs5' => resource_path('views/vendor/wizard'),
+            __DIR__.'/../resources/views-bs5' => resource_path('views/vendor/wizard'),
         ], 'wizard-views-bs5');
 
         $this->publishes([
-            __DIR__ . '/../resources/lang' => resource_path('lang/vendor/wizard'),
+            __DIR__.'/../resources/lang' => resource_path('lang/vendor/wizard'),
         ], 'wizard-languages');
     }
 }

@@ -56,7 +56,7 @@ class DatabaseStore implements CacheStore
     {
         $data = $this->getSelectedQuery()->first();
 
-        if (!$data = (array)$this->getSelectedQuery()->first()) {
+        if (! $data = (array) $this->getSelectedQuery()->first()) {
             return;
         }
 

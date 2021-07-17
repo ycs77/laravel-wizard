@@ -37,7 +37,7 @@ class WizardControllerMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/controller.wizard.stub';
+        return __DIR__.'/stubs/controller.wizard.stub';
     }
 
     /**
@@ -135,7 +135,7 @@ class WizardControllerMakeCommand extends GeneratorCommand
         foreach ($stepsClass as $stepClass) {
             $stepClass = $this->parseStep($stepClass);
 
-            if (!class_exists($stepClass)) {
+            if (! class_exists($stepClass)) {
                 if ($this->option('force')) {
                     $this->createWizardStep($stepClass, true);
                 } else {
@@ -146,13 +146,13 @@ class WizardControllerMakeCommand extends GeneratorCommand
             }
 
             $fullStepsClasses[] = "use {$stepClass};";
-            $stepsClasses[] = class_basename($stepClass) . '::class,';
+            $stepsClasses[] = class_basename($stepClass).'::class,';
         }
 
         sort($fullStepsClasses);
 
         $fullStepsClassesText = implode(PHP_EOL, $fullStepsClasses);
-        $stepsClassesText = implode(PHP_EOL . '        ', $stepsClasses);
+        $stepsClassesText = implode(PHP_EOL.'        ', $stepsClasses);
         $stepsClassesText = implode('', [
             PHP_EOL,
             '        ',
@@ -197,11 +197,11 @@ class WizardControllerMakeCommand extends GeneratorCommand
 
         $step = trim(str_replace('/', '\\', $step), '\\');
         $stepNamespace = $this->laravel['config']['wizard.namespace.steps'];
-        $stepNamespace .= '\\' . Str::studly($this->getWizardName());
+        $stepNamespace .= '\\'.Str::studly($this->getWizardName());
         $rootNamespace = trim(str_replace('/', '\\', $stepNamespace), '\\');
 
-        if (!Str::startsWith($step, $rootNamespace)) {
-            $step = $rootNamespace . '\\' . $step;
+        if (! Str::startsWith($step, $rootNamespace)) {
+            $step = $rootNamespace.'\\'.$step;
         }
 
         return $step;

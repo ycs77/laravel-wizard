@@ -76,7 +76,7 @@ class CacheManager extends Manager
      */
     protected function getSessionKey()
     {
-        return 'laravel_wizard.' . $this->wizard->getName();
+        return 'laravel_wizard.'.$this->wizard->getName();
     }
 
     /**

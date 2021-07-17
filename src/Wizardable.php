@@ -4,7 +4,6 @@ namespace Ycs77\LaravelWizard;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Ycs77\LaravelWizard\Exceptions\StepNotFoundException;
 
 trait Wizardable
@@ -247,7 +246,7 @@ trait Wizardable
      */
     public function getActionMethod(string $method)
     {
-        $className = '\\' . trim(static::class, '\\');
+        $className = '\\'.trim(static::class, '\\');
 
         return "$className@$method";
     }
@@ -364,7 +363,7 @@ trait Wizardable
      */
     public function getViewPath($view)
     {
-        $viewPath = config('wizard.wizard_view_path') . ".{$this->wizardName()}.$view";
+        $viewPath = config('wizard.wizard_view_path').".{$this->wizardName()}.$view";
 
         if (view()->exists($viewPath)) {
             return $viewPath;
@@ -402,7 +401,7 @@ trait Wizardable
      */
     protected function wizard()
     {
-        if (!$this->wizard) {
+        if (! $this->wizard) {
             /** @var \Ycs77\LaravelWizard\WizardFactory $factory */
             $factory = app(WizardFactory::class);
 

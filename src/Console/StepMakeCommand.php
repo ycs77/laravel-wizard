@@ -36,7 +36,7 @@ class StepMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/step.stub';
+        return __DIR__.'/stubs/step.stub';
     }
 
     /**
@@ -48,10 +48,10 @@ class StepMakeCommand extends GeneratorCommand
     protected function getDefaultNamespace($rootNamespace)
     {
         $wizardName = $this->option('wizard')
-            ? '\\' . Str::studly($this->option('wizard'))
+            ? '\\'.Str::studly($this->option('wizard'))
             : '';
 
-        return $this->laravel['config']['wizard.namespace.steps'] . $wizardName;
+        return $this->laravel['config']['wizard.namespace.steps'].$wizardName;
     }
 
     /**
