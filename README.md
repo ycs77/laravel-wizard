@@ -194,7 +194,7 @@ And add steps view, for example:
 
 Next, browse the URL `/wizard/user`, start use the Laravel Wizard.
 
-If you want to get the layout see [Laravel UI alyouts/app.blade.php](https://github.com/laravel/ui/blob/3.x/src/Auth/bootstrap-stubs/layouts/app.stub).
+> If you want to get the layout see [Laravel UI alyouts/app.blade.php](https://github.com/laravel/ui/blob/3.x/src/Auth/bootstrap-stubs/layouts/app.stub).
 
 ### 3. Install wizard steps CSS package
 
