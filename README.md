@@ -66,16 +66,10 @@ Publish config:
 php artisan vendor:publish --tag=wizard-config
 ```
 
-The this package view is use [Bootstrap 5](https://getbootstrap.com/), but if you don't want to use, you can publish views to custom it, or [Customize View](#customize-view):
+This package view is use [Bootstrap 5](https://getbootstrap.com/), but if you don't want to use, can publish views to custom it, see [Customize View](#customize-view):
 
 ```bash
 php artisan vendor:publish --tag=wizard-views-bs5
-```
-
-Or you can publish Bootstrap 4 view to custom it:
-
-```bash
-php artisan vendor:publish --tag=wizard-views-bs4
 ```
 
 ## Usage
@@ -257,7 +251,13 @@ protected $wizardOptions = [
 First, publish layouts:
 
 ```bash
-php artisan vendor:publish --tag=wizard-views
+php artisan vendor:publish --tag=wizard-views-bs5
+```
+
+Or you can publish Bootstrap 4 view to custom it:
+
+```bash
+php artisan vendor:publish --tag=wizard-views-bs4
 ```
 
 Now you can customize `resources/views/vendor/wizard/*.blade.php` in your laravel project.
