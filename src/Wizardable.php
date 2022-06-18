@@ -202,7 +202,7 @@ trait Wizardable
     /**
      * Step redirect response.
      *
-     * @param  string|null $step
+     * @param  string|null  $step
      * @return \Illuminate\Http\RedirectResponse
      */
     protected function redirectTo($step = null)

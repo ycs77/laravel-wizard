@@ -195,7 +195,7 @@ class Wizard
     /**
      * Get the application instance.
      *
-     * @return  \Illuminate\Foundation\Application
+     * @return \Illuminate\Foundation\Application
      */
     public function getApp()
     {
@@ -205,7 +205,7 @@ class Wizard
     /**
      * Get the wizard name.
      *
-     * @return  string
+     * @return string
      */
     public function getName()
     {
@@ -215,7 +215,7 @@ class Wizard
     /**
      * Get the wizard title.
      *
-     * @return  string
+     * @return string
      */
     public function getTitle()
     {
