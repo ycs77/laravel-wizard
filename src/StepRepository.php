@@ -149,7 +149,7 @@ class StepRepository implements StepRepositoryContract
      * Get or set the current step.
      *
      * @param  \Ycs77\LaravelWizard\Step|null  $step
-     * @return \Ycs77\LaravelWizard\Step|null  $step
+     * @return \Ycs77\LaravelWizard\Step|null $step
      */
     public function current($step = null)
     {
