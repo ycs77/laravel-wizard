@@ -1,7 +1,7 @@
 # Laravel Wizard
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE.md)
+[![Software License][ico-license]](LICENSE)
 [![CI Build Status][ico-ci]][link-ci]
 [![Style CI Build Status][ico-style-ci]][link-style-ci]
 [![Total Downloads][ico-downloads]][link-downloads]
@@ -41,6 +41,8 @@ A web setup wizard for Laravel application.
     - [Set relationships model](#set-relationships-model)
   - [Common Problems](#common-problems)
   - [Commands](#commands)
+  - [Credits](#credits)
+  - [License](#license)
 
 ## Version Compatibility
 
@@ -492,6 +494,14 @@ Add custom view path:
 ```bash
 php artisan make:wizard:step NameStep --label="Name" --slug=name --view=steps.user.name --wizard=user
 ```
+
+## Credits
+
+* [smajti1/laravel-wizard](https://github.com/smajti1/laravel-wizard)
+
+## License
+
+[MIT LICENSE](LICENSE)
 
 [ico-version]: https://img.shields.io/packagist/v/ycs77/laravel-wizard?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
