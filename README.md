@@ -510,6 +510,6 @@ php artisan make:wizard:step NameStep --label="Name" --slug=name --view=steps.us
 [ico-downloads]: https://img.shields.io/packagist/dt/ycs77/laravel-wizard?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/ycs77/laravel-wizard
-[link-ci]: https://travis-ci.com/github/ycs77/laravel-wizard
+[link-ci]: https://app.travis-ci.com/github/ycs77/laravel-wizard
 [link-style-ci]: https://github.styleci.io/repos/190876726
 [link-downloads]: https://packagist.org/packages/ycs77/laravel-wizard
