@@ -73,6 +73,12 @@ This package view is use [Bootstrap 5](https://getbootstrap.com/), but if you do
 php artisan vendor:publish --tag=wizard-views-bs5
 ```
 
+If you want to use Bootstrap 4, you can publish the Bootstrap 4 views:
+
+```bash
+php artisan vendor:publish --tag=wizard-views-bs4
+```
+
 ## Usage
 
 ### 1. Generate controller and wizard steps
