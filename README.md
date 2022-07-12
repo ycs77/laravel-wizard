@@ -5,12 +5,6 @@
 [![Style CI Build Status][ico-style-ci]][link-style-ci]
 [![Total Downloads][ico-downloads]][link-downloads]
 
----
-
-**If you're using PHP 8, it's recommended to use [arcanist](https://github.com/laravel-arcanist/arcanist) package instead.**
-
----
-
 A web setup wizard for Laravel application.
 
 > This package is adapted from [smajti1/laravel-wizard](https://github.com/smajti1/laravel-wizard).
