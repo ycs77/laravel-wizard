@@ -2,7 +2,6 @@
 * eol=lf
 
 /tests export-ignore
-/resources/stub_views export-ignore
 /.editorconfig export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore

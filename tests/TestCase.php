@@ -19,7 +19,7 @@ class TestCase extends OrchestraTestCase
     {
         $this->setUpTheTestEnvironment();
 
-        $this->app['view']->addLocation(__DIR__.'/../resources/stub_views');
+        $this->app['view']->addLocation(__DIR__.'/Stubs/views');
 
         $this->loadMigrationsFrom(__DIR__.'/Stubs/database/migrations');
     }
