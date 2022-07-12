@@ -176,6 +176,7 @@ And add steps view, for example:
 <div class="form-group mb-3">
     <label for="name">Name</label>
     <input type="text" name="name" id="name" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" value="{{ old('name') ?? $step->data('name') }}">
+
     @if ($errors->has('name'))
         <span class="invalid-feedback">{{ $errors->first('name') }}</span>
     @endif
@@ -187,6 +188,7 @@ And add steps view, for example:
 <div class="form-group mb-3">
     <label for="email">E-mail</label>
     <input type="email" name="email" id="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" value="{{ old('email') ?? $step->data('email') }}">
+
     @if ($errors->has('email'))
         <span class="invalid-feedback">{{ $errors->first('email') }}</span>
     @endif
@@ -340,7 +342,7 @@ class NameStep extends Step
 
 *resources/views/steps/user/name.blade.php*
 ```blade
-<div class="form-group">
+<div class="form-group mb-3">
     <label for="name">Select name</label>
     <select id="name" name="name" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}">
         <option value="">Select...</option>
