@@ -216,6 +216,47 @@ class HttpTest extends TestCase
         ], $this->app['session']->get('laravel_wizard.test'));
     }
 
+    public function testWizardStepTriggerToSkipAndCached()
+    {
+        $this->app['config']->set('wizard.cache', true);
+
+        $this->setWizardRoutes(
+            '/wizard/can-skip',
+            '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerSkipStub',
+            'wizard.can-skip'
+        );
+
+        $response = $this->post('/wizard/can-skip/user-step-stub?_trigger=skip', [
+            'name' => null,
+        ]);
+        $response->assertRedirect('/wizard/can-skip/post-step-stub');
+
+        $this->assertEquals([
+            'user-step-stub' => [
+                'name' => null,
+            ],
+            '_last_index' => 1,
+        ], $this->app['session']->get('laravel_wizard.test'));
+    }
+
+    public function testWizardStepTriggerToSkipAndNoCache()
+    {
+        $this->app['config']->set('wizard.cache', false);
+
+        $this->setWizardRoutes(
+            '/wizard/can-skip',
+            '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerSkipStub',
+            'wizard.can-skip'
+        );
+
+        $response = $this->post('/wizard/can-skip/user-step-stub?_trigger=skip', [
+            'name' => null,
+        ]);
+        $response->assertRedirect('/wizard/can-skip/post-step-stub');
+
+        $this->assertNull($this->app['session']->get('laravel_wizard.test'));
+    }
+
     public function testWizardCacheDatabaseDriver()
     {
         $this->app['config']->set('wizard.driver', 'database');

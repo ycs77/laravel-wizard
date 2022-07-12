@@ -92,36 +92,41 @@ trait Wizardable
 
         $step = $this->getWizardStep($request, $step);
 
-        // Form validation.
-        if ($this->canValidate($request)) {
-            $this->validate(
-                $request,
-                $step->rules($request),
-                $step->validateMessages($request),
-                $step->validateAttributes($request)
-            );
-        }
-
-        // Wizard step validated event.
-        $this->wizardStepFormValidated($request);
-
-        if ($this->wizard()->option('cache')) {
-            $step->cacheProgress($request);
+        if ($step->skip() && $request->query('_trigger') === 'skip') {
+            if ($this->wizard()->option('cache')) {
+                $step->cacheProgress($request);
+            }
         } else {
-            $step->saveData($request, $step->getRequestData($request), $step->getModel());
-        }
+            // Form validation.
+            if ($this->canValidate($request)) {
+                $this->validate(
+                    $request,
+                    $step->rules($request),
+                    $step->validateMessages($request),
+                    $step->validateAttributes($request)
+                );
+            }
 
-        // Wizard step saved event.
-        if ($redirectTo = $this->wizardStepSaved($request, $step)) {
-            return $redirectTo;
-        }
+            // Wizard step validated event.
+            $this->wizardStepFormValidated($request);
 
-        // If trigger from 'back',
-        // Set this step index and redirect to prev step.
-        if ($request->query('_trigger') === 'back' && $this->beforeBackWizardStep($request)) {
-            $prevStep = $this->wizard()->stepRepo()->prev();
+            if ($this->wizard()->option('cache')) {
+                $step->cacheProgress($request);
+            } else {
+                $step->saveData($request, $step->getRequestData($request), $step->getModel());
+            }
 
-            return $this->setThisStepAndRedirectTo($request, $prevStep);
+            // Wizard step saved event.
+            if ($redirectTo = $this->wizardStepSaved($request, $step)) {
+                return $redirectTo;
+            }
+
+            // If trigger from 'back', set this step index and redirect to prev step.
+            if ($request->query('_trigger') === 'back' && $this->beforeBackWizardStep($request)) {
+                $prevStep = $this->wizard()->stepRepo()->prev();
+
+                return $this->setThisStepAndRedirectTo($request, $prevStep);
+            }
         }
 
         if ($this->isLastStep()) {
