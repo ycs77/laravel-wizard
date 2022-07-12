@@ -29,6 +29,7 @@ A web setup wizard for Laravel application.
   - [Step](#step)
     - [Get cache data](#get-cache-data)
     - [Step repository](#step-repository)
+    - [Skip step](#skip-step)
     - [Passing data to views](#passing-data-to-views)
     - [Save data on other step](#save-data-on-other-step)
     - [Set relationships model](#set-relationships-model)
@@ -314,6 +315,29 @@ $prevStep = $step->next();
 ```
 
 Step repository all can use method detailed reference: https://github.com/ycs77/laravel-wizard/blob/master/src/StepRepository.php
+
+### Skip step
+
+> **Info**: add in *v2.3.3*
+
+To make Step skippable, set the `$skip` property to `true`, then this Step will be skip the validation and save data:
+
+*app/Steps/User/NameStep.php*
+```php
+<?php
+
+...
+
+class NameStep extends Step
+{
+    /**
+     * Is it possible to skip this step.
+     *
+     * @var boolean
+     */
+    protected $skip = true;
+}
+```
 
 ### Passing data to views
 

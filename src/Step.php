@@ -49,6 +49,13 @@ abstract class Step
     protected $view;
 
     /**
+     * Is it possible to skip this step.
+     *
+     * @var bool
+     */
+    protected $skip = false;
+
+    /**
      * The request input except input data.
      *
      * @var array
@@ -120,6 +127,16 @@ abstract class Step
         }
 
         return config('wizard.step_view_path').".{$this->wizard->getName()}.{$this->slug}";
+    }
+
+    /**
+     * Get is it possible to skip this step.
+     *
+     * @return bool
+     */
+    public function skip()
+    {
+        return $this->skip;
     }
 
     /**

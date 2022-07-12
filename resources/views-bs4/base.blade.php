@@ -25,6 +25,12 @@
                         </div>
 
                         <div class="ml-auto">
+                            @if ($step->skip())
+                                <button type="button" class="btn btn-secondary mr-2" onclick="this.form.action = '{{ $getActionUrl($postAction, [$step->slug(), '_trigger' => 'skip']) }}'; this.form.submit();">
+                                    @lang('wizard::generic.skip')
+                                </button>
+                            @endif
+
                             @if ($stepRepo->hasNext())
                                 <button type="submit" class="btn btn-primary">
                                     @lang('wizard::generic.next')
