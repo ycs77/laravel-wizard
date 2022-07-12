@@ -299,12 +299,16 @@ Get previous step:
 
 ```php
 $prevStep = $step->getRepo()->prev();
+// or use alias method:
+$prevStep = $step->prev();
 ```
 
 Get next step:
 
 ```php
 $nextStep = $step->getRepo()->next();
+// or use alias method:
+$prevStep = $step->next();
 ```
 
 Step repository all can use method detailed reference: https://github.com/ycs77/laravel-wizard/blob/master/src/StepRepository.php
@@ -396,10 +400,7 @@ class EmailStep extends Step
 
     public function saveData(Request $request, $data = null, $model = null)
     {
-        $data = $this->getRepo()->original()->reduce(function ($carry, $step) {
-            return array_merge($carry, $step->data());
-        }, []);
-
+        $data = $this->getStepsData();
         $model->fill($data)->save();
     }
 }

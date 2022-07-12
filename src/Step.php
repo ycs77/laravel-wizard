@@ -251,6 +251,38 @@ abstract class Step
     }
 
     /**
+     * Get all user input data from steps.
+     *
+     * @return array
+     */
+    public function getStepsData()
+    {
+        return $this->getRepo()->original()->reduce(function ($carry, $step) {
+            return array_merge($carry, $step->data());
+        }, []);
+    }
+
+    /**
+     * Get the previous step.
+     *
+     * @return \Ycs77\LaravelWizard\Step|null
+     */
+    public function prev()
+    {
+        return $this->getRepo()->prev();
+    }
+
+    /**
+     * Get the next step.
+     *
+     * @return \Ycs77\LaravelWizard\Step|null
+     */
+    public function next()
+    {
+        return $this->getRepo()->next();
+    }
+
+    /**
      * Cache progress data.
      *
      * @param  \Illuminate\Http\Request  $request
