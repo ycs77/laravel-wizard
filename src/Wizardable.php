@@ -57,7 +57,7 @@ trait Wizardable
             );
         }
 
-        $this->pushWithViewData([
+        $this->viewData([
             'wizard' => $this->wizard(),
             'wizardTitle' => $this->wizardTitle(),
             'step' => $step,
@@ -341,14 +341,14 @@ trait Wizardable
      *
      * Example:
      *
-     * $this->pushWithViewData(compact(
+     * $this->viewData(compact(
      *     'data'
      * ));
      *
      * @param  array  $data
      * @return void
      */
-    protected function pushWithViewData(array $data)
+    protected function viewData(array $data)
     {
         foreach ($data as $key => $value) {
             $this->withViewData[$key] = $value;
