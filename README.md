@@ -2,7 +2,6 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE)
-[![CI Build Status][ico-ci]][link-ci]
 [![Style CI Build Status][ico-style-ci]][link-style-ci]
 [![Total Downloads][ico-downloads]][link-downloads]
 
@@ -505,11 +504,9 @@ php artisan make:wizard:step NameStep --label="Name" --slug=name --view=steps.us
 
 [ico-version]: https://img.shields.io/packagist/v/ycs77/laravel-wizard?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
-[ico-ci]: https://img.shields.io/travis/ycs77/laravel-wizard?style=flat-square
 [ico-style-ci]: https://github.styleci.io/repos/190876726/shield?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/ycs77/laravel-wizard?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/ycs77/laravel-wizard
-[link-ci]: https://app.travis-ci.com/github/ycs77/laravel-wizard
 [link-style-ci]: https://github.styleci.io/repos/190876726
 [link-downloads]: https://packagist.org/packages/ycs77/laravel-wizard
