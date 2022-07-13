@@ -265,7 +265,9 @@ Add `wizardOptions` property to `controller`, you can use `cache`, `driver`, `co
  * @var array
  */
 protected $wizardOptions = [
-    'cache' => false,
+    'cache' => true,
+    'driver' => 'session',
+    'table' => 'wizards',
 ];
 ```
 
@@ -380,6 +382,7 @@ Then add a step view to upload the avatar image:
     <label for="avatar">Avatar</label>
     <input type="file" name="avatar" id="avatar" class="form-control">
     <div class="form-control d-none {{ $errors->has('avatar') ? 'is-invalid' : '' }}"></div>
+
     @if ($errors->has('avatar'))
         <span class="invalid-feedback">{{ $errors->first('avatar') }}</span>
     @endif
@@ -395,8 +398,6 @@ To make Step skippable, set the `$skip` property to `true`, then this Step will 
 *app/Steps/User/NameStep.php*
 ```php
 <?php
-
-...
 
 class NameStep extends Step
 {
