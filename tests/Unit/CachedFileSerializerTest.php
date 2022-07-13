@@ -6,10 +6,13 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Ycs77\LaravelWizard\CachedFile;
 use Ycs77\LaravelWizard\CachedFileSerializer;
+use Ycs77\LaravelWizard\Test\Concerns\CachedFileTesting;
 use Ycs77\LaravelWizard\Test\TestCase;
 
 class CachedFileSerializerTest extends TestCase
 {
+    use CachedFileTesting;
+
     /**
      * The cached file serializer instance.
      *
@@ -45,7 +48,7 @@ class CachedFileSerializerTest extends TestCase
 
         // assert
         $this->assertEquals($expected, $actual);
-        Storage::assertExists('laravel-wizard-tmp/test_temp_file.jpg');
+        Storage::assertExists('laravel-wizard-tmp/test_temp_file.'.jpg());
     }
 
     public function testSerializeFilePutCachedFile()
@@ -61,14 +64,14 @@ class CachedFileSerializerTest extends TestCase
 
         // assert
         $this->assertEquals($expected, $actual);
-        Storage::assertExists('laravel-wizard-tmp/test_temp_file.jpg');
+        Storage::assertExists('laravel-wizard-tmp/test_temp_file.'.jpg());
     }
 
     public function testUnserializeFile()
     {
         // arrange
         $file = UploadedFile::fake()->image('avatar.jpg');
-        $filePath = $file->storeAs('laravel-wizard-tmp', 'test_temp_file.jpg');
+        $filePath = $file->storeAs('laravel-wizard-tmp', 'test_temp_file.'.jpg());
         $serialized = $this->getSerializedCachedFile();
 
         // act
@@ -78,9 +81,9 @@ class CachedFileSerializerTest extends TestCase
         // assert
         $this->assertInstanceOf(CachedFile::class, $cachedFile);
         $this->assertEquals('local', $cachedFile->disk());
-        $this->assertEquals('test_temp_file.jpg', $cachedFile->filename());
+        $this->assertEquals('test_temp_file.'.jpg(), $cachedFile->filename());
         $this->assertEquals('image/jpeg', $cachedFile->mimeType());
-        $this->assertEquals('laravel-wizard-tmp/test_temp_file.jpg', $cachedFile->tmpPath());
+        $this->assertEquals('laravel-wizard-tmp/test_temp_file.'.jpg(), $cachedFile->tmpPath());
         $this->assertTrue(is_file($cachedFile->tmpFullPath()));
         $this->assertIsTemporaryFile($cachedFile->file());
     }
@@ -136,7 +139,7 @@ class CachedFileSerializerTest extends TestCase
     {
         // arrange
         $file = UploadedFile::fake()->image('avatar.jpg');
-        $file->storeAs('laravel-wizard-tmp', 'test_temp_file.jpg');
+        $file->storeAs('laravel-wizard-tmp', 'test_temp_file.'.jpg());
         $data = [
             'other_step' => ['field' => 'data'],
             'avatar_step' => ['avatar' => $this->getSerializedCachedFile()],
@@ -182,35 +185,21 @@ class CachedFileSerializerTest extends TestCase
     {
         // arrange
         $file = UploadedFile::fake()->image('avatar1.jpg');
-        $file->storeAs('laravel-wizard-tmp', 'test_temp_file1.jpg');
+        $file->storeAs('laravel-wizard-tmp', 'test_temp_file1.'.jpg());
         $file = UploadedFile::fake()->image('avatar2.jpg');
-        $file->storeAs('laravel-wizard-tmp', 'test_temp_file2.jpg');
+        $file->storeAs('laravel-wizard-tmp', 'test_temp_file2.'.jpg());
         $files = [
             $this->tempFileFullPath('1'),
             $this->tempFileFullPath('2'),
         ];
 
         // act
-        Storage::assertExists([
-            'laravel-wizard-tmp/test_temp_file1.jpg',
-            'laravel-wizard-tmp/test_temp_file2.jpg',
-        ]);
+        Storage::assertExists('laravel-wizard-tmp/test_temp_file1.'.jpg());
+        Storage::assertExists('laravel-wizard-tmp/test_temp_file2.'.jpg());
         $this->serializer->clearTmpFiles($files);
 
         // assert
-        Storage::assertMissing([
-            'laravel-wizard-tmp/test_temp_file1.jpg',
-            'laravel-wizard-tmp/test_temp_file2.jpg',
-        ]);
-    }
-
-    protected function getSerializedCachedFile()
-    {
-        return "Ycs77\LaravelWizard\CachedFile:O:30:\"Ycs77\LaravelWizard\CachedFile\":5:{s:7:\"\x00*\x00disk\";s:5:\"local\";s:11:\"\x00*\x00filename\";s:18:\"test_temp_file.jpg\";s:9:\"\x00*\x00tmpDir\";s:18:\"laravel-wizard-tmp\";s:10:\"\x00*\x00tmpPath\";s:37:\"laravel-wizard-tmp/test_temp_file.jpg\";s:11:\"\x00*\x00mimeType\";s:10:\"image/jpeg\";}";
-    }
-
-    protected function tempFileFullPath($num = '')
-    {
-        return str_replace('\\', '/', Storage::path('laravel-wizard-tmp/test_temp_file'.$num.'.jpg'));
+        Storage::assertMissing('laravel-wizard-tmp/test_temp_file1.'.jpg());
+        Storage::assertMissing('laravel-wizard-tmp/test_temp_file2.'.jpg());
     }
 }

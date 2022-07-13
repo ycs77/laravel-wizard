@@ -157,7 +157,7 @@ class HttpTest extends TestCase
             'avatar' => $file,
         ]);
         $response->assertRedirect('/wizard/upload-file/save-avatar-step-stub');
-        Storage::assertExists('laravel-wizard-tmp/test_temp_file.jpg');
+        Storage::assertExists('laravel-wizard-tmp/test_temp_file.'.jpg());
 
         // Get avatar step
         $response = $this->get('/wizard/upload-file/save-avatar-step-stub');
@@ -166,7 +166,7 @@ class HttpTest extends TestCase
         // Post avatar step
         $response = $this->post('/wizard/upload-file/save-avatar-step-stub');
         $response->assertRedirect('/wizard/upload-file/done');
-        Storage::assertMissing('laravel-wizard-tmp/test_temp_file.jpg');
+        Storage::assertMissing('laravel-wizard-tmp/test_temp_file.'.jpg());
 
         // Get done page
         $response = $this->get('/wizard/upload-file/done');
