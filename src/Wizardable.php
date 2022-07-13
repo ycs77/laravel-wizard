@@ -36,13 +36,12 @@ trait Wizardable
             return $redirectTo;
         }
 
-        $lastProcessedIndex = $this->getLastProcessedStepIndex($request, $step);
+        $lastProcessedIndex = $this->getLastProcessedStepIndex($step);
 
         // If step is null, redirect to last processed index.
         if (is_null($step)) {
             return $this->redirectToLastProcessedStep(
-                $request,
-                $lastProcessedIndex
+                $request, $lastProcessedIndex
             );
         }
 
@@ -52,8 +51,7 @@ trait Wizardable
         if ($step->index() !== $lastProcessedIndex) {
             // Redirect to last processed step.
             return $this->redirectToLastProcessedStep(
-                $request,
-                $lastProcessedIndex
+                $request, $lastProcessedIndex
             );
         }
 
@@ -105,10 +103,10 @@ trait Wizardable
                     $step->validateMessages($request),
                     $step->validateAttributes($request)
                 );
-            }
 
-            // Wizard step validated event.
-            $this->wizardStepFormValidated($request);
+                // Wizard step validated event.
+                $this->wizardStepFormValidated($request);
+            }
 
             if ($this->wizard()->option('cache')) {
                 $step->cacheProgress($request);
@@ -276,11 +274,10 @@ trait Wizardable
     /**
      * Get the last processed step index.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  string|null  $stepSlug
      * @return int
      */
-    protected function getLastProcessedStepIndex(Request $request, string $stepSlug = null)
+    protected function getLastProcessedStepIndex(string $stepSlug = null)
     {
         if ($this->wizard()->option('cache')) {
             return $this->wizard()->cache()->getLastProcessedIndex() ?? 0;
@@ -306,7 +303,7 @@ trait Wizardable
         if (isset($slug)) {
             $step = $this->wizard()->stepRepo()->find($slug);
         } else {
-            $lastProcessedStepIndex = $this->getLastProcessedStepIndex($request);
+            $lastProcessedStepIndex = $this->getLastProcessedStepIndex();
             $step = $this->wizard()->stepRepo()->get($lastProcessedStepIndex);
         }
 
