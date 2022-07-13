@@ -37,6 +37,9 @@
         "psr-4": {
             "Ycs77\\LaravelWizard\\Test\\": "tests"
         },
+        "files": [
+            "tests/utils.php"
+        ],
         "classmap": [
             "tests/Stubs/database/migrations"
         ]

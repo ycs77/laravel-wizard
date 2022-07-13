@@ -2,6 +2,7 @@
 
 namespace Ycs77\LaravelWizard\Test;
 
+use Illuminate\Http\UploadedFile;
 use Mockery;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 use Ycs77\LaravelWizard\Facades\Wizard as WizardFacade;
@@ -100,5 +101,18 @@ class TestCase extends OrchestraTestCase
         $this->app['request']->setUserResolver(function () use ($user) {
             return $user;
         });
+    }
+
+    /**
+     * Assert that is temporary file.
+     *
+     * @param  mixed  $file
+     * @param  string  $startsWith
+     * @return void
+     */
+    protected function assertIsTemporaryFile($file, string $startsWith = 'php')
+    {
+        $this->assertInstanceOf(UploadedFile::class, $file);
+        $this->assertStringStartsWith($startsWith, $file->getFilename());
     }
 }

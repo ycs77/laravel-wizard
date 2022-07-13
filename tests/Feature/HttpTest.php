@@ -3,6 +3,9 @@
 namespace Ycs77\LaravelWizard\Test\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Ycs77\LaravelWizard\CachedFile;
 use Ycs77\LaravelWizard\Facades\Wizard;
 use Ycs77\LaravelWizard\Test\TestCase;
 
@@ -90,7 +93,7 @@ class HttpTest extends TestCase
         ]);
     }
 
-    public function testRunAllWizardStepsCloseCache()
+    public function testRunAllWizardStepsButNoCache()
     {
         $this->app['config']->set('wizard.cache', false);
 
@@ -128,6 +131,50 @@ class HttpTest extends TestCase
         $this->assertDatabaseHas('posts', [
             'title' => 'Title',
             'content' => 'Content.',
+        ]);
+    }
+
+    public function testRunAllWizardStepsSaveOnLastStepAndCanBeCachedUploadedFile()
+    {
+        $this->app['config']->set('wizard.cache', true);
+
+        Storage::fake('local');
+
+        $this->setWizardRoutes(
+            '/wizard/upload-file',
+            '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerUploadFileStub',
+            'wizard.upload-file'
+        );
+
+        // Get avatar step
+        $response = $this->get('/wizard/upload-file/avatar-step-stub');
+        $response->assertStatus(200);
+
+        // Post avatar step
+        CachedFile::setFakeFilename('test_temp_file');
+        $file = UploadedFile::fake()->image('avatar.jpg');
+        $response = $this->post('/wizard/upload-file/avatar-step-stub', [
+            'avatar' => $file,
+        ]);
+        $response->assertRedirect('/wizard/upload-file/save-avatar-step-stub');
+        Storage::assertExists('laravel-wizard-tmp/test_temp_file.'.jpg());
+
+        // Get avatar step
+        $response = $this->get('/wizard/upload-file/save-avatar-step-stub');
+        $response->assertStatus(200);
+
+        // Post avatar step
+        $response = $this->post('/wizard/upload-file/save-avatar-step-stub');
+        $response->assertRedirect('/wizard/upload-file/done');
+        Storage::assertMissing('laravel-wizard-tmp/test_temp_file.'.jpg());
+
+        // Get done page
+        $response = $this->get('/wizard/upload-file/done');
+        $response->assertStatus(200);
+
+        Storage::assertExists('avatar/saved_avatar.jpg');
+        $this->assertDatabaseHas('users', [
+            'avatar' => 'avatar/saved_avatar.jpg',
         ]);
     }
 
@@ -184,6 +231,7 @@ class HttpTest extends TestCase
                 'content' => 'Content.',
             ],
             '_last_index' => 0,
+            '_files' => [],
         ], $this->app['session']->get('laravel_wizard.test'));
     }
 
@@ -213,6 +261,7 @@ class HttpTest extends TestCase
                 'content' => null,
             ],
             '_last_index' => 0,
+            '_files' => [],
         ], $this->app['session']->get('laravel_wizard.test'));
     }
 
@@ -236,6 +285,7 @@ class HttpTest extends TestCase
                 'name' => null,
             ],
             '_last_index' => 1,
+            '_files' => [],
         ], $this->app['session']->get('laravel_wizard.test'));
     }
 
@@ -267,7 +317,7 @@ class HttpTest extends TestCase
         $response->assertRedirect('/wizard/test/post-step-stub');
 
         $this->assertDatabaseHas('wizards', [
-            'payload' => '{"user-step-stub":{"name":"John"},"_last_index":1}',
+            'payload' => '{"user-step-stub":{"name":"John"},"_files":[],"_last_index":1}',
             'user_id' => 1,
         ]);
     }

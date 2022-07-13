@@ -16,6 +16,13 @@ class SessionStore implements CacheStore
     protected $session;
 
     /**
+     * The cached file serializer instance.
+     *
+     * @var \Ycs77\LaravelWizard\CachedFileSerializer
+     */
+    protected $serializer;
+
+    /**
      * The wizard key.
      *
      * @var string
@@ -26,12 +33,14 @@ class SessionStore implements CacheStore
      * Create a new wizard cache session store instance.
      *
      * @param  \Illuminate\Contracts\Session\Session  $session
+     * @param  \Ycs77\LaravelWizard\CachedFileSerializer  $serializer
      * @param  string  $key
      * @return void
      */
-    public function __construct(Session $session, string $wizardKey)
+    public function __construct(Session $session, CachedFileSerializer $serializer, string $wizardKey)
     {
         $this->session = $session;
+        $this->serializer = $serializer;
         $this->wizardKey = $wizardKey;
     }
 
@@ -44,6 +53,7 @@ class SessionStore implements CacheStore
     public function get(string $key = '')
     {
         $data = $this->session->get($this->wizardKey, []);
+        $data = $this->serializer->unserializePayloadFiles($data);
 
         return $key ? Arr::get($data, $key) : $data;
     }
@@ -67,6 +77,10 @@ class SessionStore implements CacheStore
      */
     public function set(array $data, $lastIndex = null)
     {
+        $cachedData = $this->session->get($this->wizardKey, []);
+
+        $data = $this->serializer->serializePayloadFiles($data, $cachedData);
+
         if (isset($lastIndex) && is_numeric($lastIndex)) {
             $data['_last_index'] = (int) $lastIndex;
         }
@@ -109,6 +123,8 @@ class SessionStore implements CacheStore
      */
     public function clear()
     {
+        $this->serializer->clearTmpFiles($this->get('_files'));
+
         $this->session->forget($this->wizardKey);
     }
 }
