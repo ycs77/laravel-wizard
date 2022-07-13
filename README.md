@@ -318,7 +318,7 @@ Step repository all can use method detailed reference: https://github.com/ycs77/
 
 ### Skip step
 
-> **Info**: add in *v2.3.3*
+> **Note**: **v2.3.3+**
 
 To make Step skippable, set the `$skip` property to `true`, then this Step will be skip the validation and save data:
 
