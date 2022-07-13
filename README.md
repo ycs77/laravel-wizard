@@ -21,19 +21,20 @@ A web setup wizard for Laravel application.
     - [1. Generate controller and wizard steps](#1-generate-controller-and-wizard-steps)
     - [2. Set steps](#2-set-steps)
     - [3. Install wizard steps CSS package](#3-install-wizard-steps-css-package)
-  - [Cache Driver](#cache-driver)
-    - [Database](#database)
+  - [Cache](#cache)
+    - [Database Driver](#database-driver)
+    - [Disable Cache](#disable-cache)
   - [Controller](#controller)
     - [Setting Configuration](#setting-configuration)
   - [Customize View](#customize-view)
   - [Step](#step)
-    - [Get cache data](#get-cache-data)
+    - [Get cached data](#get-cached-data)
     - [Step repository](#step-repository)
+    - [Upload Files](#upload-files)
     - [Skip step](#skip-step)
     - [Passing data to views](#passing-data-to-views)
     - [Save data on other step](#save-data-on-other-step)
     - [Set relationships model](#set-relationships-model)
-  - [Common Problems](#common-problems)
   - [Commands](#commands)
   - [Credits](#credits)
   - [License](#license)
@@ -220,9 +221,9 @@ Import to app.scss file and run `npm run dev` or `yarn run dev`:
 @import '~bootstrap-steps/scss/bootstrap-steps';
 ```
 
-## Cache Driver
+## Cache
 
-### Database
+### Database Driver
 
 In order to use the `database` wizard cache driver, you will need a database table to hold the wizards cache data. To generate a migration that creates this table, run the `wizard:table` Artisan command:
 
@@ -231,6 +232,24 @@ php artisan wizard:table
 
 php artisan migrate
 ```
+
+### Disable Cache
+
+Set `cache` in `config/wizard.php` to `false` to disable cache input data:
+
+```php
+'cache' => false,
+```
+
+Or set to your WizardController `wizardOptions` property:
+
+```php
+protected $wizardOptions = [
+    'cache' => false,
+];
+```
+
+If disable cache, the data will be saved in the data immediately after each step is sent. If you are afraid to save the data repeatedly, you can hide the Prev button, or use `Model::updateOrCreate()` (https://laravel.com/docs/6.x/eloquent#other-creation-methods).
 
 ## Controller
 
@@ -270,16 +289,26 @@ But if you want custom only one wizard view base view, you can copy the views fr
 
 ## Step
 
-### Get cache data
+### Get cached data
 
 For example, `FirstStep` has `name` and `email` fields, `SecondStep` has `age` and `phone` fields. you can use step's `data` method to get step data:
 
 ```php
 $name = $firstStep->data('name');
-// Bob
+// 'Lucas'
 
 $data = $secondStep->data();
 // ['age' => '30', 'phone' => '0900111222']
+```
+
+Or you can use Step repository to get other step data:
+
+```php
+$data = $secondStep->getRepo()->find('first')->data();
+// ['name' => 'Lucas']
+
+$name = $secondStep->getRepo()->find('first')->data('name');
+// 'Lucas'
 ```
 
 ### Step repository
@@ -301,20 +330,61 @@ $stepRepo = $step->getRepo();
 Get previous step:
 
 ```php
-$prevStep = $step->getRepo()->prev();
-// or use alias method:
 $prevStep = $step->prev();
+// same as:
+$prevStep = $step->getRepo()->prev();
 ```
 
 Get next step:
 
-```php
-$nextStep = $step->getRepo()->next();
-// or use alias method:
+```PHP
 $prevStep = $step->next();
+// same as:
+$nextStep = $step->getRepo()->next();
 ```
 
-Step repository all can use method detailed reference: https://github.com/ycs77/laravel-wizard/blob/master/src/StepRepository.php
+Step repository all can use method detailed reference: https://github.com/ycs77/laravel-wizard/blob/v2.x/src/StepRepository.php
+
+### Upload Files
+
+Since **v2.3.3** upload files in **Cache** and **No Cache** are supported, if use the **Cache Mode** you can cache all input data and uploaded files to save in the last step:
+
+```php
+<?php
+
+class LastStep extends Step
+{
+    public function model(Request $request)
+    {
+        return $request->user();
+    }
+
+    public function saveData(Request $request, $data = null, $model = null)
+    {
+        $data = [
+            'avatar' => $this->getRepo()->find('has-avatar-step')->data('avatar'),
+        ];
+
+        $data['avatar'] = $data['avatar']->store('avatar', ['disk' => 'public']);
+
+        $model->update($data);
+    }
+}
+```
+
+Then add a step view to upload the avatar image:
+
+*resources/views/steps/user/has-avatar.blade.php*
+```blade
+<div class="form-group mb-3">
+    <label for="avatar">Avatar</label>
+    <input type="file" name="avatar" id="avatar" class="form-control">
+    <div class="form-control d-none {{ $errors->has('avatar') ? 'is-invalid' : '' }}"></div>
+    @if ($errors->has('avatar'))
+        <span class="invalid-feedback">{{ $errors->first('avatar') }}</span>
+    @endif
+</div>
+```
 
 ### Skip step
 
@@ -347,12 +417,8 @@ Because each step is injected into the view of the step, so just add the method 
 ```php
 <?php
 
-...
-
 class NameStep extends Step
 {
-    ...
-
     public function getOptions()
     {
         return [
@@ -391,12 +457,10 @@ First, don't set the Model for all Steps, but don't use the last one:
 
 *app/Steps/User/NameStep.php*
 ```php
-...
+<?php
 
 class NameStep extends Step
 {
-    ...
-
     public function model(Request $request)
     {
         //
@@ -413,12 +477,10 @@ Next, receive all the data in the last Step and save Model:
 
 *app/Steps/User/EmailStep.php*
 ```php
-...
+<?php
 
 class EmailStep extends Step
 {
-    ...
-
     public function model(Request $request)
     {
         return new User();
@@ -464,26 +526,6 @@ public function saveData(Request $request, $data = null, $model = null)
     $model->create($data);
 }
 ```
-
-## Common Problems
-
-**Error: "Serialization of 'Illuminate\Http\UploadedFile' is not allowed"**:
-
-Set `cache` in `config/wizard.php` to `false`:
-
-```php
-'cache' => false,
-```
-
-Or set to your WizardController `wizardOptions` method:
-
-```php
-protected $wizardOptions = [
-    'cache' => false,
-];
-```
-
-If disable cache, the data will be saved in the data immediately after each step is sent. If you are afraid to save the data repeatedly, you can hide the Prev button, or use `Model::updateOrCreate()` (https://laravel.com/docs/6.x/eloquent#other-creation-methods).
 
 ## Commands
 
