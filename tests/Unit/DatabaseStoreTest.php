@@ -3,6 +3,10 @@
 namespace Ycs77\LaravelWizard\Test\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Ycs77\LaravelWizard\CachedFile;
+use Ycs77\LaravelWizard\CachedFileSerializer;
 use Ycs77\LaravelWizard\DatabaseStore;
 use Ycs77\LaravelWizard\Test\TestCase;
 
@@ -31,6 +35,7 @@ class DatabaseStoreTest extends TestCase
         $this->cache = $this->app->makeWith(DatabaseStore::class, [
             'connection' => $connection,
             'table' => $table,
+            'serializer' => $this->app->make(CachedFileSerializer::class),
             'container' => $this->app,
         ]);
     }
@@ -112,6 +117,25 @@ class DatabaseStoreTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testGetDataWithFile()
+    {
+        $this->authenticate();
+
+        // arrange
+        $file = UploadedFile::fake()->image('avatar.jpg');
+        $file->storeAs('laravel-wizard-tmp', 'test_temp_file.jpg');
+        $this->app['db']->table('wizards')->insert([
+            'payload' => '{"avatar_step":{"avatar":'.json_encode($this->getSerializedCachedFile()).'}}',
+            'user_id' => 1,
+        ]);
+
+        // act
+        $actual = $this->cache->get('avatar_step.avatar');
+
+        // assert
+        $this->assertIsTemporaryFile($actual);
+    }
+
     public function testGetLastProcessedIndexData()
     {
         $this->authenticate();
@@ -129,7 +153,7 @@ class DatabaseStoreTest extends TestCase
         $this->assertEquals(0, $actual);
     }
 
-    public function testSetData()
+    public function testSetAllData()
     {
         $this->authenticate();
 
@@ -138,7 +162,7 @@ class DatabaseStoreTest extends TestCase
 
         // assert
         $this->assertDatabaseHas('wizards', [
-            'payload' => '{"step":{"field":"data"}}',
+            'payload' => '{"step":{"field":"data"},"_files":[]}',
             'user_id' => 1,
         ]);
     }
@@ -152,7 +176,28 @@ class DatabaseStoreTest extends TestCase
 
         // assert
         $this->assertDatabaseHas('wizards', [
-            'payload' => '{"step":{"field":"data"},"_last_index":1}',
+            'payload' => '{"step":{"field":"data"},"_files":[],"_last_index":1}',
+            'user_id' => 1,
+        ]);
+    }
+
+    public function testSetDataWithFile()
+    {
+        $this->authenticate();
+
+        // arrange
+        CachedFile::setFakeFilename('test_temp_file');
+        $file = UploadedFile::fake()->image('avatar.jpg');
+
+        // act
+        $this->cache->set([
+            'other_step' => ['field' => 'data'],
+            'avatar_step' => ['avatar' => $file],
+        ]);
+
+        // assert
+        $this->assertDatabaseHas('wizards', [
+            'payload' => '{"other_step":{"field":"data"},"avatar_step":{"avatar":'.json_encode($this->getSerializedCachedFile()).'},"_files":['.json_encode($this->tempFileFullPath()).']}',
             'user_id' => 1,
         ]);
     }
@@ -166,7 +211,7 @@ class DatabaseStoreTest extends TestCase
 
         // assert
         $this->assertDatabaseHas('wizards', [
-            'payload' => '{"step":{"field":"data"}}',
+            'payload' => '{"step":{"field":"data"},"_files":[]}',
             'user_id' => 1,
         ]);
     }
@@ -194,7 +239,7 @@ class DatabaseStoreTest extends TestCase
 
         // arrange
         $this->app['db']->table('wizards')->insert([
-            'payload' => '{"step":{"field":"data"},"_last_index":1}',
+            'payload' => '{"step":{"field":"data"},"_files":[],"_last_index":1}',
             'user_id' => 1,
         ]);
 
@@ -203,8 +248,38 @@ class DatabaseStoreTest extends TestCase
 
         // assert
         $this->assertDatabaseMissing('wizards', [
-            'payload' => '{"step":{"field":"data"},"_last_index":1}',
+            'payload' => '{"step":{"field":"data"},"_files":[],"_last_index":1}',
             'user_id' => 1,
         ]);
+    }
+
+    public function testClearDataAndFile()
+    {
+        $this->authenticate();
+
+        // arrange
+        $file = UploadedFile::fake()->image('avatar.jpg');
+        $file->storeAs('laravel-wizard-tmp', 'test_temp_file.jpg');
+        $this->app['db']->table('wizards')->insert([
+            'payload' => '{"step":{"field":"data"},"_files":['.json_encode($this->tempFileFullPath()).'],"_last_index":1}',
+            'user_id' => 1,
+        ]);
+
+        // act
+        Storage::assertExists('laravel-wizard-tmp/test_temp_file.jpg');
+        $this->cache->clear();
+
+        // assert
+        Storage::assertMissing('laravel-wizard-tmp/test_temp_file.jpg');
+    }
+
+    protected function getSerializedCachedFile()
+    {
+        return "Ycs77\LaravelWizard\CachedFile:O:30:\"Ycs77\LaravelWizard\CachedFile\":5:{s:7:\"\x00*\x00disk\";s:5:\"local\";s:11:\"\x00*\x00filename\";s:18:\"test_temp_file.jpg\";s:9:\"\x00*\x00tmpDir\";s:18:\"laravel-wizard-tmp\";s:10:\"\x00*\x00tmpPath\";s:37:\"laravel-wizard-tmp/test_temp_file.jpg\";s:11:\"\x00*\x00mimeType\";s:10:\"image/jpeg\";}";
+    }
+
+    protected function tempFileFullPath()
+    {
+        return str_replace('\\', '/', Storage::path('laravel-wizard-tmp/test_temp_file.jpg'));
     }
 }

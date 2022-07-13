@@ -25,6 +25,13 @@ class DatabaseStore implements CacheStore
     protected $table;
 
     /**
+     * The cached file serializer instance.
+     *
+     * @var \Ycs77\LaravelWizard\CachedFileSerializer
+     */
+    protected $serializer;
+
+    /**
      * The container instance.
      *
      * @var \Illuminate\Contracts\Container\Container
@@ -36,13 +43,15 @@ class DatabaseStore implements CacheStore
      *
      * @param  \Illuminate\Database\ConnectionInterface  $connection
      * @param  string  $table
-     * @param  \Illuminate\Contracts\Container\Container|null  $container
+     * @param  \Ycs77\LaravelWizard\CachedFileSerializer  $serializer
+     * @param  \Illuminate\Contracts\Container\Container  $container
      * @return void
      */
-    public function __construct(ConnectionInterface $connection, $table, Container $container = null)
+    public function __construct(ConnectionInterface $connection, $table, CachedFileSerializer $serializer, Container $container)
     {
         $this->connection = $connection;
         $this->table = $table;
+        $this->serializer = $serializer;
         $this->container = $container;
     }
 
@@ -54,13 +63,12 @@ class DatabaseStore implements CacheStore
      */
     public function get(string $key = '')
     {
-        $data = $this->getSelectedQuery()->first();
-
-        if (! $data = (array) $this->getSelectedQuery()->first()) {
+        if (! $data = optional($this->getSelectedQuery()->first())->payload) {
             return;
         }
 
-        $data = json_decode($data['payload'], true);
+        $data = json_decode($data, true);
+        $data = $this->serializer->unserializePayloadFiles($data);
 
         return $key ? Arr::get($data, $key) : $data;
     }
@@ -84,17 +92,19 @@ class DatabaseStore implements CacheStore
      */
     public function set(array $data, $lastIndex = null)
     {
+        $cachedData = optional($this->getSelectedQuery()->first())->payload;
+        $cachedData = is_string($cachedData) ? json_decode($cachedData, true) : [];
+
+        $data = $this->serializer->serializePayloadFiles($data, $cachedData);
+
         if (isset($lastIndex) && is_numeric($lastIndex)) {
             $data['_last_index'] = $lastIndex;
         }
 
+        $attributes = $this->userId() ? ['user_id' => $this->userId()] : ['ip_address' => $this->ipAddress()];
         $data = ['payload' => json_encode($data)];
 
-        if ($this->userId()) {
-            $this->getQuery()->updateOrInsert(['user_id' => $this->userId()], $data);
-        } else {
-            $this->getQuery()->updateOrInsert(['ip_address' => $this->ipAddress()], $data);
-        }
+        $this->getQuery()->updateOrInsert($attributes, $data);
     }
 
     /**
@@ -132,6 +142,8 @@ class DatabaseStore implements CacheStore
      */
     public function clear()
     {
+        $this->serializer->clearTmpFiles($this->get('_files'));
+
         $this->getSelectedQuery()->delete();
     }
 

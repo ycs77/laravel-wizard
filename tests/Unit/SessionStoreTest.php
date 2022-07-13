@@ -2,6 +2,10 @@
 
 namespace Ycs77\LaravelWizard\Test\Unit;
 
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Ycs77\LaravelWizard\CachedFile;
+use Ycs77\LaravelWizard\CachedFileSerializer;
 use Ycs77\LaravelWizard\SessionStore;
 use Ycs77\LaravelWizard\Test\TestCase;
 
@@ -18,8 +22,11 @@ class SessionStoreTest extends TestCase
     {
         parent::setUp();
 
+        Storage::fake('local');
+
         $this->cache = $this->app->makeWith(SessionStore::class, [
             'session' => $this->app['session.store'],
+            'serializer' => $this->app->make(CachedFileSerializer::class),
             'wizardKey' => 'laravel_wizard.test',
         ]);
     }
@@ -82,6 +89,24 @@ class SessionStoreTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testGetDataWithFile()
+    {
+        // arrange
+        $file = UploadedFile::fake()->image('avatar.jpg');
+        $file->storeAs('laravel-wizard-tmp', 'test_temp_file.jpg');
+        $this->session([
+            'laravel_wizard.test' => [
+                'avatar_step' => ['avatar' => $this->getSerializedCachedFile()],
+            ],
+        ]);
+
+        // act
+        $actual = $this->cache->get('avatar_step.avatar');
+
+        // assert
+        $this->assertIsTemporaryFile($actual);
+    }
+
     public function testGetLastProcessedIndexData()
     {
         // arrange
@@ -98,10 +123,13 @@ class SessionStoreTest extends TestCase
         $this->assertEquals(0, $actual);
     }
 
-    public function testSetData()
+    public function testSetAllData()
     {
         // arrange
-        $expected = ['step' => ['field' => 'data']];
+        $expected = [
+            'step' => ['field' => 'data'],
+            '_files' => [],
+        ];
 
         // act
         $this->cache->set(['step' => ['field' => 'data']]);
@@ -116,6 +144,7 @@ class SessionStoreTest extends TestCase
         $expected = [
             'step' => ['field' => 'data'],
             '_last_index' => 1,
+            '_files' => [],
         ];
 
         // act
@@ -125,10 +154,34 @@ class SessionStoreTest extends TestCase
         $this->assertEquals($expected, $this->app['session']->get('laravel_wizard.test'));
     }
 
+    public function testSetDataWithFile()
+    {
+        // arrange
+        $expected = [
+            'other_step' => ['field' => 'data'],
+            'avatar_step' => ['avatar' => $this->getSerializedCachedFile()],
+            '_files' => [$this->tempFileFullPath()],
+        ];
+        CachedFile::setFakeFilename('test_temp_file');
+        $file = UploadedFile::fake()->image('avatar.jpg');
+
+        // act
+        $this->cache->set([
+            'other_step' => ['field' => 'data'],
+            'avatar_step' => ['avatar' => $file],
+        ]);
+
+        // assert
+        $this->assertEquals($expected, $this->app['session']->get('laravel_wizard.test'));
+    }
+
     public function testPutData()
     {
         // arrange
-        $expected = ['step' => ['field' => 'data']];
+        $expected = [
+            'step' => ['field' => 'data'],
+            '_files' => [],
+        ];
 
         // act
         $this->cache->put('step', ['field' => 'data']);
@@ -156,8 +209,11 @@ class SessionStoreTest extends TestCase
     public function testClearData()
     {
         // arrange
-        $this->app['session']->put('laravel_wizard.test', [
-            'step' => ['field' => 'data'],
+        $this->session([
+            'laravel_wizard.test' => [
+                'step' => ['field' => 'data'],
+                '_files' => [],
+            ],
         ]);
 
         // act
@@ -165,5 +221,35 @@ class SessionStoreTest extends TestCase
 
         // assert
         $this->assertNull($this->app['session']->get('laravel_wizard.test'));
+    }
+
+    public function testClearDataAndFile()
+    {
+        // arrange
+        $file = UploadedFile::fake()->image('avatar.jpg');
+        $file->storeAs('laravel-wizard-tmp', 'test_temp_file.jpg');
+        $this->session([
+            'laravel_wizard.test' => [
+                'step' => ['field' => 'data'],
+                '_files' => [$this->tempFileFullPath()],
+            ],
+        ]);
+
+        // act
+        Storage::assertExists('laravel-wizard-tmp/test_temp_file.jpg');
+        $this->cache->clear();
+
+        // assert
+        Storage::assertMissing('laravel-wizard-tmp/test_temp_file.jpg');
+    }
+
+    protected function getSerializedCachedFile()
+    {
+        return "Ycs77\LaravelWizard\CachedFile:O:30:\"Ycs77\LaravelWizard\CachedFile\":5:{s:7:\"\x00*\x00disk\";s:5:\"local\";s:11:\"\x00*\x00filename\";s:18:\"test_temp_file.jpg\";s:9:\"\x00*\x00tmpDir\";s:18:\"laravel-wizard-tmp\";s:10:\"\x00*\x00tmpPath\";s:37:\"laravel-wizard-tmp/test_temp_file.jpg\";s:11:\"\x00*\x00mimeType\";s:10:\"image/jpeg\";}";
+    }
+
+    protected function tempFileFullPath()
+    {
+        return str_replace('\\', '/', Storage::path('laravel-wizard-tmp/test_temp_file.jpg'));
     }
 }
