@@ -304,10 +304,10 @@ $data = $secondStep->data();
 Or you can use Step repository to get other step data:
 
 ```php
-$data = $secondStep->getRepo()->find('first')->data();
+$data = $secondStep->find('first')->data();
 // ['name' => 'Lucas']
 
-$name = $secondStep->getRepo()->find('first')->data('name');
+$name = $secondStep->find('first')->data('name');
 // 'Lucas'
 ```
 
