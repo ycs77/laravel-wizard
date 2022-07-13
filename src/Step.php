@@ -280,6 +280,48 @@ abstract class Step
     }
 
     /**
+     * Find step by slug.
+     *
+     * @param  string  $slug
+     * @return \Ycs77\LaravelWizard\Step|null
+     */
+    public function find(string $slug)
+    {
+        return $this->getRepo()->find($slug);
+    }
+
+    /**
+     * Find step key by slug.
+     *
+     * @param  string  $slug
+     * @return int|null
+     */
+    public function findKey(string $slug, int $default = null)
+    {
+        return $this->getRepo()->findKey($slug, $default);
+    }
+
+    /**
+     * Get the first step.
+     *
+     * @return \Ycs77\LaravelWizard\Step|null
+     */
+    public function first()
+    {
+        return $this->getRepo()->first();
+    }
+
+    /**
+     * Get the last step.
+     *
+     * @return \Ycs77\LaravelWizard\Step|null
+     */
+    public function last()
+    {
+        return $this->getRepo()->last();
+    }
+
+    /**
      * Get the previous step.
      *
      * @return \Ycs77\LaravelWizard\Step|null
@@ -297,6 +339,46 @@ abstract class Step
     public function next()
     {
         return $this->getRepo()->next();
+    }
+
+    /**
+     * Checks if an a prev step.
+     *
+     * @return bool
+     */
+    public function hasPrev()
+    {
+        return $this->getRepo()->hasPrev();
+    }
+
+    /**
+     * Checks if an a next step.
+     *
+     * @return bool
+     */
+    public function hasNext()
+    {
+        return $this->getRepo()->hasNext();
+    }
+
+    /**
+     * Get prev step slug.
+     *
+     * @return string|null
+     */
+    public function prevSlug()
+    {
+        return $this->getRepo()->prevSlug();
+    }
+
+    /**
+     * Get next step slug.
+     *
+     * @return string|null
+     */
+    public function nextSlug()
+    {
+        return $this->getRepo()->nextSlug();
     }
 
     /**

@@ -172,7 +172,7 @@ class StepRepository implements StepRepositoryContract
     }
 
     /**
-     * Get first step.
+     * Get the first step.
      *
      * @return \Ycs77\LaravelWizard\Step|null
      */
@@ -182,7 +182,7 @@ class StepRepository implements StepRepositoryContract
     }
 
     /**
-     * Get last step.
+     * Get the last step.
      *
      * @return \Ycs77\LaravelWizard\Step|null
      */
@@ -192,7 +192,7 @@ class StepRepository implements StepRepositoryContract
     }
 
     /**
-     * Get prev step.
+     * Get the previous step.
      *
      * @return \Ycs77\LaravelWizard\Step|null
      */
@@ -202,7 +202,7 @@ class StepRepository implements StepRepositoryContract
     }
 
     /**
-     * Get next step.
+     * Get the next step.
      *
      * @return \Ycs77\LaravelWizard\Step|null
      */
