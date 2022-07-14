@@ -36,6 +36,7 @@ A web setup wizard for Laravel application.
     - [Save data on other step](#save-data-on-other-step)
     - [Set relationships model](#set-relationships-model)
   - [Commands](#commands)
+  - [Sponsor](#sponsor)
   - [Credits](#credits)
   - [License](#license)
 
@@ -563,6 +564,16 @@ Add custom view path:
 ```bash
 php artisan make:wizard:step NameStep --label="Name" --slug=name --view=steps.user.name --wizard=user
 ```
+
+## Sponsor
+
+If you think this package have helped you, can [Become a sponsor](https://www.patreon.com/ycs77) to support my work~ and can show your avatar on my open-source project README.
+
+---
+
+**Now there are no sponsors yet, [join it](https://www.patreon.com/ycs77).**
+
+---
 
 ## Credits
 
