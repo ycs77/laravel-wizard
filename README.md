@@ -16,6 +16,7 @@ A web setup wizard for Laravel application.
 - [Laravel Wizard](#laravel-wizard)
   - [Table of Contents](#table-of-contents)
   - [Version Compatibility](#version-compatibility)
+  - [Sponsor](#sponsor)
   - [Install](#install)
   - [Usage](#usage)
     - [1. Generate controller and wizard steps](#1-generate-controller-and-wizard-steps)
@@ -36,7 +37,6 @@ A web setup wizard for Laravel application.
     - [Save data on other step](#save-data-on-other-step)
     - [Set relationships model](#set-relationships-model)
   - [Commands](#commands)
-  - [Sponsor](#sponsor)
   - [Credits](#credits)
   - [License](#license)
 
@@ -49,6 +49,16 @@ A web setup wizard for Laravel application.
  | 2.0.x,2.1.x    | ^5.6\|^6.x       | ^7.1.3  |
  | 2.2.x          | ^5.6\|^6.x\|^7.x | ^7.1.3  |
  | 2.3.x          | >=5.6            | >=7.1.3 |
+
+## Sponsor
+
+If you think this package have helped you, can [Become a sponsor](https://www.patreon.com/ycs77) to support my work~ and your avatar will be visible on my major projects.
+
+---
+
+**Now there are no sponsors yet, [join it](https://www.patreon.com/ycs77).**
+
+---
 
 ## Install
 
@@ -564,16 +574,6 @@ Add custom view path:
 ```bash
 php artisan make:wizard:step NameStep --label="Name" --slug=name --view=steps.user.name --wizard=user
 ```
-
-## Sponsor
-
-If you think this package have helped you, can [Become a sponsor](https://www.patreon.com/ycs77) to support my work~ and can show your avatar on my open-source project README.
-
----
-
-**Now there are no sponsors yet, [join it](https://www.patreon.com/ycs77).**
-
----
 
 ## Credits
 
