@@ -5,7 +5,7 @@ namespace Ycs77\LaravelWizard\Test\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Ycs77\LaravelWizard\CachedFile;
+use Ycs77\LaravelWizard\Cache\CachedFile;
 use Ycs77\LaravelWizard\Facades\Wizard;
 use Ycs77\LaravelWizard\Test\TestCase;
 

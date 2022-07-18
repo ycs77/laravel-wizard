@@ -1,6 +1,6 @@
 <?php
 
-namespace Ycs77\LaravelWizard;
+namespace Ycs77\LaravelWizard\Cache;
 
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Container\Container;
@@ -27,7 +27,7 @@ class DatabaseStore implements CacheStore
     /**
      * The cached file serializer instance.
      *
-     * @var \Ycs77\LaravelWizard\CachedFileSerializer
+     * @var \Ycs77\LaravelWizard\Cache\CachedFileSerializer
      */
     protected $serializer;
 
@@ -43,11 +43,11 @@ class DatabaseStore implements CacheStore
      *
      * @param  \Illuminate\Database\ConnectionInterface  $connection
      * @param  string  $table
-     * @param  \Ycs77\LaravelWizard\CachedFileSerializer  $serializer
+     * @param  \Ycs77\LaravelWizard\Cache\CachedFileSerializer  $serializer
      * @param  \Illuminate\Contracts\Container\Container  $container
      * @return void
      */
-    public function __construct(ConnectionInterface $connection, $table, CachedFileSerializer $serializer, Container $container)
+    public function __construct(ConnectionInterface $connection, string $table, CachedFileSerializer $serializer, Container $container)
     {
         $this->connection = $connection;
         $this->table = $table;

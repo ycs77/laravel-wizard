@@ -5,9 +5,9 @@ namespace Ycs77\LaravelWizard\Test\Unit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Ycs77\LaravelWizard\CachedFile;
-use Ycs77\LaravelWizard\CachedFileSerializer;
-use Ycs77\LaravelWizard\DatabaseStore;
+use Ycs77\LaravelWizard\Cache\CachedFile;
+use Ycs77\LaravelWizard\Cache\CachedFileSerializer;
+use Ycs77\LaravelWizard\Cache\DatabaseStore;
 use Ycs77\LaravelWizard\Test\Concerns\CachedFileTesting;
 use Ycs77\LaravelWizard\Test\TestCase;
 
@@ -19,7 +19,7 @@ class DatabaseStoreTest extends TestCase
     /**
      * The wizard store instance.
      *
-     * @var \Ycs77\LaravelWizard\DatabaseStore
+     * @var \Ycs77\LaravelWizard\Cache\DatabaseStore
      */
     protected $cache;
 

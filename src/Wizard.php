@@ -4,6 +4,7 @@ namespace Ycs77\LaravelWizard;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
+use Ycs77\LaravelWizard\Cache\CacheManager;
 
 class Wizard
 {

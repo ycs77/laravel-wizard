@@ -4,9 +4,9 @@ namespace Ycs77\LaravelWizard\Test\Unit;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Ycs77\LaravelWizard\CachedFile;
-use Ycs77\LaravelWizard\CachedFileSerializer;
-use Ycs77\LaravelWizard\SessionStore;
+use Ycs77\LaravelWizard\Cache\CachedFile;
+use Ycs77\LaravelWizard\Cache\CachedFileSerializer;
+use Ycs77\LaravelWizard\Cache\SessionStore;
 use Ycs77\LaravelWizard\Test\Concerns\CachedFileTesting;
 use Ycs77\LaravelWizard\Test\TestCase;
 
@@ -17,7 +17,7 @@ class SessionStoreTest extends TestCase
     /**
      * The wizard store instance.
      *
-     * @var \Ycs77\LaravelWizard\SessionStore
+     * @var \Ycs77\LaravelWizard\Cache\SessionStore
      */
     protected $cache;
 

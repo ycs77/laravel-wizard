@@ -1,9 +1,10 @@
 <?php
 
-namespace Ycs77\LaravelWizard;
+namespace Ycs77\LaravelWizard\Cache;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Manager;
+use Ycs77\LaravelWizard\Wizard;
 
 class CacheManager extends Manager
 {
@@ -53,7 +54,7 @@ class CacheManager extends Manager
     {
         return new SessionStore(
             $this->app['session.store'],
-            $this->app->make(CachedFileSerializer::class),
+            new CachedFileSerializer(),
             $this->getSessionKey()
         );
     }
@@ -70,7 +71,7 @@ class CacheManager extends Manager
         return new DatabaseStore(
             $this->getDatabaseConnection(),
             $table,
-            $this->app->make(CachedFileSerializer::class),
+            new CachedFileSerializer(),
             $this->app
         );
     }
