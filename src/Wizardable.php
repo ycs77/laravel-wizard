@@ -71,6 +71,18 @@ trait Wizardable
             return $redirectTo;
         }
 
+        return $this->renderCreateView($request, $step);
+    }
+
+    /**
+     * Render the create view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Ycs77\LaravelWizard\Step  $step
+     * @return \Illuminate\Contracts\Support\Renderable|\Illuminate\Contracts\Support\Responsable
+     */
+    protected function renderCreateView(Request $request, Step $step)
+    {
         return view($this->getViewPath('base'), $this->withViewData);
     }
 
@@ -152,10 +164,21 @@ trait Wizardable
      */
     public function done(Request $request)
     {
-        $stepRepo = $this->wizard()->stepRepo();
-        $doneText = $this->doneText();
+        return $this->renderDoneView($request);
+    }
 
-        return view($this->getViewPath('done'), compact('stepRepo', 'doneText'));
+    /**
+     * Render the done view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable|\Illuminate\Contracts\Support\Responsable
+     */
+    protected function renderDoneView(Request $request)
+    {
+        return view($this->getViewPath('done'), [
+            'stepRepo' => $this->wizard()->stepRepo(),
+            'doneText' => $this->doneText(),
+        ]);
     }
 
     /**
@@ -343,9 +366,9 @@ trait Wizardable
      *
      * Example:
      *
-     * $this->viewData(compact(
-     *     'data'
-     * ));
+     * $this->viewData([
+     *     'data' => $data,
+     * ]);
      *
      * @param  array  $data
      * @return void
