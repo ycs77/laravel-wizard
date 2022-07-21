@@ -56,6 +56,10 @@ class WizardServiceProvider extends ServiceProvider
         ], 'wizard-views-bs5');
 
         $this->publishes([
+            __DIR__.'/../resources/views-tailwind' => resource_path('views/vendor/wizard'),
+        ], 'wizard-views-tailwind');
+
+        $this->publishes([
             __DIR__.'/../resources/lang' => resource_path('lang/vendor/wizard'),
         ], 'wizard-languages');
     }
