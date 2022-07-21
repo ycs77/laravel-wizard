@@ -74,18 +74,6 @@ Publish config:
 php artisan vendor:publish --tag=wizard-config
 ```
 
-This package view is use [Bootstrap 5](https://getbootstrap.com/), but if you don't want to use, can publish views to custom it, see [Customize View](#customize-view):
-
-```bash
-php artisan vendor:publish --tag=wizard-views-bs5
-```
-
-If you want to use Bootstrap 4, you can publish the Bootstrap 4 views:
-
-```bash
-php artisan vendor:publish --tag=wizard-views-bs4
-```
-
 ## Usage
 
 ### 1. Generate controller and wizard steps
@@ -284,21 +272,27 @@ protected $wizardOptions = [
 
 ## Customize View
 
-First, publish layouts:
+This package layout view uses Bootstrap 5, but if you don't want to use default views, you can publish views to custom it:
 
 ```bash
 php artisan vendor:publish --tag=wizard-views-bs5
 ```
 
-Or you can publish Bootstrap 4 view to custom it:
+If you used Bootstrap 4, you could publish the layouts:
 
 ```bash
 php artisan vendor:publish --tag=wizard-views-bs4
 ```
 
+If you used Tailwind CSS, you could publish the layouts:
+
+```bash
+php artisan vendor:publish --tag=wizard-views-tailwind
+```
+
 Now you can customize `resources/views/vendor/wizard/*.blade.php` in your laravel project.
 
-But if you want custom only one wizard view base view, you can copy the views from `resources/views/vendor/wizard/*.blade.php` to `resources/views/wizards/user/*.blade.php`. (`user` is `wizardName` property value on your wizard controller),
+But if you want custom-only one wizard view base view, you can copy the views from `resources/views/vendor/wizard/*.blade.php` to `resources/views/wizards/user/*.blade.php`. (`user` is `wizardName` property value on your wizard controller),
 
 ## Step
 
