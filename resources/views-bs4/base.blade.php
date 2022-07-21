@@ -11,7 +11,7 @@
                 </div>
 
                 <form action="{{ $getActionUrl($postAction, [$step->slug()]) }}" method="POST" enctype="multipart/form-data">
-                    {{ csrf_field() }}
+                    @csrf
 
                     @include($step->view(), compact('step', 'errors'))
 
