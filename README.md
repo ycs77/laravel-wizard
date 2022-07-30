@@ -367,7 +367,7 @@ class LastStep extends Step
     public function saveData(Request $request, $data = null, $model = null)
     {
         $data = [
-            'avatar' => $this->getRepo()->find('has-avatar-step')->data('avatar'),
+            'avatar' => $this->find('has-avatar-step')->data('avatar'),
         ];
 
         $data['avatar'] = $data['avatar']->store('avatar', ['disk' => 'public']);
