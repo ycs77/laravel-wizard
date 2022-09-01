@@ -33,7 +33,7 @@ A web setup wizard for Laravel application.
     - [Upload Files](#upload-files)
     - [Skip step](#skip-step)
     - [Passing data to views](#passing-data-to-views)
-    - [Save data on other step](#save-data-on-other-step)
+    - [Save data on another step](#save-data-on-another-step)
     - [Set relationships model](#set-relationships-model)
   - [Commands](#commands)
   - [Sponsor](#sponsor)
@@ -74,7 +74,7 @@ Now you can quickly generate the wizard controller and the wizard steps:
 php artisan make:wizard User NameStep,EmailStep
 ```
 
-This command generate the `UserWizardController`, `NameStep`, `EmailStep` class, and append the wizard route to `routes/web.php`.
+This command generates the `UserWizardController`, `NameStep`, and `EmailStep` class, and appends the wizard route to `routes/web.php`.
 
 *routes/web.php*
 ```php
@@ -160,7 +160,7 @@ class NameStep extends Step
 }
 ```
 
-And add steps view, for example:
+And add some steps view, for example:
 
 *resources/views/steps/user/name.blade.php*
 ```blade
@@ -186,9 +186,9 @@ And add steps view, for example:
 </div>
 ```
 
-Next, browse the URL `/wizard/user`, start use the Laravel Wizard.
+Next, browse the URL `/wizard/user`, and start to use the Laravel Wizard.
 
-> If you want to get the layout see [Laravel UI alyouts/app.blade.php](https://github.com/laravel/ui/blob/3.x/src/Auth/bootstrap-stubs/layouts/app.stub).
+> If you want to get the layout see [Laravel UI layouts/app.blade.php](https://github.com/laravel/ui/blob/3.x/src/Auth/bootstrap-stubs/layouts/app.stub).
 
 ### 3. Install wizard steps CSS package
 
@@ -200,7 +200,7 @@ npm install bootstrap bootstrap-steps
 yarn add bootstrap bootstrap-steps
 ```
 
-Import to app.scss file and run `npm run dev` or `yarn run dev`:
+Import to the `app.scss` file and run `npm run dev` or `yarn run dev`:
 
 *resources/sass/app.scss*
 ```scss
@@ -214,7 +214,7 @@ Import to app.scss file and run `npm run dev` or `yarn run dev`:
 
 ### Database Driver
 
-In order to use the `database` wizard cache driver, you will need a database table to hold the wizards cache data. To generate a migration that creates this table, run the `wizard:table` Artisan command:
+To use the `database` wizard cache driver, you will need a database table to hold the cache data of the wizard. Generate a migration that creates this table, and runs the `wizard:table` Artisan command:
 
 ```
 php artisan wizard:table
@@ -230,7 +230,7 @@ Set `cache` in `config/wizard.php` to `false` to disable cache input data:
 'cache' => false,
 ```
 
-Or set to your WizardController `wizardOptions` property:
+Or set it to your WizardController `wizardOptions` property:
 
 ```php
 protected $wizardOptions = [
@@ -238,13 +238,13 @@ protected $wizardOptions = [
 ];
 ```
 
-If disable cache, the data will be saved in the data immediately after each step is sent. If you are afraid to save the data repeatedly, you can hide the Prev button, or use `Model::updateOrCreate()` (https://laravel.com/docs/6.x/eloquent#other-creation-methods).
+If disabled cache, the data will be saved in the data immediately after each step is sent. If you are afraid to save the data repeatedly, you can hide the Prev button, or use `Model::updateOrCreate()` (https://laravel.com/docs/6.x/eloquent#other-creation-methods).
 
 ## Controller
 
 ### Setting Configuration
 
-Add `wizardOptions` property to `controller`, you can use `cache`, `driver`, `connection`, `table` options to override configuration.
+Add `wizardOptions` property to your wizard controller, you can use the `cache`, `driver`, `connection`, and `table` options to override configuration.
 
 *app/Http/Controllers/UserWizardController.php*
 ```php
@@ -280,15 +280,15 @@ If you used Tailwind CSS, you could publish the layouts:
 php artisan vendor:publish --tag=wizard-views-tailwind
 ```
 
-Now you can customize `resources/views/vendor/wizard/*.blade.php` in your laravel project.
+Now you can customize `resources/views/vendor/wizard/*.blade.php` in your Laravel project.
 
-But if you want custom-only one wizard view base view, you can copy the views from `resources/views/vendor/wizard/*.blade.php` to `resources/views/wizards/user/*.blade.php`. (`user` is `wizardName` property value on your wizard controller),
+But if you want a custom-only one wizard view base view, you can copy the views from `resources/views/vendor/wizard/*.blade.php` to `resources/views/wizards/user/*.blade.php`. (`user` is `wizardName` property value on your wizard controller),
 
 ## Step
 
 ### Get cached data
 
-For example, `FirstStep` has `name` and `email` fields, `SecondStep` has `age` and `phone` fields. you can use step's `data` method to get step data:
+For example, `FirstStep` has `name` and `email` fields, and `SecondStep` has `age` and `phone` fields. you can use the `data` method of step to get step data:
 
 ```php
 $name = $firstStep->data('name');
@@ -298,7 +298,7 @@ $data = $secondStep->data();
 // ['age' => '30', 'phone' => '0900111222']
 ```
 
-Or you can use Step repository to get other step data:
+Or you can use the step repository to get other step data:
 
 ```php
 $data = $secondStep->find('first')->data();
@@ -310,7 +310,7 @@ $name = $secondStep->find('first')->data('name');
 
 ### Step repository
 
-Step repository saves all steps data, if you want use other step, you need to use it:
+Step repository saves all steps data, if you want to use another step, you need to use it:
 
 From wizard:
 
@@ -324,7 +324,7 @@ From step:
 $stepRepo = $step->getRepo();
 ```
 
-Get previous step:
+Get the previous step:
 
 ```php
 $prevStep = $step->prev();
@@ -332,7 +332,7 @@ $prevStep = $step->prev();
 $prevStep = $step->getRepo()->prev();
 ```
 
-Get next step:
+Get the next step:
 
 ```PHP
 $prevStep = $step->next();
@@ -388,7 +388,7 @@ Then add a step view to upload the avatar image:
 
 > **Note**: **v2.3.3+**
 
-To make Step skippable, set the `$skip` property to `true`, then this Step will be skip the validation and save data:
+To make Step skippable, set the `$skip` property to `true`, then this Step will skip the validation and save data:
 
 *app/Steps/User/NameStep.php*
 ```php
@@ -444,9 +444,9 @@ class NameStep extends Step
 
 ```
 
-The `getOptions` method is custom, can be changed at will.
+The `getOptions` method is custom and can be changed at will.
 
-### Save data on other step
+### Save data on another step
 
 Suppose there are now two Steps `NameStep` and `EmailStep`.
 First, don't set the Model for all Steps, but don't use the last one:
@@ -469,7 +469,7 @@ class NameStep extends Step
 }
 ```
 
-Next, receive all the data in the last Step and save Model:
+Next, receive all the data in the last Step and save the Model:
 
 *app/Steps/User/EmailStep.php*
 ```php
@@ -492,7 +492,7 @@ class EmailStep extends Step
 
 ### Set relationships model
 
-Similarly, you can set the relationships model in `model` method of the `Step`.
+Similarly, you can set the relationships model in the `model` method of the step.
 
 ```php
 use Illuminate\Support\Arr;
@@ -527,7 +527,7 @@ public function saveData(Request $request, $data = null, $model = null)
 
 **Make wizard**:
 
-The `make:wizard` command and `make:wizard:controller` command difference, is `make:wizard` command will append route and no confirm generate step.
+The `make:wizard` command and `make:wizard:controller` command difference, is `make:wizard` command will append the route and not confirm generate step.
 
 ```bash
 php artisan make:wizard User NameStep,EmailStep
@@ -535,7 +535,7 @@ php artisan make:wizard User NameStep,EmailStep
 
 **Make controller**:
 
-The `make:wizard:controller` command only generate the `WizardController`, `NameStep`, `EmailStep` class.
+The `make:wizard:controller` command only generates the `WizardController`, `NameStep`, and `EmailStep` class.
 
 ```bash
 php artisan make:wizard:controller UserController --steps=NameStep,EmailStep
@@ -561,7 +561,7 @@ php artisan make:wizard:step NameStep --label="Name" --slug=name --view=steps.us
 
 ## Sponsor
 
-If you think this package have helped you, please consider [Become a sponsor](https://www.patreon.com/ycs77) to support my work~ and your avatar will be visible on my major projects.
+If you think this package has helped you, please consider [Becoming a sponsor](https://www.patreon.com/ycs77) to support my work~ and your avatar will be visible on my major projects.
 
 <p align="center">
   <a href="https://www.patreon.com/ycs77">
