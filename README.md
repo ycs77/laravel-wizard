@@ -340,7 +340,7 @@ $prevStep = $step->next();
 $nextStep = $step->getRepo()->next();
 ```
 
-Step repository all can use method detailed reference: https://github.com/ycs77/laravel-wizard/blob/v2.x/src/StepRepository.php
+Step repository all can use method detailed reference: [src/StepRepository.php](src/StepRepository.php)
 
 ### Upload Files
 
