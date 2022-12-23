@@ -2,6 +2,7 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE)
+[![GitHub Tests Action Status][ico-github-action]][link-github-action]
 [![Style CI Build Status][ico-style-ci]][link-style-ci]
 [![Total Downloads][ico-downloads]][link-downloads]
 
@@ -583,9 +584,11 @@ If you think this package has helped you, please consider [Becoming a sponsor](h
 
 [ico-version]: https://img.shields.io/packagist/v/ycs77/laravel-wizard?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square
+[ico-github-action]: https://img.shields.io/github/actions/workflow/status/ycs77/laravel-wizard/tests.yml?branch=2.x&label=tests&style=flat-square
 [ico-style-ci]: https://github.styleci.io/repos/190876726/shield?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/ycs77/laravel-wizard?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/ycs77/laravel-wizard
+[link-github-action]: https://github.com/ycs77/laravel-wizard/actions/workflows/tests.yml?query=branch%3A2.x
 [link-style-ci]: https://github.styleci.io/repos/190876726
 [link-downloads]: https://packagist.org/packages/ycs77/laravel-wizard
