@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
-         backupGlobals="false"
-         backupStaticAttributes="false"
-         beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="vendor/autoload.php"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false">
+>
+    <coverage/>
     <testsuites>
         <testsuite name="Package Tests">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
-    <coverage processUncoveredFiles="true">
+    <source>
         <include>
             <directory suffix=".php">./src</directory>
         </include>
@@ -26,16 +20,5 @@
             <directory>./src/Contracts</directory>
             <directory>./src/Exceptions</directory>
         </exclude>
-    </coverage>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-            <exclude>
-                <file>./src/WizardServiceProvider.php</file>
-                <directory>./src/Console</directory>
-                <directory>./src/Contracts</directory>
-                <directory>./src/Exceptions</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+    </source>
 </phpunit>
