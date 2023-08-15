@@ -9,6 +9,13 @@ use Ycs77\LaravelWizard\Wizard;
 class CacheManager extends Manager
 {
     /**
+     * The application instance.
+     *
+     * @var \Illuminate\Foundation\Application
+     */
+    protected $app;
+
+    /**
      * The wizard instance.
      *
      * @var \Ycs77\LaravelWizard\Wizard
@@ -25,7 +32,7 @@ class CacheManager extends Manager
     /**
      * Create a new Wizard Cache manager instance.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Foundation\Application  $app
      * @param  \Ycs77\LaravelWizard\Wizard  $wizard
      * @return void
      */
