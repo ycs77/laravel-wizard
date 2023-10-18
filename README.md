@@ -208,8 +208,8 @@ Import to the `app.scss` file and run `npm run dev` or `yarn run dev`:
 ```scss
 ...
 
-@import '~bootstrap/scss/bootstrap';
-@import '~bootstrap-steps/scss/bootstrap-steps';
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-steps/scss/bootstrap-steps';
 ```
 
 ## Cache
