@@ -72,6 +72,16 @@ class TestCase extends OrchestraTestCase
     }
 
     /**
+     * Define database migrations.
+     *
+     * @return void
+     */
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadMigrationsFrom(__DIR__.'/Stubs/database/migrations');
+    }
+
+    /**
      * Mock an instance of an object in the container.
      *
      * @param  string  $abstract
