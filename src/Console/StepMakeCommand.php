@@ -64,7 +64,7 @@ class StepMakeCommand extends GeneratorCommand
      */
     protected function buildClass($name)
     {
-        $replace = $this->buildStepSlugReplacement();
+        $replace = $this->buildStepSlugReplacement([]);
         $replace = $this->buildLabelSlugReplacement($replace);
         $replace = $this->buildViewPathSlugReplacement($replace);
 
@@ -78,13 +78,14 @@ class StepMakeCommand extends GeneratorCommand
     /**
      * Build the step slug for step class replacement value.
      *
+     * @param  array  $replace
      * @return array
      */
-    public function buildStepSlugReplacement()
+    public function buildStepSlugReplacement(array $replace)
     {
-        return [
+        return array_merge($replace, [
             'DummySlug' => $this->option('slug') ?? $this->getStepName(),
-        ];
+        ]);
     }
 
     /**

@@ -60,6 +60,8 @@ class AvatarStepStub extends Step
      */
     public function rules(Request $request)
     {
-        return [];
+        return [
+            //
+        ];
     }
 }

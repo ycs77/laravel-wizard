@@ -53,6 +53,8 @@ class StepStub extends Step
      */
     public function rules(Request $request)
     {
-        return [];
+        return [
+            //
+        ];
     }
 }
