@@ -1,7 +1,8 @@
-<div class="form-group">
+<div class="form-group mb-3">
     <label for="name">Name</label>
-    <input type="text" name="name" id="name" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" value="{{ old('name') ?? $step->data('name') }}">
-    @if ($errors->has('name'))
-        <span class="invalid-feedback">{{ $errors->first('name') }}</span>
-    @endif
+    <input type="text" name="name" id="name" @class(['form-control', 'is-invalid' => $errors->has('name')]) value="{{ old('name', $step->data('name')) }}">
+
+    @error('name')
+        <span class="invalid-feedback">{{ $message }}</span>
+    @enderror
 </div>

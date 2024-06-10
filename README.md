@@ -168,11 +168,11 @@ And add some steps view, for example:
 ```blade
 <div class="form-group mb-3">
     <label for="name">Name</label>
-    <input type="text" name="name" id="name" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" value="{{ old('name') ?? $step->data('name') }}">
+    <input type="text" name="name" id="name" @class(['form-control', 'is-invalid' => $errors->has('name')]) value="{{ old('name', $step->data('name')) }}">
 
-    @if ($errors->has('name'))
-        <span class="invalid-feedback">{{ $errors->first('name') }}</span>
-    @endif
+    @error('name')
+        <span class="invalid-feedback">{{ $message }}</span>
+    @enderror
 </div>
 ```
 
@@ -180,11 +180,11 @@ And add some steps view, for example:
 ```blade
 <div class="form-group mb-3">
     <label for="email">E-mail</label>
-    <input type="email" name="email" id="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" value="{{ old('email') ?? $step->data('email') }}">
+    <input type="email" name="email" id="email" @class(['form-control', 'is-invalid' => $errors->has('email')]) value="{{ old('email', $step->data('email')) }}">
 
-    @if ($errors->has('email'))
-        <span class="invalid-feedback">{{ $errors->first('email') }}</span>
-    @endif
+    @error('email')
+        <span class="invalid-feedback">{{ $message }}</span>
+    @enderror
 </div>
 ```
 
@@ -198,7 +198,7 @@ The CSS for this package default view is based on the [Bootstrap Steps](https://
 
 ```bash
 npm install bootstrap bootstrap-steps
-// or Yarn
+// or yarn
 yarn add bootstrap bootstrap-steps
 ```
 
@@ -377,12 +377,11 @@ Then add a step view to upload the avatar image:
 ```blade
 <div class="form-group mb-3">
     <label for="avatar">Avatar</label>
-    <input type="file" name="avatar" id="avatar" class="form-control">
-    <div class="form-control d-none {{ $errors->has('avatar') ? 'is-invalid' : '' }}"></div>
+    <input type="file" name="avatar" id="avatar" @class(['form-control', 'is-invalid' => $errors->has('avatar')])>
 
-    @if ($errors->has('avatar'))
-        <span class="invalid-feedback">{{ $errors->first('avatar') }}</span>
-    @endif
+    @error('avatar')
+        <span class="invalid-feedback">{{ $message }}</span>
+    @enderror
 </div>
 ```
 
@@ -432,18 +431,22 @@ class NameStep extends Step
 ```blade
 <div class="form-group mb-3">
     <label for="name">Select name</label>
-    <select id="name" name="name" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}">
+    <select id="name" name="name" @class(['form-control', 'is-invalid' => $errors->has('name')])>
         <option value="">Select...</option>
         @foreach ($step->getOptions() as $option)
-            <option value="{{ $option }}" @if (old('name') ?? $step->data('name') === $option) @endif>{{ $option }}</option>
+            <option
+                value="{{ $option }}"
+                @selected($option === old('name', $step->data('name')))
+            >
+                {{ $option }}
+            </option>
         @endforeach
     </select>
 
-    @if ($errors->has('name'))
-        <span class="invalid-feedback">{{ $errors->first('name') }}</span>
-    @endif
+    @error('name')
+        <span class="invalid-feedback">{{ $message }}</span>
+    @enderror
 </div>
-
 ```
 
 The `getOptions` method is custom and can be changed at will.
