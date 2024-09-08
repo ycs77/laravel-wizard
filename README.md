@@ -58,7 +58,7 @@ A web setup wizard for Laravel application.
 Install the package via composer:
 
 ```bash
-composer reqre ycs77/laravel-wizard
+composer require ycs77/laravel-wizard
 ```
 
 Publish config:
