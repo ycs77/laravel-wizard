@@ -82,4 +82,21 @@ class WizardTest extends TestCase
         // assert
         $this->assertNull($actual);
     }
+
+    public function testRedirectToOtherStep()
+    {
+        // arrange
+        /** @param \Mockery\MockInterface $mock */
+        $stepRepo = $this->mock(StepRepository::class);
+        $this->wizard->setStepRepo($stepRepo);
+        $this->wizard->resolveActionUrlUsing(function (string $method, $parameters = []) {
+            return url('/wizard/test-wizard/'.$parameters[0]);
+        });
+
+        // act
+        $actual = $this->wizard->redirectToStep('post');
+
+        // assert
+        $this->assertEquals(url('/wizard/test-wizard/post'), $actual->getTargetUrl());
+    }
 }

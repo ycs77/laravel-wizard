@@ -2,8 +2,10 @@
 
 namespace Ycs77\LaravelWizard;
 
+use Closure;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
+use RuntimeException;
 use Ycs77\LaravelWizard\Cache\CacheManager;
 
 class Wizard
@@ -63,6 +65,13 @@ class Wizard
     ];
 
     /**
+     * The action url resolver instance.
+     *
+     * @var \Closure|null
+     */
+    protected $actionUrlResolver;
+
+    /**
      * Create a new Wizard instance.
      *
      * @param  \Illuminate\Foundation\Application  $app
@@ -106,6 +115,61 @@ class Wizard
         }
 
         return $nextStepIndex;
+    }
+
+    /**
+     * Get the action URL.
+     *
+     * @param  string  $method
+     * @param  mixed  $parameters
+     * @return string
+     */
+    public function getActionUrl(string $method, $parameters = [])
+    {
+        if (! $this->actionUrlResolver) {
+            throw new RuntimeException('Action url resolver is not set.');
+        }
+
+        return call_user_func($this->actionUrlResolver, $method, $parameters);
+    }
+
+    /**
+     * Redirect to the given step.
+     *
+     * @param  string|null  $stepSlug
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function redirectToStep(string $stepSlug = null)
+    {
+        if (is_null($stepSlug)) {
+            $stepSlug = $this->nextSlug();
+        }
+
+        return redirect($this->getActionUrl('create', [$stepSlug]));
+    }
+
+    /**
+     * Redirect to the done page.
+     *
+     * @param  string|null  $stepSlug
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function redirectToDone()
+    {
+        return redirect($this->getActionUrl('done'));
+    }
+
+    /**
+     * Set the action url resolver.
+     *
+     * @param  \Closure  $resolver
+     * @return self
+     */
+    public function resolveActionUrlUsing(Closure $resolver)
+    {
+        $this->actionUrlResolver = $resolver;
+
+        return $this;
     }
 
     /**

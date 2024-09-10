@@ -153,7 +153,7 @@ trait Wizardable
             return $this->redirectToDone($data);
         }
 
-        return $this->redirectTo();
+        return $this->redirectToStep();
     }
 
     /**
@@ -197,7 +197,7 @@ trait Wizardable
             );
         }
 
-        return $this->redirectTo($step->slug());
+        return $this->redirectToStep($step->slug());
     }
 
     /**
@@ -211,7 +211,7 @@ trait Wizardable
     {
         $lastProcessedStep = $this->wizard()->stepRepo()->get($lastProcessedIndex);
 
-        return $this->redirectTo($lastProcessedStep->slug());
+        return $this->redirectToStep($lastProcessedStep->slug());
     }
 
     /**
@@ -231,13 +231,22 @@ trait Wizardable
      * @param  string|null  $stepSlug
      * @return \Illuminate\Http\RedirectResponse
      */
+    protected function redirectToStep(string $stepSlug = null)
+    {
+        return $this->wizard()->redirectToStep($stepSlug);
+    }
+
+    /**
+     * Redirect to the step.
+     *
+     * Alias of `redirectToStep()`.
+     *
+     * @param  string|null  $stepSlug
+     * @return \Illuminate\Http\RedirectResponse
+     */
     protected function redirectTo(string $stepSlug = null)
     {
-        if (is_null($stepSlug)) {
-            $stepSlug = $this->getNextStepSlug();
-        }
-
-        return redirect($this->getActionUrl('create', [$stepSlug]));
+        return $this->redirectToStep($stepSlug);
     }
 
     /**
@@ -248,7 +257,7 @@ trait Wizardable
      */
     protected function redirectToDone($withData = null)
     {
-        return redirect($this->getActionUrl('done'));
+        return $this->wizard()->redirectToDone($withData);
     }
 
     /**
@@ -257,7 +266,7 @@ trait Wizardable
      * @param  array|null  $withData
      * @return \Illuminate\Http\RedirectResponse
      *
-     * @deprecated Please use the "redirectToDone" method
+     * @deprecated Please use the `redirectToDone()` method
      */
     protected function doneRedirectTo($withData = null)
     {
@@ -281,6 +290,7 @@ trait Wizardable
      * Get the action URL.
      *
      * @param  string  $method
+     * @param  mixed  $parameters
      * @return string
      */
     public function getActionUrl(string $method, $parameters = [])
@@ -434,6 +444,8 @@ trait Wizardable
                 $this->steps(),
                 $this->wizardOptions()
             );
+
+            $this->wizard->resolveActionUrlUsing(Closure::fromCallable([$this, 'getActionUrl']));
         }
 
         return $this->wizard;
