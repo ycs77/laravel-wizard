@@ -48,18 +48,18 @@ class Wizard extends Facade
         if ($options['use_done']) {
             $router->get(
                 "$uri/{$options['done_url']}",
-                "$controllerClass@{$options['done']}"
+                [$controllerClass, $options['done']]
             )->name("$name.{$options['done']}");
         }
 
         $router->get(
             "$uri/{step?}",
-            "$controllerClass@{$options['create']}"
+            [$controllerClass, $options['create']]
         )->name("$name");
 
         $router->post(
             "$uri/{step}",
-            "$controllerClass@{$options['store']}"
+            [$controllerClass, $options['store']]
         )->name("$name.{$options['store']}");
     }
 }
