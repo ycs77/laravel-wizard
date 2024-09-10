@@ -4,6 +4,7 @@ namespace Ycs77\LaravelWizard;
 
 use Closure;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use RuntimeException;
 use Ycs77\LaravelWizard\Cache\CacheManager;
@@ -118,6 +119,59 @@ class Wizard
     }
 
     /**
+     * Cache progress data.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Ycs77\LaravelWizard\Step  $step
+     * @param  array  $additionalData
+     * @return array
+     */
+    public function cacheProgress(Request $request, Step $step, array $additionalData = [])
+    {
+        if (! $this->option('cache')) {
+            return;
+        }
+
+        // Get cache data, and push this step data.
+        $cacheData = $this->cache->get();
+        $cacheData[$step->slug()] = $step->getRequestData($request);
+        $cacheData = array_merge($cacheData, $additionalData);
+
+        $nextStepIndex = $this->nextStepIndex();
+
+        // Save data to cache.
+        $this->cacheStepData($cacheData, $nextStepIndex);
+
+        return $this->cache->get();
+    }
+
+    /**
+     * Set the last processed step index.
+     *
+     * @return self
+     */
+    public function setLastProcessedIndex($stepIndex)
+    {
+        if (! $this->option('cache')) {
+            return;
+        }
+
+        $this->cacheStepData($this->cache->get(), $stepIndex);
+
+        return $this;
+    }
+
+    /**
+     * Get the last processed step index.
+     *
+     * @return int|null
+     */
+    public function getLastProcessedIndex()
+    {
+        return $this->cache->getLastProcessedIndex();
+    }
+
+    /**
      * Get the action URL.
      *
      * @param  string  $method
@@ -136,16 +190,23 @@ class Wizard
     /**
      * Redirect to the given step.
      *
-     * @param  string|null  $stepSlug
+     * @param  string|\Ycs77\LaravelWizard\Step|null  $step
+     * @param  bool  $setLastIndex
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function redirectToStep(string $stepSlug = null)
+    public function redirectToStep($step = null, $setLastIndex = true)
     {
-        if (is_null($stepSlug)) {
-            $stepSlug = $this->nextSlug();
+        if (is_null($step)) {
+            $step = $this->stepRepo()->next();
+        } elseif (is_string($step)) {
+            $step = $this->stepRepo()->find($step);
         }
 
-        return redirect($this->getActionUrl('create', [$stepSlug]));
+        if ($this->option('cache') && $setLastIndex) {
+            $this->setLastProcessedIndex($step->index());
+        }
+
+        return redirect($this->getActionUrl('create', [$step->slug()]));
     }
 
     /**

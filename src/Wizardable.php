@@ -103,17 +103,13 @@ trait Wizardable
 
         // If trigger from 'back', set this step index and redirect to prev step.
         if ($request->query('_trigger') === 'back' && $this->beforeBackWizardStep($request, $step)) {
-            if ($this->wizard()->option('cache')) {
-                $step->cacheProgress($request);
-            }
+            $this->wizard()->cacheProgress($request, $step);
 
             $prevStep = $this->wizard()->stepRepo()->prev();
 
-            return $this->setThisStepAndRedirectTo($request, $prevStep);
+            return $this->redirectToStep($prevStep);
         } elseif ($step->skip() && $request->query('_trigger') === 'skip') {
-            if ($this->wizard()->option('cache')) {
-                $step->cacheProgress($request);
-            }
+            $this->wizard()->cacheProgress($request, $step);
         } else {
             // Form validation.
             if ($this->canValidate($request)) {
@@ -128,7 +124,7 @@ trait Wizardable
             }
 
             if ($this->wizard()->option('cache')) {
-                $step->cacheProgress($request);
+                $this->wizard()->cacheProgress($request, $step);
             } else {
                 $step->saveData($request, $step->getRequestData($request), $step->getModel());
             }
@@ -153,7 +149,7 @@ trait Wizardable
             return $this->redirectToDone($data);
         }
 
-        return $this->redirectToStep();
+        return $this->redirectToStep(null, false);
     }
 
     /**
@@ -182,25 +178,6 @@ trait Wizardable
     }
 
     /**
-     * Set this step and redirect to this step.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Ycs77\LaravelWizard\Step  $step
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function setThisStepAndRedirectTo(Request $request, Step $step)
-    {
-        if ($this->wizard()->option('cache')) {
-            $this->wizard()->cacheStepData(
-                $this->wizard()->cache()->get(),
-                $step->index()
-            );
-        }
-
-        return $this->redirectToStep($step->slug());
-    }
-
-    /**
      * Redirect to last processed step.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -211,7 +188,7 @@ trait Wizardable
     {
         $lastProcessedStep = $this->wizard()->stepRepo()->get($lastProcessedIndex);
 
-        return $this->redirectToStep($lastProcessedStep->slug());
+        return $this->redirectToStep($lastProcessedStep->slug(), false);
     }
 
     /**
@@ -228,12 +205,13 @@ trait Wizardable
     /**
      * Redirect to the step.
      *
-     * @param  string|null  $stepSlug
+     * @param  string|\Ycs77\LaravelWizard\Step|null  $step
+     * @param  bool  $setLastIndex
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectToStep(string $stepSlug = null)
+    protected function redirectToStep($step = null, $setLastIndex = true)
     {
-        return $this->wizard()->redirectToStep($stepSlug);
+        return $this->wizard()->redirectToStep($step, $setLastIndex);
     }
 
     /**
@@ -241,12 +219,13 @@ trait Wizardable
      *
      * Alias of `redirectToStep()`.
      *
-     * @param  string|null  $stepSlug
+     * @param  string|\Ycs77\LaravelWizard\Step|null  $step
+     * @param  bool  $setLastIndex
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectTo(string $stepSlug = null)
+    protected function redirectTo($step = null, $setLastIndex = true)
     {
-        return $this->redirectToStep($stepSlug);
+        return $this->redirectToStep($step, $setLastIndex);
     }
 
     /**
@@ -313,7 +292,7 @@ trait Wizardable
     protected function getLastProcessedStepIndex(string $stepSlug = null)
     {
         if ($this->wizard()->option('cache')) {
-            return $this->wizard()->cache()->getLastProcessedIndex() ?? 0;
+            return $this->wizard()->getLastProcessedIndex() ?? 0;
         } elseif (is_string($stepSlug)) {
             return $this->wizard()->stepRepo()->findKey($stepSlug, 0);
         }

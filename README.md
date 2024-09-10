@@ -311,6 +311,18 @@ $name = $secondStep->find('first')->data('name');
 // 'Lucas'
 ```
 
+### Redirect to the step
+
+If you want to manually redirect to another step, you can use the `redirectToStep()` of the wizard, it will return a redirect response.
+
+```php
+// given a step slug
+return $wizard->redirectToStep('second');
+
+// given a step insatnce
+return $wizard->redirectToStep($secondStep);
+```
+
 ### Step repository
 
 Step repository saves all steps data, if you want to use another step, you need to use it:

@@ -390,16 +390,6 @@ abstract class Step
      */
     public function cacheProgress(Request $request, array $additionalData = [])
     {
-        // Get cache data, and push this step data.
-        $cacheData = $this->wizard->cache()->get();
-        $cacheData[$this->slug] = $this->getRequestData($request);
-        $cacheData = array_merge($cacheData, $additionalData);
-
-        $nextStepIndex = $this->wizard->nextStepIndex();
-
-        // Save data to cache.
-        $this->wizard->cacheStepData($cacheData, $nextStepIndex);
-
-        return $this->wizard->cache()->get();
+        return $this->wizard->cacheProgress($request, $this, $additionalData);
     }
 }

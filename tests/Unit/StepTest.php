@@ -3,8 +3,7 @@
 namespace Ycs77\LaravelWizard\Test\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Request;
-use Ycs77\LaravelWizard\Test\Stubs\PostStepStub;
+use Ycs77\LaravelWizard\Contracts\CacheStore;
 use Ycs77\LaravelWizard\Test\Stubs\StepStub;
 use Ycs77\LaravelWizard\Test\Stubs\UserStepStub;
 use Ycs77\LaravelWizard\Test\TestCase;
@@ -92,94 +91,5 @@ class StepTest extends TestCase
     {
         $this->assertEquals('user-step-stub', $this->step->getDataKey());
         $this->assertEquals('user-step-stub.field', $this->step->getDataKey('field'));
-    }
-
-    public function testCacheProgress()
-    {
-        // arrange
-        $expected = [
-            'user-step-stub' => [
-                'name' => 'Lucas Yang',
-            ],
-            '_last_index' => 1,
-        ];
-        $request = Request::create('http://example.com');
-
-        $this->step->shouldReceive('getRequestData')
-            ->once()
-            ->andReturn(['name' => 'Lucas Yang']);
-
-        /** @param \Mockery\MockInterface $mock */
-        $cache = $this->mock(CacheStore::class, function ($mock) use ($expected) {
-            $mock->shouldReceive('get')
-                ->twice()
-                ->andReturn([], $expected);
-        });
-        $this->wizard->shouldReceive('cache')->twice()->andReturn($cache);
-        $this->wizard->shouldReceive('nextStepIndex')->once()->andReturn(1);
-        $this->wizard->shouldReceive('cacheStepData')
-            ->once()
-            ->with([
-                'user-step-stub' => [
-                    'name' => 'Lucas Yang',
-                ],
-            ], 1);
-
-        // act
-        $actual = $this->step->cacheProgress($request);
-
-        // assert
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function testSecondStepCacheProgress()
-    {
-        // arrange
-        $expected = [
-            'user-step-stub' => [
-                'name' => 'Lucas Yang',
-            ],
-            'post-step-stub' => [
-                'phone' => '12345678',
-            ],
-            '_last_index' => 1,
-        ];
-        $request = Request::create('http://example.com');
-
-        $this->step = $this->mock(PostStepStub::class, [$this->wizard, 1])->makePartial();
-        $this->step->shouldReceive('getRequestData')
-            ->once()
-            ->andReturn(['phone' => '12345678']);
-
-        /** @param \Mockery\MockInterface $mock */
-        $cache = $this->mock(CacheStore::class, function ($mock) use ($expected) {
-            $mock->shouldReceive('get')
-                ->twice()
-                ->andReturn([
-                    'user-step-stub' => [
-                        'name' => 'Lucas Yang',
-                    ],
-                    '_last_index' => 1,
-                ], $expected);
-        });
-        $this->wizard->shouldReceive('cache')->twice()->andReturn($cache);
-        $this->wizard->shouldReceive('nextStepIndex')->once()->andReturn(null);
-        $this->wizard->shouldReceive('cacheStepData')
-            ->once()
-            ->with([
-                'user-step-stub' => [
-                    'name' => 'Lucas Yang',
-                ],
-                'post-step-stub' => [
-                    'phone' => '12345678',
-                ],
-                '_last_index' => 1,
-            ], null);
-
-        // act
-        $actual = $this->step->cacheProgress($request);
-
-        // assert
-        $this->assertEquals($expected, $actual);
     }
 }
