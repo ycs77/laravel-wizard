@@ -102,7 +102,7 @@ trait Wizardable
         $step = $this->getWizardStep($request, $step);
 
         // If trigger from 'back', set this step index and redirect to prev step.
-        if ($request->query('_trigger') === 'back' && $this->beforeBackWizardStep($request)) {
+        if ($request->query('_trigger') === 'back' && $this->beforeBackWizardStep($request, $step)) {
             if ($this->wizard()->option('cache')) {
                 $step->cacheProgress($request);
             }
@@ -124,7 +124,7 @@ trait Wizardable
                 );
 
                 // Wizard step validated event.
-                $this->wizardStepFormValidated($request);
+                $this->wizardStepFormValidated($request, $step);
             }
 
             if ($this->wizard()->option('cache')) {
@@ -226,18 +226,18 @@ trait Wizardable
     }
 
     /**
-     * Step redirect response.
+     * Redirect to the step.
      *
-     * @param  string|null  $step
+     * @param  string|null  $stepSlug
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectTo($step = null)
+    protected function redirectTo(string $stepSlug = null)
     {
-        if (is_null($step)) {
-            $step = $this->getNextStepSlug();
+        if (is_null($stepSlug)) {
+            $stepSlug = $this->getNextStepSlug();
         }
 
-        return redirect($this->getActionUrl('create', [$step]));
+        return redirect($this->getActionUrl('create', [$stepSlug]));
     }
 
     /**
@@ -529,9 +529,10 @@ trait Wizardable
      * On wizard step validated event.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \Ycs77\LaravelWizard\Step  $step
      * @return void
      */
-    protected function wizardStepFormValidated(Request $request)
+    protected function wizardStepFormValidated(Request $request, Step $step)
     {
         //
     }
@@ -552,9 +553,10 @@ trait Wizardable
      * On before back wizard step event.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \Ycs77\LaravelWizard\Step  $step
      * @return bool
      */
-    protected function beforeBackWizardStep(Request $request)
+    protected function beforeBackWizardStep(Request $request, Step $step)
     {
         return true;
     }
