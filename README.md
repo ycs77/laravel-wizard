@@ -17,7 +17,7 @@ A web setup wizard for Laravel application.
 - [Laravel Wizard](#laravel-wizard)
   - [Table of Contents](#table-of-contents)
   - [Version Compatibility](#version-compatibility)
-  - [Install](#install)
+  - [Installation](#installation)
   - [Usage](#usage)
     - [1. Generate controller and wizard steps](#1-generate-controller-and-wizard-steps)
     - [2. Set steps](#2-set-steps)
@@ -30,12 +30,14 @@ A web setup wizard for Laravel application.
   - [Customize View](#customize-view)
   - [Step](#step)
     - [Get cached data](#get-cached-data)
+    - [Redirect to the step](#redirect-to-the-step)
     - [Step repository](#step-repository)
     - [Upload Files](#upload-files)
     - [Skip step](#skip-step)
     - [Passing data to views](#passing-data-to-views)
     - [Save data on another step](#save-data-on-another-step)
     - [Set relationships model](#set-relationships-model)
+    - [Force restart from first step](#force-restart-from-first-step)
   - [Commands](#commands)
   - [Sponsor](#sponsor)
   - [Credits](#credits)
@@ -538,6 +540,25 @@ public function saveData(Request $request, $data = null, $model = null)
 {
     $data = Arr::only($data, ['title', 'content']);
     $model->create($data);
+}
+```
+
+### Force restart from first step
+
+If you don't keep the cache on click the start wizard button, you can change the link to `/wizard/user?_reset=1`.
+
+If you have any custom cache data you want to clean up, you can set the clean up into `cleanUpWizard()` hook in your `WizardController`, then it will clean on wizard done or visit route with `?_reset=1` parameter:
+
+*app/Http/Controllers/UserWizardController.php*
+```php
+/**
+ * Clean up the wizard event.
+ *
+ * @return void
+ */
+protected function cleanUpWizard(Request $request)
+{
+    // Cleanup wizard cache...
 }
 ```
 
