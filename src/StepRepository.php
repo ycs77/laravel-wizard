@@ -99,16 +99,24 @@ class StepRepository implements StepRepositoryContract
      */
     public function push($stepClass, int $index = null)
     {
+        $currentCount = $this->steps->count();
+
         if (is_array($stepClass)) {
             $steps = $stepClass;
             foreach ($steps as $stepIndex => $stepClass) {
-                $step = new $stepClass($this->wizard, $stepIndex);
+                $step = app($stepClass, [
+                    'wizard' => $this->wizard,
+                    'index' => $currentCount + $stepIndex,
+                ]);
                 $this->steps->push($step);
             }
         } elseif ($stepClass instanceof Step) {
             $this->steps->push($stepClass);
         } elseif (is_string($stepClass)) {
-            $step = new $stepClass($this->wizard, $index);
+            $step = app($stepClass, [
+                'wizard' => $this->wizard,
+                'index' => $index ?? $currentCount,
+            ]);
             $this->steps->push($step);
         }
 

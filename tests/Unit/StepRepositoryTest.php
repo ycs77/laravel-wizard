@@ -4,6 +4,7 @@ namespace Ycs77\LaravelWizard\Test\Unit;
 
 use Ycs77\LaravelWizard\StepRepository;
 use Ycs77\LaravelWizard\Test\Stubs\PostStepStub;
+use Ycs77\LaravelWizard\Test\Stubs\UserStepOverrideConstructStub;
 use Ycs77\LaravelWizard\Test\Stubs\UserStepStub;
 use Ycs77\LaravelWizard\Test\TestCase;
 use Ycs77\LaravelWizard\Wizard;
@@ -22,7 +23,7 @@ class StepRepositoryTest extends TestCase
      *
      * @var \Ycs77\LaravelWizard\StepRepository
      */
-    protected $step;
+    protected $stepRepo;
 
     /**
      * The wizard steps stub.
@@ -55,6 +56,31 @@ class StepRepositoryTest extends TestCase
     protected function initStepsItems()
     {
         $this->stepRepo->set($this->stepsStub);
+    }
+
+    public function testPushSteps()
+    {
+        $this->assertCount(0, $this->stepRepo->all());
+
+        $this->stepRepo->push(new UserStepStub($this->wizard, 0));
+        $this->assertCount(1, $this->stepRepo->all());
+        $this->assertEquals(0, $this->stepRepo->get(0)->index());
+
+        $this->stepRepo->push(UserStepStub::class);
+        $this->assertCount(2, $this->stepRepo->all());
+        $this->assertEquals(1, $this->stepRepo->get(1)->index());
+
+        $this->stepRepo->push([UserStepStub::class, PostStepStub::class]);
+        $this->assertCount(4, $this->stepRepo->all());
+        $this->assertEquals(2, $this->stepRepo->get(2)->index());
+        $this->assertEquals(3, $this->stepRepo->get(3)->index());
+
+        $this->stepRepo->push(UserStepOverrideConstructStub::class);
+        $this->assertCount(5, $this->stepRepo->all());
+        /** @var \Ycs77\LaravelWizard\Test\Stubs\UserStepOverrideConstructStub */
+        $step = $this->stepRepo->get(4);
+        $this->assertEquals(4, $step->index());
+        $this->assertInstanceOf(\Illuminate\Contracts\Session\Session::class, $step->getSessionFromConstruct());
     }
 
     public function testGetStep()
