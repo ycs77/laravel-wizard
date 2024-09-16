@@ -4,10 +4,12 @@ namespace Ycs77\LaravelWizard\Test\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Ycs77\LaravelWizard\Cache\CachedFile;
 use Ycs77\LaravelWizard\Facades\Wizard;
 use Ycs77\LaravelWizard\Test\Stubs\WizardControllerBeforeBackStepStub;
+use Ycs77\LaravelWizard\Test\Stubs\WizardControllerCleanUpStub;
 use Ycs77\LaravelWizard\Test\Stubs\WizardControllerOptionsStub;
 use Ycs77\LaravelWizard\Test\Stubs\WizardControllerSkipStub;
 use Ycs77\LaravelWizard\Test\Stubs\WizardControllerStub;
@@ -347,5 +349,52 @@ class HttpTest extends TestCase
         $this->assertDatabaseHas('users', [
             'name' => 'John',
         ]);
+    }
+
+    public function testWizardCalledCleanUpEventWhenDone()
+    {
+        $this->setWizardRoutes('/wizard/clean-up', WizardControllerCleanUpStub::class, 'wizard.clean-up');
+
+        $this->assertFalse(Cache::has('wizard.clean-up.cached'));
+
+        $response = $this->post('/wizard/clean-up/user-step-stub', [
+            'name' => 'John',
+        ]);
+        $response->assertRedirect('/wizard/clean-up/set-cache-step-stub');
+
+        $response = $this->post('/wizard/clean-up/set-cache-step-stub');
+        $response->assertRedirect('/wizard/clean-up/post-step-stub');
+
+        $this->assertTrue(Cache::has('wizard.clean-up.cached'));
+
+        $response = $this->post('/wizard/clean-up/post-step-stub', [
+            'title' => 'Title',
+            'content' => 'Content.',
+        ]);
+        $response->assertRedirect('/wizard/clean-up/done');
+
+        $this->assertFalse(Cache::has('wizard.clean-up.cached'));
+    }
+
+    public function testWizardCalledCleanUpEventWhenTriggerReset()
+    {
+        $this->setWizardRoutes('/wizard/clean-up', WizardControllerCleanUpStub::class, 'wizard.clean-up');
+
+        $this->assertFalse(Cache::has('wizard.clean-up.cached'));
+
+        $response = $this->post('/wizard/clean-up/user-step-stub', [
+            'name' => 'John',
+        ]);
+        $response->assertRedirect('/wizard/clean-up/set-cache-step-stub');
+
+        $response = $this->post('/wizard/clean-up/set-cache-step-stub');
+        $response->assertRedirect('/wizard/clean-up/post-step-stub');
+
+        $this->assertTrue(Cache::has('wizard.clean-up.cached'));
+
+        $response = $this->get('/wizard/clean-up?_reset=1');
+        $response->assertRedirect('/wizard/clean-up/user-step-stub');
+
+        $this->assertFalse(Cache::has('wizard.clean-up.cached'));
     }
 }

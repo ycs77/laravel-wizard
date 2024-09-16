@@ -123,7 +123,9 @@ class SessionStore implements CacheStore
      */
     public function clear()
     {
-        $this->serializer->clearTmpFiles($this->get('_files'));
+        if (is_array($files = $this->get('_files'))) {
+            $this->serializer->clearTmpFiles($files);
+        }
 
         $this->session->forget($this->wizardKey);
     }

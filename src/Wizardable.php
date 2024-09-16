@@ -31,6 +31,16 @@ trait Wizardable
      */
     public function create(Request $request, $step = null)
     {
+        // Reset the wizard cache when passing the `_reset` query parameter.
+        if ($request->query('_reset') === '1') {
+            $this->wizard()->cache()->clear();
+
+            // Clean up the wizard event.
+            $this->cleanUpWizard($request);
+
+            return $this->redirectToLastProcessedStep($request, 0);
+        }
+
         // Before wizard step create event.
         if ($redirectTo = $this->beforeWizardStepCreate($request)) {
             return $redirectTo;
@@ -152,6 +162,9 @@ trait Wizardable
 
             // Wizard ended event.
             $this->wizardEnded($request, $data);
+
+            // Clean the wizard event.
+            $this->cleanUpWizard($request);
 
             return $this->redirectToDone($data);
         }
@@ -567,6 +580,16 @@ trait Wizardable
      * @return void
      */
     protected function wizardEnded(Request $request, $data)
+    {
+        //
+    }
+
+    /**
+     * Clean up the wizard event.
+     *
+     * @return void
+     */
+    protected function cleanUpWizard(Request $request)
     {
         //
     }
