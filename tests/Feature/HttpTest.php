@@ -7,6 +7,11 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Ycs77\LaravelWizard\Cache\CachedFile;
 use Ycs77\LaravelWizard\Facades\Wizard;
+use Ycs77\LaravelWizard\Test\Stubs\WizardControllerBeforeBackStepStub;
+use Ycs77\LaravelWizard\Test\Stubs\WizardControllerOptionsStub;
+use Ycs77\LaravelWizard\Test\Stubs\WizardControllerSkipStub;
+use Ycs77\LaravelWizard\Test\Stubs\WizardControllerStub;
+use Ycs77\LaravelWizard\Test\Stubs\WizardControllerUploadFileStub;
 use Ycs77\LaravelWizard\Test\TestCase;
 
 class HttpTest extends TestCase
@@ -17,11 +22,7 @@ class HttpTest extends TestCase
     {
         parent::setUp();
 
-        $this->setWizardRoutes(
-            '/wizard/test',
-            '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerStub',
-            'wizard.test'
-        );
+        $this->setWizardRoutes('/wizard/test', WizardControllerStub::class, 'wizard.test');
 
         $this->authenticate();
     }
@@ -140,11 +141,7 @@ class HttpTest extends TestCase
 
         Storage::fake('local');
 
-        $this->setWizardRoutes(
-            '/wizard/upload-file',
-            '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerUploadFileStub',
-            'wizard.upload-file'
-        );
+        $this->setWizardRoutes('/wizard/upload-file', WizardControllerUploadFileStub::class, 'wizard.upload-file');
 
         // Get avatar step
         $response = $this->get('/wizard/upload-file/avatar-step-stub');
@@ -226,6 +223,25 @@ class HttpTest extends TestCase
         ], $this->app['session']->get('laravel_wizard.test'));
     }
 
+    public function testWizardStepRedirectToResponseFromBack()
+    {
+        $this->session([
+            'laravel_wizard.test' => [
+                '_last_index' => 2,
+            ],
+        ]);
+
+        $this->setWizardRoutes('/wizard/back-step', WizardControllerBeforeBackStepStub::class, 'wizard.back-step');
+
+        // Get avatar step
+        $response = $this->get('/wizard/back-step/avatar-step-stub');
+        $response->assertStatus(200);
+
+        // Post avatar step
+        $response = $this->post('/wizard/back-step/avatar-step-stub?_trigger=back');
+        $response->assertRedirect('/wizard/back-step/user-step-stub');
+    }
+
     public function testWizardStepTriggerToBackNoValidate()
     {
         $this->session([
@@ -260,11 +276,7 @@ class HttpTest extends TestCase
     {
         $this->app['config']->set('wizard.cache', true);
 
-        $this->setWizardRoutes(
-            '/wizard/can-skip',
-            '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerSkipStub',
-            'wizard.can-skip'
-        );
+        $this->setWizardRoutes('/wizard/can-skip', WizardControllerSkipStub::class, 'wizard.can-skip');
 
         $response = $this->post('/wizard/can-skip/user-step-stub?_trigger=skip', [
             'name' => null,
@@ -284,11 +296,7 @@ class HttpTest extends TestCase
     {
         $this->app['config']->set('wizard.cache', false);
 
-        $this->setWizardRoutes(
-            '/wizard/can-skip',
-            '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerSkipStub',
-            'wizard.can-skip'
-        );
+        $this->setWizardRoutes('/wizard/can-skip', WizardControllerSkipStub::class, 'wizard.can-skip');
 
         $response = $this->post('/wizard/can-skip/user-step-stub?_trigger=skip', [
             'name' => null,
@@ -329,11 +337,7 @@ class HttpTest extends TestCase
 
     public function testWizardSetNoCacheFromControllerNowRunStepSaveData()
     {
-        $this->setWizardRoutes(
-            '/wizard/no-cache',
-            '\Ycs77\LaravelWizard\Test\Stubs\WizardControllerOptionsStub',
-            'wizard.no-cache'
-        );
+        $this->setWizardRoutes('/wizard/no-cache', WizardControllerOptionsStub::class, 'wizard.no-cache');
 
         $response = $this->post('/wizard/no-cache/user-step-stub', [
             'name' => 'John',

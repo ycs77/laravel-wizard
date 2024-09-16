@@ -2,15 +2,12 @@
 
 namespace Ycs77\LaravelWizard\Test\Stubs;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
 use Ycs77\LaravelWizard\Wizardable;
 
 class WizardControllerStub extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Wizardable;
+    use Wizardable;
 
     /**
      * The wizard name.

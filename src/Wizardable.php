@@ -3,6 +3,7 @@
 namespace Ycs77\LaravelWizard;
 
 use Closure;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 trait Wizardable
@@ -102,7 +103,13 @@ trait Wizardable
         $step = $this->getWizardStep($request, $step);
 
         // If trigger from 'back', set this step index and redirect to prev step.
-        if ($request->query('_trigger') === 'back' && $this->beforeBackWizardStep($request, $step)) {
+        if ($request->query('_trigger') === 'back' &&
+            ($redirectTo = $this->beforeBackWizardStep($request, $step)) !== false
+        ) {
+            if ($redirectTo instanceof RedirectResponse) {
+                return $redirectTo;
+            }
+
             $this->wizard()->cacheProgress($request, $step);
 
             $prevStep = $this->wizard()->stepRepo()->prev();
@@ -545,7 +552,7 @@ trait Wizardable
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Ycs77\LaravelWizard\Step  $step
-     * @return bool
+     * @return bool|\Illuminate\Http\RedirectResponse
      */
     protected function beforeBackWizardStep(Request $request, Step $step)
     {
