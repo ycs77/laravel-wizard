@@ -5,6 +5,7 @@ namespace Ycs77\LaravelWizard;
 use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 trait Wizardable
 {
@@ -31,14 +32,21 @@ trait Wizardable
      */
     public function create(Request $request, $step = null)
     {
+        // Get the query parameters.
+        $parameters = $request->query();
+        unset($parameters['_trigger']);
+        $resetParam = Arr::pull($parameters, '_reset');
+
         // Reset the wizard cache when passing the `_reset` query parameter.
-        if ($request->query('_reset') === '1') {
+        if ($resetParam === '1') {
             $this->wizard()->cache()->clear();
 
             // Clean up the wizard event.
             $this->cleanUpWizard($request);
 
-            return $this->redirectToLastProcessedStep($request, 0);
+            return $this->redirectToLastProcessedStep(
+                $request, 0, $parameters
+            );
         }
 
         // Before wizard step create event.
@@ -51,7 +59,7 @@ trait Wizardable
         // If step is null, redirect to last processed index.
         if (is_null($step)) {
             return $this->redirectToLastProcessedStep(
-                $request, $lastProcessedIndex
+                $request, $lastProcessedIndex, $parameters
             );
         }
 
@@ -61,7 +69,7 @@ trait Wizardable
         if ($step->index() !== $lastProcessedIndex) {
             // Redirect to last processed step.
             return $this->redirectToLastProcessedStep(
-                $request, $lastProcessedIndex
+                $request, $lastProcessedIndex, $parameters
             );
         }
 
@@ -202,13 +210,14 @@ trait Wizardable
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $lastProcessedIndex
+     * @param  array  $parameters
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectToLastProcessedStep(Request $request, int $lastProcessedIndex)
+    protected function redirectToLastProcessedStep(Request $request, int $lastProcessedIndex, array $parameters = [])
     {
         $lastProcessedStep = $this->wizard()->stepRepo()->get($lastProcessedIndex);
 
-        return $this->redirectToStep($lastProcessedStep->slug(), false);
+        return $this->redirectToStep($lastProcessedStep->slug(), false, $parameters);
     }
 
     /**
@@ -227,11 +236,12 @@ trait Wizardable
      *
      * @param  string|\Ycs77\LaravelWizard\Step|null  $step
      * @param  bool  $setLastIndex
+     * @param  array  $parameters
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectToStep($step = null, $setLastIndex = true)
+    protected function redirectToStep($step = null, $setLastIndex = true, array $parameters = [])
     {
-        return $this->wizard()->redirectToStep($step, $setLastIndex);
+        return $this->wizard()->redirectToStep($step, $setLastIndex, $parameters);
     }
 
     /**
@@ -241,11 +251,12 @@ trait Wizardable
      *
      * @param  string|\Ycs77\LaravelWizard\Step|null  $step
      * @param  bool  $setLastIndex
+     * @param  array  $parameters
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectTo($step = null, $setLastIndex = true)
+    protected function redirectTo($step = null, $setLastIndex = true, array $parameters = [])
     {
-        return $this->redirectToStep($step, $setLastIndex);
+        return $this->redirectToStep($step, $setLastIndex, $parameters);
     }
 
     /**

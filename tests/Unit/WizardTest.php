@@ -197,7 +197,7 @@ class WizardTest extends TestCase
         $this->wizard->setStepRepo($stepRepo);
 
         $this->wizard->resolveActionUrlUsing(function (string $method, $parameters = []) {
-            return url('/wizard/test-wizard/'.$parameters[0]);
+            return url('/wizard/test-wizard/'.$parameters['step']);
         });
 
         // act

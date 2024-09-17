@@ -192,9 +192,10 @@ class Wizard
      *
      * @param  string|\Ycs77\LaravelWizard\Step|null  $step
      * @param  bool  $setLastIndex
+     * @param  array  $parameters
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function redirectToStep($step = null, $setLastIndex = true)
+    public function redirectToStep($step = null, $setLastIndex = true, array $parameters = [])
     {
         if (is_null($step)) {
             $step = $this->stepRepo()->next();
@@ -206,7 +207,7 @@ class Wizard
             $this->setLastProcessedIndex($step->index());
         }
 
-        return redirect($this->getActionUrl('create', [$step->slug()]));
+        return redirect($this->getActionUrl('create', ['step' => $step->slug(), ...$parameters]));
     }
 
     /**
